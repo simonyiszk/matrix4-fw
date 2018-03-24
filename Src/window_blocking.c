@@ -1,6 +1,6 @@
 #include "window_blocking.h"
 #include "stm32f0xx_hal.h"
-#include "mxconstants.h"
+//#include "mxconstants.h"
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
