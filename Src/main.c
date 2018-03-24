@@ -97,23 +97,21 @@ void step_internal_anim(){
 	static uint32_t i = 0;
 	static char szin = 0;
 
-	while (1) {
-		set_pixel(left_window, 0, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-				(szin == 2 ? i : 0));
-		set_pixel(left_window, 1, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-				(szin == 2 ? i : 0));
-		set_pixel(left_window, 2, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-				(szin == 2 ? i : 0));
-		set_pixel(left_window, 3, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-				(szin == 2 ? i : 0));
-		i++;
-		if (i == 0x8)
-			i = 0;
-		if (i == 0)
-			szin++;
-		if (szin == 3)
-			szin = 0;
-	}
+	set_pixel(left_window, 0, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
+			(szin == 2 ? i : 0));
+	set_pixel(left_window, 1, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
+			(szin == 2 ? i : 0));
+	set_pixel(left_window, 2, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
+			(szin == 2 ? i : 0));
+	set_pixel(left_window, 3, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
+			(szin == 2 ? i : 0));
+	i++;
+	if (i == 0x8)
+		i = 0;
+	if (i == 0)
+		szin++;
+	if (szin == 3)
+		szin = 0;
 }
 
 
