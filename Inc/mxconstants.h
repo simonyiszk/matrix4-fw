@@ -41,6 +41,10 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define WINDOW_POWER_LEFT_Pin GPIO_PIN_13
+#define WINDOW_POWER_LEFT_GPIO_Port GPIOC
+#define WINDOW_LEFT_INSTALLED_Pin GPIO_PIN_3
+#define WINDOW_LEFT_INSTALLED_GPIO_Port GPIOA
 #define SPI1_NSS_Pin GPIO_PIN_4
 #define SPI1_NSS_GPIO_Port GPIOA
 #define W5500_RESET_Pin GPIO_PIN_1
@@ -53,6 +57,10 @@
 #define LED_DHCP_GPIO_Port GPIOB
 #define LED_HEARTH_Pin GPIO_PIN_15
 #define LED_HEARTH_GPIO_Port GPIOB
+#define WINDOW_RIGHT_INSTALLED_Pin GPIO_PIN_10
+#define WINDOW_RIGHT_INSTALLED_GPIO_Port GPIOA
+#define WINDOW_POWER_RIGHT_Pin GPIO_PIN_11
+#define WINDOW_POWER_RIGHT_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
