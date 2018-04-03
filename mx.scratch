@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
-<ProjectName>/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/eth_test/\eth_test</ProjectName>
+<ProjectName>/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/\matrix4_mueb_fw</ProjectName>
 <ProjectNature>C</ProjectNature> 
 <CMSIS>../Drivers/CMSIS</CMSIS>
 <HAL_Driver>/home/kisada/STM32Cube/Repository//STM32Cube_FW_F0_V1.9.0/Drivers/CMSIS</HAL_Driver>
@@ -22,7 +22,7 @@
 
 <configs>
   <config>
-    <name>eth_test</name>				
+    <name>matrix4_mueb_fw</name>				
     <device>STM32F030C8Tx</device>		 
     <heapSize>0x200</heapSize>
     <stackSize>0x400</stackSize>

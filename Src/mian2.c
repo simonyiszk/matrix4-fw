@@ -106,11 +106,13 @@ void main2(void){
 
 	turn_12V_on(left_window);
 
-	while (1) {
+
+	while (1){
 		step_internal_anim();
 		HAL_Delay(500);
 		//HAL_GPIO_TogglePin(LED_HEARTH_GPIO_Port, LED_HEARTH_Pin);
 
+		//do DHCP task
 		switch(DHCP_run()){
 		case DHCP_IP_ASSIGN:
 		case DHCP_IP_CHANGED:
