@@ -3,7 +3,7 @@
 #include "wizchip_conf.h"
 #include "socket.h"
 #include "w5500.h"
-#include "window_blocking.h"
+#include "window.h"
 #include "mac_eeprom.h"
 #include "dhcp.h"
 
@@ -96,21 +96,13 @@ void main2(void){
 	reg_dhcp_cbfunc(ip_assign, ip_assign, ip_conflict);
 
 
-
-
-
-	while (!if_window(left_window)) { //Handling non-installed window
-		HAL_Delay(1000);
-		HAL_GPIO_TogglePin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
-	}
-
-	turn_12V_on(left_window);
-
-
 	while (1){
-		step_internal_anim();
-		HAL_Delay(500);
+		//step_internal_anim();
+		//HAL_Delay(500);
 		//HAL_GPIO_TogglePin(LED_HEARTH_GPIO_Port, LED_HEARTH_Pin);
+
+		step_window_state(left_window);
+		step_window_state(right_window);
 
 		//do DHCP task
 		switch(DHCP_run()){
