@@ -7,9 +7,10 @@ extern UART_HandleTypeDef huart2;
 
 
 enum twindow_status window_status[2] = {vcc_3v3_off, vcc_3v3_off};
-enum tframe_status  frame_status[2]  = {buffer_free, buffer_free};
 
 uint8_t sec_cntr_window = 0;
+
+struct subpixel_data subpixels[2][num_of_subpixels];
 
 void init_window_state_machine(){
 	//GPIO default states configured along with the GPIO itself
@@ -29,6 +30,14 @@ void init_window_state_machine(){
 
 	//gloab vars are set from .bss section, no need for further init
 	//sec_cntr_window = 0;
+
+	for(size_t i=0; i<2;i++)
+		for(size_t j=0; j<num_of_subpixels; j++){
+			subpixels[i][j].blue=0;
+			subpixels[i][j].red=0;
+			subpixels[i][j].green=0;
+			subpixels[i][j].stat=buffer_free;
+		}
 
 	//TODO> DMA
 }
@@ -63,6 +72,7 @@ void step_window_state(enum window_selector w){
 enum twindow_status get_window_state(enum window_selector w){
 	return window_status[(size_t)w];
 }
+
 void set_window_state(enum window_selector w , enum twindow_status s){
 	switch(s){
 	default:
