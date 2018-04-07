@@ -38,6 +38,7 @@
 /* USER CODE BEGIN 0 */
 #include "dhcp.h"
 #include "window.h"
+#include "internal_anim.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -166,6 +167,7 @@ void TIM17_IRQHandler(void)
   DHCP_time_handler();
   HAL_GPIO_TogglePin(LED_HEARTH_GPIO_Port, LED_HEARTH_Pin);
   sec_cntr_window++;
+  time_to_next_frame = 1;
 
   /* USER CODE END TIM17_IRQn 0 */
   HAL_TIM_IRQHandler(&htim17);

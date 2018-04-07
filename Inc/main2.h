@@ -3,10 +3,6 @@
 
 #include "stm32f0xx_hal.h"
 
-extern I2C_HandleTypeDef hi2c2;
-
-extern SPI_HandleTypeDef hspi1;
-
 //UART_HandleTypeDef huart1;
 //UART_HandleTypeDef huart2;
 
