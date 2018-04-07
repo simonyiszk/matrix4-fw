@@ -51,8 +51,6 @@
 
 #define WINDOW_POWER_LEFT_Pin GPIO_PIN_13
 #define WINDOW_POWER_LEFT_GPIO_Port GPIOC
-#define WINDOW_3V3_LEFT_Pin GPIO_PIN_14
-#define WINDOW_3V3_LEFT_GPIO_Port GPIOC
 #define SPI1_NSS_Pin GPIO_PIN_4
 #define SPI1_NSS_GPIO_Port GPIOA
 #define W5500_RESET_Pin GPIO_PIN_1
@@ -69,6 +67,8 @@
 #define WINDOW_POWER_RIGHT_GPIO_Port GPIOA
 #define WINDOW_3V3_RIGHT_Pin GPIO_PIN_12
 #define WINDOW_3V3_RIGHT_GPIO_Port GPIOA
+#define WINDOW_3V3_LEFT_Pin GPIO_PIN_9
+#define WINDOW_3V3_LEFT_GPIO_Port GPIOB
 
 /* ########################## Assert Selection ############################## */
 /**

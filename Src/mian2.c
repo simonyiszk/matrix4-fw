@@ -1,9 +1,10 @@
+#include "window.h"
 #include "main2.h"
 #include "main.h"
 #include "wizchip_conf.h"
 #include "socket.h"
 #include "w5500.h"
-#include "window.h"
+
 #include "mac_eeprom.h"
 #include "dhcp.h"
 
@@ -40,14 +41,13 @@ void step_internal_anim(){
 	static uint32_t i = 0;
 	static char szin = 0;
 
-	set_pixel(left_window, 0, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-			(szin == 2 ? i : 0));
-	set_pixel(left_window, 1, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-			(szin == 2 ? i : 0));
-	set_pixel(left_window, 2, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-			(szin == 2 ? i : 0));
-	set_pixel(left_window, 3, (szin == 0 ? i : 0), (szin == 1 ? i : 0),
-			(szin == 2 ? i : 0));
+	for(size_t j=0;j<2;j++)
+		for(size_t k=0;k<num_of_pixels;k++){
+			pixels[j][k].red=(szin == 0 ? i : 0);
+			pixels[j][k].green=(szin == 1 ? i : 0);
+			pixels[j][k].blue=(szin == 2 ? i : 0);
+			pixels[j][k].stat = buffer_full;
+		}
 	i++;
 	if (i == 0x8)
 		i = 0;
@@ -97,12 +97,12 @@ void main2(void){
 
 
 	while (1){
-		//step_internal_anim();
-		//HAL_Delay(500);
+		step_internal_anim();
+		HAL_Delay(500);
 		//HAL_GPIO_TogglePin(LED_HEARTH_GPIO_Port, LED_HEARTH_Pin);
 
-		step_window_state(left_window);
 		step_window_state(right_window);
+		//step_window_state(right_window);
 
 		//do DHCP task
 		switch(DHCP_run()){

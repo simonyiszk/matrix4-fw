@@ -1,4 +1,4 @@
-#ifndef  __WINDOW_BLOCKING_H___INCLUDED_____SEM_SCH_BME_HU___
+#ifndef __WINDOW_BLOCKING_H___INCLUDED_____SEM_SCH_BME_HU___
 #define __WINDOW_BLOCKING_H___INCLUDED_____SEM_SCH_BME_HU___
 
 /******************************************************************************
@@ -10,6 +10,7 @@
  *****************************************************************************/
 
 #include "inttypes.h"
+#include <stddef.h>
 
 /*!
  * \brief Type created for passing window selection as argument.
@@ -26,6 +27,7 @@ enum window_selector{
  * see documentation for further information
  */
 enum twindow_status{
+	discharge_caps,
 	vcc_3v3_off,  //waiting for plug
 	vcc_3v3_on,   //waiting for comm
 	vcc_12v_off,  //panel turned off remotely
@@ -41,7 +43,7 @@ enum tframe_status{
 	buffer_full
 };
 
-struct subpixel_data{
+struct pixel_data{
 	uint8_t red;
 	uint8_t green;
 	uint8_t blue;
@@ -49,7 +51,8 @@ struct subpixel_data{
 	enum tframe_status stat;
 };
 
-const size_t num_of_subpixels = 12;
+//const size_t num_of_pixels = 4;
+#define num_of_pixels 4
 
 /*!
  * \brief stores the status of each window
@@ -59,7 +62,7 @@ const size_t num_of_subpixels = 12;
  *
  * The declaration is in window.c
  */
-extern struct subpixel_data subpixels[2][num_of_subpixels];
+extern struct pixel_data pixels[2][num_of_pixels];
 
 /*!
  * \brief stores the status of each window
