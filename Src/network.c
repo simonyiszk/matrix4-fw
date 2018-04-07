@@ -13,6 +13,8 @@
 #include "socket.h"
 #include "w5500.h"
 #include "main.h"
+#include "main2.h"
+#include "window.h"
 #include "network.h"
 #include "stm32f0xx_hal.h"
 
@@ -92,6 +94,7 @@ void init_network(){
 	reg_dhcp_cbfunc(ip_assign, ip_assign, ip_conflict);
 
 	socket(1, Sn_MR_UDP, 2000, 0x00);
+	socket(2, Sn_MR_UDP, 3000, 0x00);
 }
 
 void step_network(){
@@ -100,14 +103,63 @@ void step_network(){
 	if(size){
 		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
 
-		char buff[25];
+		//todo treat big and small datagrams
+
+		char buff[5];
 
 		uint8_t svr_addr[6];
 		uint16_t  svr_port;
 		uint16_t len;
 		len = recvfrom(1, (uint8_t *)buff, size, svr_addr, &svr_port);
 
+		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M')
+			return;
+
+		switch(buff[3]){
+		case use_external_anim:
+			main_state=external_anim;
+			break;
+		case use_internal_anim:
+			main_state=internal_anim;
+			break;
+		case blank:
+			for(size_t i=0; i<2;i++)
+				for(size_t j=0; j<num_of_pixels; j++){
+					pixels[i][j].blue=0;
+					pixels[i][j].red=0;
+					pixels[i][j].green=0;
+					pixels[i][j].stat=buffer_full;
+				}
+
+			break;
+		default:
+			return;
+		}
 	}
+
+	size= getSn_RX_RSR(2);
+	if(size){
+		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+		//todo treat big and small datagrams
+
+				char buff[10];
+
+				uint8_t svr_addr[6];
+				uint16_t  svr_port;
+				uint16_t len;
+				len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
+
+				//todo check indexes, datagram size
+
+				size_t i = buff[0];
+				size_t j = buff[1];
+
+				pixels[i][j].stat = buffer_full;
+				pixels[i][j].red = buff[2];
+				pixels[i][j].green = buff[3];
+				pixels[i][j].blue = buff[4];
+	}
+
 
 	//do DHCP task
 	switch(DHCP_run()){

@@ -36,7 +36,7 @@ void init_window_state_machine(){
 			pixels[i][j].blue=0;
 			pixels[i][j].red=0;
 			pixels[i][j].green=0;
-			pixels[i][j].stat=buffer_free;
+			pixels[i][j].stat=buffer_full;
 		}
 
 	//TODO> DMA
