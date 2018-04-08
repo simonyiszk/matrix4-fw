@@ -133,7 +133,7 @@ void step_network(){
 
 			break;
 		default:
-			return;
+			break;
 		}
 	}
 
