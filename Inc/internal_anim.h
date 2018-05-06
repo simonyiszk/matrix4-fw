@@ -1,18 +1,25 @@
 /*
  * internal_anim.h
  *
- *  Created on: Apr 7, 2018
+ *  Created on: May 5, 2018
  *      Author: kisada
  */
 
-#ifndef INTERNAL_ANIM_H____SEM_SCH_BME_HU
-#define INTERNAL_ANIM_H____SEM_SCH_BME_HU
+#ifndef INTERNAL_ANIM_H_
+#define INTERNAL_ANIM_H_
 
 #include "stddef.h"
 #include "inttypes.h"
 
-void step_anim(void);
+#ifdef __cplusplus
+ extern "C" {
+#endif
+ 	 extern uint8_t time_to_next_frame;
 
-extern uint8_t time_to_next_frame;
+#ifdef __cplusplus
+ }
+#endif
 
-#endif // INTERNAL_ANIM_H____SEM_SCH_BME_HU
+
+
+#endif /* INTERNAL_ANIM_H_ */

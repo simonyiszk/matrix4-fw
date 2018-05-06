@@ -12,12 +12,12 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactExtension="elf" artifactName="eth_test" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="com.atollic.truestudio.exe.debug.1518366166" name="Debug" parent="com.atollic.truestudio.exe.debug" postbuildStep="" prebuildStep="">
+				<configuration artifactExtension="elf" artifactName="matrix4_mueb_fw" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="com.atollic.truestudio.exe.debug.1518366166" name="Debug" parent="com.atollic.truestudio.exe.debug" postbuildStep="" prebuildStep="">
 					<folderInfo id="com.atollic.truestudio.exe.debug.1518366166.2031504340" name="/" resourcePath="">
 						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.683225115" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain">
-							<option id="com.atollic.truestudio.general.runtimelib.516685730" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib" value="com.atollic.truestudio.ld.general.clib.small" valueType="enumerated"/>
-							<option id="com.atollic.truestudio.toolchain_options.mcu.885083494" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" value="STM32F030C8" valueType="string"/>
-							<option id="com.atollic.truestudio.toolchain_options.vendor.1722293343" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" value="STMicroelectronics" valueType="string"/>
+							<option id="com.atollic.truestudio.general.runtimelib.516685730" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib" useByScannerDiscovery="false" value="com.atollic.truestudio.ld.general.clib.small" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.toolchain_options.mcu.885083494" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" useByScannerDiscovery="false" value="STM32F030C8" valueType="string"/>
+							<option id="com.atollic.truestudio.toolchain_options.vendor.1722293343" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" useByScannerDiscovery="false" value="STMicroelectronics" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform.2054752829" isAbstract="false" name="Debug platform" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
 							<builder buildPath="${workspace_loc:/STM32100B-EVAL/Debug}" customBuilderProperties="toolChainpathType=1|toolChainpathString=/opt/Atollic_TrueSTUDIO_for_STM32_x86_64_9.0.0/ARMTools/bin|" id="com.atollic.truestudio.mbs.builder1.1222194476" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1">
 								<outputEntries>
@@ -60,7 +60,7 @@
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1297069055" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
 								<inputType id="com.atollic.truestudio.gcc.input.850396938" superClass="com.atollic.truestudio.gcc.input"/>
 							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.1444973427" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld">
+							<tool command="arm-atollic-eabi-g++" id="com.atollic.truestudio.exe.debug.toolchain.ld.1444973427" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld">
 								<option id="com.atollic.truestudio.common_options.target.endianess.662778612" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" value="com.atollic.truestudio.common_options.target.endianess.little" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.35700531" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F030C8" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.instr_set.566688004" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
@@ -160,6 +160,9 @@
 								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
 								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet}&quot;"/>
 							</option>
+							<option id="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level.1806063091" name="Optimization Level" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gcc.optimization.level.03" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gcc.optimization.prep_garbage.1274577241" superClass="com.atollic.truestudio.gcc.optimization.prep_garbage" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+							<option id="com.atollic.truestudio.gcc.optimization.prep_data.1259501733" superClass="com.atollic.truestudio.gcc.optimization.prep_data" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 							<inputType id="com.atollic.truestudio.gcc.input.64758452" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
@@ -191,36 +194,140 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.8056694" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.839033486"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.23705764" name="network.c" rcbsApplicability="disable" resourcePath="Src/network.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.1274357782">
-						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.1274357782" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335">
-							<option id="com.atollic.truestudio.gcc.directories.select.1839361207" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
-								<listOptionValue builtIn="false" value="../Inc"/>
-								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
-								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
-								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
-								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eth_test/Drivers/ioLibrary_Driver/Ethernet}&quot;"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/eth_test/Drivers/ioLibrary_Driver/Ethernet/W5500}&quot;"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Internet/DHCP}&quot;"/>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.23705764" name="network.c" rcbsApplicability="disable" resourcePath="Src/network.cpp" toolsToInvoke="com.atollic.truestudio.gpp.219290923">
+						<tool id="com.atollic.truestudio.gpp.219290923" name="C++ Compiler" superClass="com.atollic.truestudio.gpp">
+							<option id="com.atollic.truestudio.common_options.target.fpucore.1997534004" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.directories.select.738993793" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Inc}&quot;"/>
 								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet}&quot;"/>
 								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet/W5500}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Internet/DHCP}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Include}&quot;"/>
 							</option>
-							<inputType id="com.atollic.truestudio.gcc.input.1730525524" superClass="com.atollic.truestudio.gcc.input"/>
+							<option id="com.atollic.truestudio.gpp.symbols.defined.791464070" name="Defined symbols" superClass="com.atollic.truestudio.gpp.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
+								<listOptionValue builtIn="false" value="STM32F030x8"/>
+								<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+							</option>
+							<option id="com.atollic.truestudio.gpp.cppstandard.1809989510" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp0x" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.optimization.fno_rtti.1729553992" name="Disable RTTI" superClass="com.atollic.truestudio.gpp.optimization.fno_rtti" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.atollic.truestudio.gpp.optimization.fno_exceptions.473198415" name="Disable exception handling" superClass="com.atollic.truestudio.gpp.optimization.fno_exceptions" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.atollic.truestudio.common_options.target.instr_set.440422676" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.misc.otherflags.678384789" name="Other options" superClass="com.atollic.truestudio.gpp.misc.otherflags" useByScannerDiscovery="false" value=" -mcpu=cortex-m0" valueType="string"/>
+							<inputType id="com.atollic.truestudio.gpp.input.71543481" superClass="com.atollic.truestudio.gpp.input"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1235702971" name="mian2.c" rcbsApplicability="disable" resourcePath="Src/mian2.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.1167656878">
-						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.1167656878" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335">
-							<option id="com.atollic.truestudio.gcc.directories.select.666358141" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1694680156" name="main.c" rcbsApplicability="disable" resourcePath="Src/main.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.67339517">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.67339517" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335">
+							<option id="com.atollic.truestudio.gcc.directories.select.1998971814" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
 								<listOptionValue builtIn="false" value="../Inc"/>
 								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
 								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
 								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
 								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet}&quot;"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Internet/DHCP}&quot;"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet/W5500}&quot;"/>
 							</option>
-							<inputType id="com.atollic.truestudio.gcc.input.1133374005" superClass="com.atollic.truestudio.gcc.input"/>
+							<inputType id="com.atollic.truestudio.gcc.input.2008895069" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.512429309" name="window.cpp" rcbsApplicability="disable" resourcePath="Src/window.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1006803529">
+						<tool command="arm-atollic-eabi-g++ -c" id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1006803529" name="C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
+							<option id="gnu.cpp.compiler.option.include.paths.621478325" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Inc}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc}&quot;"/>
+							</option>
+							<option id="gnu.cpp.compiler.option.preprocessor.undef.1428717220" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef" useByScannerDiscovery="false"/>
+							<option id="gnu.cpp.compiler.option.preprocessor.def.359330804" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<listOptionValue builtIn="false" value="STM32F030x8"/>
+								<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+							</option>
+							<option id="gnu.cpp.compiler.option.other.other.1677314156" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -std=gnu++11  -fstack-usage -Wall -fno-threadsafe-statics -specs=nano.specs    -mcpu=cortex-m0  -mthumb" valueType="string"/>
+							<option id="gnu.cpp.compiler.option.optimization.flags.932612469" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" useByScannerDiscovery="false" value=" -fno-rtti -fno-exceptions" valueType="string"/>
+							<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.195193488" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.1512705627" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.661830008" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.1024681754" name="Resource Custom Build Step Output Type"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.414287793" name="internal_anim.cpp" rcbsApplicability="disable" resourcePath="Src/internal_anim.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1086246667">
+						<tool command="arm-atollic-eabi-g++ -c" id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1086246667" name="C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
+							<option id="gnu.cpp.compiler.option.include.paths.8311674" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Inc}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc}&quot;"/>
+							</option>
+							<option id="gnu.cpp.compiler.option.preprocessor.undef.1971015808" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef" useByScannerDiscovery="false"/>
+							<option id="gnu.cpp.compiler.option.preprocessor.def.1362436746" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
+								<listOptionValue builtIn="false" value="STM32F030x8"/>
+								<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+							</option>
+							<option id="gnu.cpp.compiler.option.other.other.1091284740" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fstack-usage -fno-threadsafe-statics -specs=nano.specs -std=gnu++11   -mcpu=cortex-m0  -mthumb" valueType="string"/>
+							<option id="gnu.cpp.compiler.option.optimization.flags.657196024" name="Other optimization flags" superClass="gnu.cpp.compiler.option.optimization.flags" useByScannerDiscovery="false" value=" -fno-rtti -fno-exceptions" valueType="string"/>
+							<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1228826244" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.276096684" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.320998700" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.200962689" name="Resource Custom Build Step Output Type"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1748315004" name="stm32f0xx_hal_msp.c" rcbsApplicability="disable" resourcePath="Src/stm32f0xx_hal_msp.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.686472782">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.686472782" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335">
+							<option id="com.atollic.truestudio.gcc.directories.select.1376586793" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="../Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
+							</option>
+							<inputType id="com.atollic.truestudio.gcc.input.1062309588" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1235702971" name="mian2.c" rcbsApplicability="disable" resourcePath="Src/mian2.cpp" toolsToInvoke="com.atollic.truestudio.gpp.255993951">
+						<tool id="com.atollic.truestudio.gpp.255993951" name="C++ Compiler" superClass="com.atollic.truestudio.gpp">
+							<option id="com.atollic.truestudio.common_options.target.fpucore.382871625" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.directories.select.1948959630" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Inc}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc}&quot;"/>
+							</option>
+							<option id="com.atollic.truestudio.gpp.symbols.defined.922093982" name="Defined symbols" superClass="com.atollic.truestudio.gpp.symbols.defined" valueType="definedSymbols">
+								<listOptionValue builtIn="false" value="STM32F030x8"/>
+								<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+							</option>
+							<option id="com.atollic.truestudio.gpp.cppstandard.822476318" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp0x" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.optimization.level.1855428530" name="Optimization Level" superClass="com.atollic.truestudio.gpp.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.optimization.level.02" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.optimization.fno_rtti.1179888459" name="Disable RTTI" superClass="com.atollic.truestudio.gpp.optimization.fno_rtti" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.atollic.truestudio.gpp.optimization.fno_exceptions.722823789" name="Disable exception handling" superClass="com.atollic.truestudio.gpp.optimization.fno_exceptions" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.atollic.truestudio.common_options.target.instr_set.92642725" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.misc.otherflags.606150728" name="Other options" superClass="com.atollic.truestudio.gpp.misc.otherflags" useByScannerDiscovery="false" value=" -mcpu=cortex-m0" valueType="string"/>
+							<inputType id="com.atollic.truestudio.gpp.input.1691808764" superClass="com.atollic.truestudio.gpp.input"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.64724501" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.1616270092" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.1416854575" name="Resource Custom Build Step Output Type"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1143410045" name="system_stm32f0xx.c" rcbsApplicability="disable" resourcePath="Src/system_stm32f0xx.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.262917000">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.262917000" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335">
+							<option id="com.atollic.truestudio.gcc.directories.select.1044846721" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="../Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
+							</option>
+							<inputType id="com.atollic.truestudio.gcc.input.25543836" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.2073079344" name="stm32f0xx_it.c" rcbsApplicability="disable" resourcePath="Src/stm32f0xx_it.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.1683061726">

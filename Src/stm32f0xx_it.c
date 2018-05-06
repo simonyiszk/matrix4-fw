@@ -31,6 +31,7 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include "internal_anim.h"
 #include "stm32f0xx_hal.h"
 #include "stm32f0xx.h"
 #include "stm32f0xx_it.h"
@@ -38,7 +39,6 @@
 /* USER CODE BEGIN 0 */
 #include "dhcp.h"
 #include "window.h"
-#include "internal_anim.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/

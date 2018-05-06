@@ -6,17 +6,23 @@
  */
 
 
+extern "C" {
+	#include "mac_eeprom.h"
+	#include "dhcp.h"
+	#include "wizchip_conf.h"
+	#include "socket.h"
+	#include "w5500.h"
+	#include "main.h"
+	#include "main2.h"
+	#include "window.h"
+	#include "stm32f0xx_hal.h"
+};
 
-#include "mac_eeprom.h"
-#include "dhcp.h"
-#include "wizchip_conf.h"
-#include "socket.h"
-#include "w5500.h"
-#include "main.h"
-#include "main2.h"
-#include "window.h"
-#include "network.h"
-#include "stm32f0xx_hal.h"
+
+#include "network.hpp"
+#include "main2.hpp"
+#include "window.hpp"
+
 
 
 
@@ -25,29 +31,12 @@ wiz_NetInfo netInfo = {
 		.ip    = { 0 },
 		.sn    = { 0 },
 		.gw    = { 0 },
+		.dns   = { 0 },
 		.dhcp  = NETINFO_DHCP //Using DHCP
-	};
+};
 
-#define DATA_BUF_SIZE   2048
+const size_t DATA_BUF_SIZE = 2048;
 uint8_t gDATABUF[DATA_BUF_SIZE];
-
-void cs_sel() {
-	HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_RESET); //CS LOW
-}
-
-void cs_desel() {
-	HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_SET); //CS HIGH
-}
-
-uint8_t spi_rb(void) {
-	uint8_t rbuf;
-	HAL_SPI_Receive(&hspi1, &rbuf, 1, 0xFFFFFFFF);
-	return rbuf;
-}
-
-void spi_wb(uint8_t b) {
-	HAL_SPI_Transmit(&hspi1, &b, 1, 0xFFFFFFFF);
-}
 
 void ip_assign(){
 	getIPfromDHCP(netInfo.ip);
@@ -70,13 +59,38 @@ void reset_w5500(){
 	HAL_Delay(2); //PLL lock 1 ms max (refer datasheet)
 }
 
+
 //DHCP 1s timer located in stm32f0xx_it.c
 
 
+namespace net{
 
+void cs_sel() {
+	HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_RESET); //CS LOW
+}
 
+void cs_desel() {
+	HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_SET); //CS HIGH
+}
 
-void init_network(){
+uint8_t spi_rb(void) {
+	uint8_t rbuf;
+	HAL_SPI_Receive(&hspi1, &rbuf, 1, 0xFFFFFFFF);
+	return rbuf;
+}
+
+void spi_wb(uint8_t b) {
+	HAL_SPI_Transmit(&hspi1, &b, 1, 0xFFFFFFFF);
+}
+
+/*********************************
+ *  network Class function defs
+ ********************************/
+
+network::network(){
+}
+
+void network::init(){
 	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } };
 
 	reset_w5500();
@@ -97,7 +111,7 @@ void init_network(){
 	socket(2, Sn_MR_UDP, 3000, 0x00);
 }
 
-void step_network(){
+void network::step_network(){
 	size_t size = getSn_RX_RSR(1);
 
 	if(size){
@@ -108,8 +122,8 @@ void step_network(){
 		char buff[5];
 
 		uint8_t svr_addr[6];
-		uint16_t  svr_port;
 		uint16_t len;
+		uint16_t  svr_port;
 		len = recvfrom(1, (uint8_t *)buff, size, svr_addr, &svr_port);
 
 		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M')
@@ -123,13 +137,10 @@ void step_network(){
 			main_state=internal_anim;
 			break;
 		case blank:
-			for(size_t i=0; i<2;i++)
-				for(size_t j=0; j<num_of_pixels; j++){
-					pixels[i][j].blue=0;
-					pixels[i][j].red=0;
-					pixels[i][j].green=0;
-					pixels[i][j].stat=buffer_full;
-				}
+			for(size_t j=0; j<windows::num_of_pixels; j++){
+				windows::right_window.blank();
+				windows::left_window.blank();
+			}
 
 			break;
 		default:
@@ -151,15 +162,21 @@ void step_network(){
 
 				//todo check indexes, datagram size
 
-				size_t i = buff[0];
-				size_t j = buff[1];
+				size_t window = buff[0];
+				size_t pixel_num = buff[1];
+				uint8_t red = buff[2];
+				uint8_t green = buff[3];
+				uint8_t blue = buff[4];
 
-				pixels[i][j].stat = buffer_full;
-				pixels[i][j].red = buff[2];
-				pixels[i][j].green = buff[3];
-				pixels[i][j].blue = buff[4];
+				if(window == 0) //right window
+					windows::right_window.pixels[pixel_num].set(red, green, blue);
+				else
+					windows::left_window.pixels[pixel_num].set(red, green, blue);
+
 	}
 
+	//DHCP_run();
+	return;
 
 	//do DHCP task
 	switch(DHCP_run()){
@@ -177,3 +194,13 @@ void step_network(){
 		break;
 	}
 }
+
+
+/*****************************
+ *
+ *    Static instances
+ *
+ ****************************/
+	network inetwork;
+};
+
