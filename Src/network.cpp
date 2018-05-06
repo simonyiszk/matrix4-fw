@@ -13,18 +13,15 @@ extern "C" {
 	#include "socket.h"
 	#include "w5500.h"
 	#include "main.h"
-	#include "main2.h"
-	#include "window.h"
 	#include "stm32f0xx_hal.h"
+	#include "dhcp_buffer.h"
 };
-
 
 #include "network.hpp"
 #include "main2.hpp"
 #include "window.hpp"
 
-
-
+//------------------------------------------------------------------------
 
 wiz_NetInfo netInfo = {
 		.mac   = { 0 },       // Mac address will be set later from EEPROM
@@ -34,9 +31,6 @@ wiz_NetInfo netInfo = {
 		.dns   = { 0 },
 		.dhcp  = NETINFO_DHCP //Using DHCP
 };
-
-const size_t DATA_BUF_SIZE = 2048;
-uint8_t gDATABUF[DATA_BUF_SIZE];
 
 void ip_assign(){
 	getIPfromDHCP(netInfo.ip);
@@ -174,9 +168,6 @@ void network::step_network(){
 					windows::left_window.pixels[pixel_num].set(red, green, blue);
 
 	}
-
-	//DHCP_run();
-	return;
 
 	//do DHCP task
 	switch(DHCP_run()){

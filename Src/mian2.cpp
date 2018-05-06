@@ -1,4 +1,3 @@
-#include "window.h"
 #include "window.hpp"
 #include "main2.hpp"
 #include "internal_anim.hpp"
@@ -21,10 +20,10 @@ void main2(void){
 		if(main_state == internal_anim)
 			internal_animation::step_anim();
 
+		net::inetwork.step_network();
+
 		windows::left_window.step_state();
 		windows::right_window.step_state();
-
-		net::inetwork.step_network();
 	}
 
 	//todo error handling
