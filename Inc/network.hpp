@@ -22,17 +22,22 @@ namespace net{
 		network(const network&) = delete;
 		network& operator=(const network&) = delete;
 		//~network() = delete;
+
+		void do_remote_command();
+		void fetch_frame();
+
 	public:
 		enum commands{
-			turn_12v_off_left,
-			turn_12v_off_right,
-			reset_left_panel,
-			reset_right_panel,
-			reboot,
-			get_status,
+			turn_12v_off_left = 0x00,
+			turn_12v_off_right = 0x01,
+			reset_left_panel  = 0x02,
+			reset_right_panel = 0x03,
+			reboot  = 0x04,
+			get_status = 0x05,
 			use_internal_anim = 0x10,
 			use_external_anim = 0x20,
-			blank = 0x30
+			blank = 0x30,
+			delete_anim_network_buffer = 0x06
 		};
 
 		network();

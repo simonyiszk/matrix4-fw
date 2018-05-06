@@ -46,14 +46,6 @@ void ip_conflict(){
 	while(1);
 }
 
-void reset_w5500(){
-	HAL_GPIO_WritePin(W5500_RESET_GPIO_Port, W5500_RESET_Pin, GPIO_PIN_RESET);
-	HAL_Delay(1); //min reset cycle 500 us
-	HAL_GPIO_WritePin(W5500_RESET_GPIO_Port, W5500_RESET_Pin, GPIO_PIN_SET);
-	HAL_Delay(2); //PLL lock 1 ms max (refer datasheet)
-}
-
-
 //DHCP 1s timer located in stm32f0xx_it.c
 
 
@@ -87,7 +79,11 @@ network::network(){
 void network::init(){
 	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } };
 
-	reset_w5500();
+	//Hard-reset W5500
+	HAL_GPIO_WritePin(W5500_RESET_GPIO_Port, W5500_RESET_Pin, GPIO_PIN_RESET);
+	HAL_Delay(1); //min reset cycle 500 us
+	HAL_GPIO_WritePin(W5500_RESET_GPIO_Port, W5500_RESET_Pin, GPIO_PIN_SET);
+	HAL_Delay(2); //PLL lock 1 ms max (refer datasheet)
 
 	reg_wizchip_cs_cbfunc(cs_sel, cs_desel);
 	reg_wizchip_spi_cbfunc(spi_rb, spi_wb);
@@ -105,69 +101,98 @@ void network::init(){
 	socket(2, Sn_MR_UDP, 3000, 0x00);
 }
 
-void network::step_network(){
+void network::do_remote_command(){
 	size_t size = getSn_RX_RSR(1);
 
 	if(size){
 		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
 
-		//todo treat big and small datagrams
+		char buff[4];
 
-		char buff[5];
-
-		uint8_t svr_addr[6];
+		uint8_t resp_addr[6];
 		uint16_t len;
-		uint16_t  svr_port;
-		len = recvfrom(1, (uint8_t *)buff, size, svr_addr, &svr_port);
+		uint16_t resp_port;
+
+		// Handle too small packages
+		if(size < 5){
+			len = recvfrom(1, (uint8_t *)buff, 4, resp_addr, &resp_port);
+			return;
+		}
+
+		len = recvfrom(1, (uint8_t *)buff, 4, resp_addr, &resp_port);
 
 		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M')
 			return;
 
 		switch(buff[3]){
-		case use_external_anim:
-			main_state=external_anim;
-			break;
-		case use_internal_anim:
-			main_state=internal_anim;
-			break;
-		case blank:
-			for(size_t j=0; j<windows::num_of_pixels; j++){
+			case use_external_anim:
+				main_state=external_anim;
+				break;
+			case use_internal_anim:
+				main_state=internal_anim;
+				break;
+			case blank:
 				windows::right_window.blank();
 				windows::left_window.blank();
-			}
-
-			break;
-		default:
-			break;
+				break;
+			case turn_12v_off_left:
+				windows::left_window.set_state(windows::window::vcc_12v_off);
+				break;
+			case turn_12v_off_right:
+				windows::right_window.set_state(windows::window::vcc_12v_off);
+				break;
+			case reset_left_panel:
+				windows::left_window.set_state(windows::window::discharge_caps);
+				break;
+			case reset_right_panel:
+				windows::right_window.set_state(windows::window::discharge_caps);
+				break;
+			case reboot:
+				NVIC_SystemReset();
+				break;
+			case get_status:
+				///To be implemented TODO
+				break;
+			case delete_anim_network_buffer:
+				///To be implemented TODO
+				break;
+			default:
+				break;
 		}
 	}
+}
 
-	size= getSn_RX_RSR(2);
+void network::fetch_frame(){
+	size_t size= getSn_RX_RSR(2);
 	if(size){
 		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
 		//todo treat big and small datagrams
 
-				char buff[10];
+		char buff[10];
 
-				uint8_t svr_addr[6];
-				uint16_t  svr_port;
-				uint16_t len;
-				len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
+		uint8_t svr_addr[6];
+		uint16_t  svr_port;
+		uint16_t len;
+		len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
 
-				//todo check indexes, datagram size
+		//todo check indexes, datagram size
 
-				size_t window = buff[0];
-				size_t pixel_num = buff[1];
-				uint8_t red = buff[2];
-				uint8_t green = buff[3];
-				uint8_t blue = buff[4];
+		size_t window = buff[0];
+		size_t pixel_num = buff[1];
+		uint8_t red = buff[2];
+		uint8_t green = buff[3];
+		uint8_t blue = buff[4];
 
-				if(window == 0) //right window
-					windows::right_window.pixels[pixel_num].set(red, green, blue);
-				else
-					windows::left_window.pixels[pixel_num].set(red, green, blue);
-
+		if(window == 0) //right window
+			windows::right_window.pixels[pixel_num].set(red, green, blue);
+		else
+			windows::left_window.pixels[pixel_num].set(red, green, blue);
 	}
+}
+
+void network::step_network(){
+	do_remote_command();
+	fetch_frame();
 
 	//do DHCP task
 	switch(DHCP_run()){
