@@ -117,12 +117,12 @@ void window::update_image(){
 	for(size_t j=0; j<num_of_pixels; j++){
 		if(pixels[j].isFull()){
 			pixels[j].flush();
-			uint8_t address = ( (j & 3) * 3 ) << 4;
+			uint8_t base = (j & 3) * 3;
 			uint8_t buff[] = {
 					0xF0,
-					(uint8_t)address | (pixels[j].red & (uint8_t)0x0F),
-					(uint8_t)address | (pixels[j].green & (uint8_t)0x0F),
-					(uint8_t)address | (pixels[j].blue & (uint8_t)0x0F)
+					(uint8_t)( ((base + 0) << 4) | (uint8_t)(pixels[j].red   & (uint8_t)0x0F) ),
+					(uint8_t)( ((base + 1) << 4) | (uint8_t)(pixels[j].green & (uint8_t)0x0F) ),
+					(uint8_t)( ((base + 2) << 4) | (uint8_t)(pixels[j].blue  & (uint8_t)0x0F) )
 			};
 			HAL_UART_Transmit(uart_handler, buff, sizeof(buff), HAL_MAX_DELAY);
 			return;
@@ -144,3 +144,4 @@ windows::window windows::left_window(WINDOW_3V3_LEFT_GPIO_Port, WINDOW_3V3_LEFT_
 windows::window windows::right_window(WINDOW_3V3_RIGHT_GPIO_Port, WINDOW_3V3_RIGHT_Pin, WINDOW_POWER_RIGHT_GPIO_Port, WINDOW_POWER_RIGHT_Pin, &huart2);
 
 uint8_t sec_cntr_window = 0;
+
