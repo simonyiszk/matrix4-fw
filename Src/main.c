@@ -392,11 +392,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(WINDOW_POWER_LEFT_GPIO_Port, WINDOW_POWER_LEFT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, SPI1_NSS_Pin|WINDOW_POWER_RIGHT_Pin|WINDOW_3V3_RIGHT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, SPI1_NSS_Pin|WINDOW_POWER_RIGHT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, W5500_RESET_Pin|LED_JOKER_Pin|LED_COMM_Pin|LED_DHCP_Pin 
-                          |LED_HEARTH_Pin, GPIO_PIN_RESET);
+                          |LED_HEARTH_Pin|WINDOW_3V3_RIGHT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(WINDOW_3V3_LEFT_GPIO_Port, WINDOW_3V3_LEFT_Pin, GPIO_PIN_SET);
@@ -408,17 +408,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(WINDOW_POWER_LEFT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SPI1_NSS_Pin WINDOW_POWER_RIGHT_Pin WINDOW_3V3_RIGHT_Pin */
-  GPIO_InitStruct.Pin = SPI1_NSS_Pin|WINDOW_POWER_RIGHT_Pin|WINDOW_3V3_RIGHT_Pin;
+  /*Configure GPIO pins : SPI1_NSS_Pin WINDOW_POWER_RIGHT_Pin */
+  GPIO_InitStruct.Pin = SPI1_NSS_Pin|WINDOW_POWER_RIGHT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : W5500_RESET_Pin LED_JOKER_Pin LED_COMM_Pin LED_DHCP_Pin 
-                           LED_HEARTH_Pin WINDOW_3V3_LEFT_Pin */
+                           LED_HEARTH_Pin WINDOW_3V3_RIGHT_Pin WINDOW_3V3_LEFT_Pin */
   GPIO_InitStruct.Pin = W5500_RESET_Pin|LED_JOKER_Pin|LED_COMM_Pin|LED_DHCP_Pin 
-                          |LED_HEARTH_Pin|WINDOW_3V3_LEFT_Pin;
+                          |LED_HEARTH_Pin|WINDOW_3V3_RIGHT_Pin|WINDOW_3V3_LEFT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

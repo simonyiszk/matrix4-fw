@@ -20,7 +20,7 @@ void main2(void){
 		if(main_state == internal_anim)
 			internal_animation::step_anim();
 
-		//net::inetwork.step_network();
+		net::inetwork.step_network();
 
 		windows::left_window.step_state();
 		windows::right_window.step_state();

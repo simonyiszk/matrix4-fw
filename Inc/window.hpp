@@ -55,7 +55,7 @@ namespace windows{
 		 *
 		 * see documentation for further information
 		 */
-		enum twindow_status{
+		enum twindow_status : uint8_t{
 			discharge_caps,
 			vcc_3v3_off,  //waiting for plug
 			vcc_3v3_on,   //waiting for comm
