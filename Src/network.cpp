@@ -15,6 +15,7 @@ extern "C" {
 	#include "main.h"
 	#include "stm32f0xx_hal.h"
 	#include "dhcp_buffer.h"
+	#include "stm32f0xx_ll_gpio.h"
 };
 
 #include "network.hpp"
@@ -38,12 +39,12 @@ void ip_assign(){
 	getSNfromDHCP(netInfo.sn);
 	getDNSfromDHCP(netInfo.dns);
 	wizchip_setnetinfo(&netInfo);
-	HAL_GPIO_WritePin(LED_DHCP_GPIO_Port, LED_DHCP_Pin, GPIO_PIN_SET);
+	LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
 }
 
 void ip_conflict(){
-	HAL_GPIO_WritePin(LED_DHCP_GPIO_Port, LED_DHCP_Pin, GPIO_PIN_RESET);
-	while(1);
+	LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+	while(1); //TODO better handling
 }
 
 //DHCP 1s timer located in stm32f0xx_it.c
@@ -52,11 +53,11 @@ void ip_conflict(){
 namespace net{
 
 void cs_sel() {
-	HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_RESET); //CS LOW
+	LL_GPIO_ResetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS LOW
 }
 
 void cs_desel() {
-	HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_SET); //CS HIGH
+	LL_GPIO_SetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS HIGH
 }
 
 uint8_t spi_rb(void) {
@@ -80,9 +81,9 @@ void network::init(){
 	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } };
 
 	//Hard-reset W5500
-	HAL_GPIO_WritePin(W5500_RESET_GPIO_Port, W5500_RESET_Pin, GPIO_PIN_RESET);
+	LL_GPIO_ResetOutputPin(W5500_RESET_GPIO_Port, W5500_RESET_Pin);
 	HAL_Delay(1); //min reset cycle 500 us
-	HAL_GPIO_WritePin(W5500_RESET_GPIO_Port, W5500_RESET_Pin, GPIO_PIN_SET);
+	LL_GPIO_SetOutputPin(W5500_RESET_GPIO_Port, W5500_RESET_Pin);
 	HAL_Delay(2); //PLL lock 1 ms max (refer datasheet)
 
 	reg_wizchip_cs_cbfunc(cs_sel, cs_desel);
@@ -198,13 +199,13 @@ void network::step_network(){
 	switch(DHCP_run()){
 	case DHCP_IP_ASSIGN:
 	case DHCP_IP_CHANGED:
-		HAL_GPIO_WritePin(LED_DHCP_GPIO_Port, LED_DHCP_Pin, GPIO_PIN_SET);
+		LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
 		break;
 	case DHCP_IP_LEASED:
 		//HAL_GPIO_WritePin(LED_DHCP_GPIO_Port, LED_DHCP_Pin, GPIO_PIN_RESET);
 		break;
 	case DHCP_FAILED:
-		HAL_GPIO_WritePin(LED_COMM_GPIO_Port, LED_COMM_Pin, GPIO_PIN_RESET);
+		LL_GPIO_ResetOutputPin(LED_COMM_GPIO_Port, LED_COMM_Pin);
 		break;
 	default:
 		break;

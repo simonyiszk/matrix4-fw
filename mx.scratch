@@ -44,6 +44,7 @@
 	    	<include></include>
     </Aincludes>
     <Cdefines>
+        <define>USE_FULL_LL_DRIVER</define>
         <define>__weak=&quot;__attribute__((weak))&quot;</define>
         <define>__packed=&quot;__attribute__((__packed__))&quot;</define>
     </Cdefines>
@@ -52,7 +53,6 @@
             <define></define>
         </Adefines>
         <Cdefines>
-            <define>USE_FULL_LL_DRIVER</define>
             <define>MBEDTLS_CONFIG_FILE=&quot;mbedtls_config.h&quot;</define>
         </Cdefines>         
     </definestoremove>

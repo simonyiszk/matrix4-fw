@@ -10,6 +10,7 @@
 
 #include <array>
 #include "stm32f0xx_hal.h"
+#include "stm32f0xx_ll_gpio.h"
 
 namespace windows{
 	const size_t num_of_pixels = 4;

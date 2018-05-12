@@ -85,24 +85,24 @@ void window::set_state(enum twindow_status new_stat){
 			new_stat = discharge_caps;
 		case discharge_caps:
 			sec_cntr_window=0;
-			HAL_GPIO_WritePin(gpio_port_3v3, gpio_pin_3v3, GPIO_PIN_SET);
+			LL_GPIO_SetOutputPin(gpio_port_3v3, gpio_pin_3v3);
 			break;
 		case vcc_3v3_off:
 			sec_cntr_window=0;
-			HAL_GPIO_WritePin(gpio_port_3v3, gpio_pin_3v3, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(gpio_port_power, gpio_pin_power, GPIO_PIN_RESET);
+			LL_GPIO_SetOutputPin(gpio_port_3v3, gpio_pin_3v3);
+			LL_GPIO_ResetOutputPin(gpio_port_power, gpio_pin_power);
 			break;
 		case vcc_3v3_on:
 			sec_cntr_window=0;
 			//EMPTY DMA BUFFER
-			HAL_GPIO_WritePin(gpio_port_3v3, gpio_pin_3v3, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(gpio_port_power, gpio_pin_power, GPIO_PIN_RESET);
+			LL_GPIO_ResetOutputPin(gpio_port_3v3, gpio_pin_3v3);
+			LL_GPIO_ResetOutputPin(gpio_port_power, gpio_pin_power);
 			break;
 		case vcc_12v_on:
-			HAL_GPIO_WritePin(gpio_port_power, gpio_pin_power, GPIO_PIN_SET);
+			LL_GPIO_SetOutputPin(gpio_port_power, gpio_pin_power);
 			break;
 		case vcc_12v_off:
-			HAL_GPIO_WritePin(gpio_port_power, gpio_pin_power, GPIO_PIN_RESET);
+			LL_GPIO_ResetOutputPin(gpio_port_power, gpio_pin_power);
 			break;
 		}
 		this->status = new_stat;

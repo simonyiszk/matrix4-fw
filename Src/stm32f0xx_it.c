@@ -165,7 +165,7 @@ void TIM17_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM17_IRQn 0 */
   DHCP_time_handler();
-  HAL_GPIO_TogglePin(LED_HEARTH_GPIO_Port, LED_HEARTH_Pin);
+  LL_GPIO_TogglePin(LED_HEARTH_GPIO_Port, LED_HEARTH_Pin); //TODO to be moved to the main loop
   sec_cntr_window++;
   time_to_next_frame = 1;
 
