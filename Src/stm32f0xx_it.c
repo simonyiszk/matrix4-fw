@@ -38,6 +38,7 @@
 /* USER CODE BEGIN 0 */
 #include "dhcp.h"
 #include "window.h"
+#include "internal_anim.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
