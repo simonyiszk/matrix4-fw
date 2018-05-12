@@ -43,6 +43,8 @@ namespace net{
 		network();
 		void step_network();
 		void init();
+
+		void link_status_to_joker_led();
 	};
 
 	extern network inetwork;

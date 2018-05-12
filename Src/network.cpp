@@ -102,6 +102,14 @@ void network::init(){
 	socket(2, Sn_MR_UDP, 3000, 0x00);
 }
 
+void network::link_status_to_joker_led(){
+	 if (wizphy_getphylink() == PHY_LINK_ON){
+		 LL_GPIO_SetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
+	 } else {
+		 LL_GPIO_ResetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
+	 }
+}
+
 void network::do_remote_command(){
 	size_t size = getSn_RX_RSR(1);
 
