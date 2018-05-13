@@ -27,8 +27,6 @@ void main2(void){
 
 		net::inetwork.step_network();
 
-		net::inetwork.link_status_to_joker_led();
-
 		windows::left_window.step_state();
 		windows::right_window.step_state();
 
