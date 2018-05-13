@@ -11,6 +11,8 @@
 #include <array>
 #include "stm32f0xx_hal.h"
 #include "stm32f0xx_ll_gpio.h"
+#include "stm32f0xx_ll_dma.h"
+#include "stm32f0xx_ll_usart.h"
 
 namespace windows{
 	const size_t num_of_pixels = 4;
@@ -70,7 +72,13 @@ namespace windows{
 		GPIO_TypeDef* gpio_port_power; //TODO add const keyword
 		uint16_t gpio_pin_3v3, gpio_pin_power; //TODO add const keyword
 
-		UART_HandleTypeDef* uart_handler;
+		DMA_TypeDef* DMAx;
+		uint32_t DMA_Channel;
+		USART_TypeDef* uart_handler;
+
+		volatile uint8_t DMA_buffer[13];
+
+		bool transmitted_before;
 
 	public:
 
@@ -79,10 +87,14 @@ namespace windows{
 				uint16_t gpio_pin_3v3,
 				GPIO_TypeDef* gpio_port_power,
 				uint16_t gpio_pin_power,
-				UART_HandleTypeDef* uart_handler);
+				USART_TypeDef *USARTx,
+				DMA_TypeDef* DMAx,
+				uint32_t DMA_Channel);
 
 		window(const window&) = delete;
 		window& operator=(const window&) = delete;
+
+		void init();
 
 		/*!
 		 * \brief the the jobs defined by the state of the window

@@ -9,7 +9,7 @@ using namespace windows;
 
 pixel_data::pixel_data() :
 		red(0),
-		green(0),
+		green(200),
 		blue(0),
 		stat(pixel_data::buffer_full)
 {
@@ -63,17 +63,68 @@ void window::step_state(){
 	}
 }
 
-window::window(GPIO_TypeDef* gpio_port_3v3, uint16_t gpio_pin_3v3, GPIO_TypeDef* gpio_port_power, uint16_t gpio_pin_power, UART_HandleTypeDef* uart_handler):
+window::window(	GPIO_TypeDef* gpio_port_3v3,
+		uint16_t gpio_pin_3v3,
+		GPIO_TypeDef* gpio_port_power,
+		uint16_t gpio_pin_power,
+		USART_TypeDef *USARTx,
+		DMA_TypeDef* DMAx,
+		uint32_t DMA_Channel):
 		status(vcc_3v3_off),
 		gpio_port_3v3(gpio_port_3v3),
 		gpio_port_power(gpio_port_power),
 		gpio_pin_3v3(gpio_pin_3v3),
 		gpio_pin_power(gpio_pin_power),
-		uart_handler(uart_handler)
+		DMAx(DMAx),
+		DMA_Channel(DMA_Channel),
+		uart_handler(USARTx),
+		transmitted_before(false)
 {
 	//this->set_state(discharge_caps); WARN static insatance's constructor runs before hardware init routines
 	//TODO> DMA
+	DMA_buffer[0]=0xF0;
 };
+
+void window::init(){
+	LL_DMA_DisableChannel(DMAx, DMA_Channel);
+
+	while(LL_DMA_IsEnabledChannel(DMAx, DMA_Channel));
+
+	LL_USART_Enable(uart_handler);
+	LL_USART_EnableDMAReq_TX(uart_handler);
+	LL_USART_EnableDirectionTx(uart_handler);
+
+
+	LL_DMA_SetDataTransferDirection(DMAx, DMA_Channel, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
+	LL_DMA_SetChannelPriorityLevel(DMAx, DMA_Channel, LL_DMA_PRIORITY_MEDIUM);
+	LL_DMA_SetMode(DMAx, DMA_Channel, LL_DMA_MODE_NORMAL);
+	LL_DMA_SetPeriphIncMode(DMAx, DMA_Channel, LL_DMA_PERIPH_NOINCREMENT);
+	LL_DMA_SetMemoryIncMode(DMAx, DMA_Channel, LL_DMA_MEMORY_INCREMENT);
+	LL_DMA_SetPeriphSize(DMAx, DMA_Channel, LL_DMA_PDATAALIGN_BYTE);
+	LL_DMA_SetMemorySize(DMAx, DMA_Channel, LL_DMA_MDATAALIGN_BYTE);
+	LL_DMA_SetPeriphAddress(DMAx, DMA_Channel, (uint32_t)&(uart_handler->TDR));
+	LL_DMA_SetMemoryAddress(DMAx, DMA_Channel, (uint32_t)DMA_buffer);
+	LL_DMA_SetMemorySize(DMAx, DMA_Channel, LL_DMA_MDATAALIGN_BYTE);
+
+	LL_DMA_DisableIT_HT(DMAx, DMA_Channel);
+	LL_DMA_DisableIT_TC(DMAx, DMA_Channel);
+	LL_DMA_DisableIT_TE(DMAx, DMA_Channel);
+
+	if(DMA_Channel == LL_DMA_CHANNEL_2)
+		LL_DMA_ClearFlag_GI2(DMAx);
+	else if (DMA_Channel == LL_DMA_CHANNEL_4)
+		LL_DMA_ClearFlag_GI4(DMAx);
+	else
+		while(1);
+
+	LL_USART_ClearFlag_TC(uart_handler);
+
+	LL_DMA_SetDataLength(DMAx, DMA_Channel, 1);
+
+	//Do a first tranfer, to set TC flag
+	DMA_buffer[0]=0xF0;
+	LL_DMA_EnableChannel(DMAx, DMA_Channel);
+}
 
 window::twindow_status window::get_state(){
 	return this->status;
@@ -114,19 +165,44 @@ bool window::check_uart_welcome_message(){
 }
 
 void window::update_image(){
+	if( (!LL_USART_IsActiveFlag_TC(uart_handler)) )
+		return;
+
+	LL_DMA_DisableChannel(DMAx, DMA_Channel);
+
+	if(DMA_Channel == LL_DMA_CHANNEL_2)
+		LL_DMA_ClearFlag_GI2(DMAx);
+	else if (DMA_Channel == LL_DMA_CHANNEL_4)
+		LL_DMA_ClearFlag_GI4(DMAx);
+	else
+		while(1);
+
+	DMA_buffer[0] = 0xF0; //always this value, never changes
+	size_t transfer_size = 0; //besides the first F0 byte
+
 	for(size_t j=0; j<num_of_pixels; j++){
 		if(pixels[j].isFull()){
 			pixels[j].flush();
 			uint8_t base = (j & 3) * 3;
-			uint8_t buff[] = {
-					0xF0,
-					(uint8_t)( ((base + 0) << 4) | (uint8_t)(pixels[j].red   & (uint8_t)0x0F) ),
-					(uint8_t)( ((base + 1) << 4) | (uint8_t)(pixels[j].green & (uint8_t)0x0F) ),
-					(uint8_t)( ((base + 2) << 4) | (uint8_t)(pixels[j].blue  & (uint8_t)0x0F) )
-			};
-			HAL_UART_Transmit(uart_handler, buff, sizeof(buff), HAL_MAX_DELAY);
-			return;
+
+			transfer_size++;
+			DMA_buffer[transfer_size] = (uint8_t)( ((base + 0) << 4) | (uint8_t)(pixels[j].red   & (uint8_t)0x0F) );
+			transfer_size++;
+			DMA_buffer[transfer_size] = (uint8_t)( ((base + 1) << 4) | (uint8_t)(pixels[j].green & (uint8_t)0x0F) );
+			transfer_size++;
+			DMA_buffer[transfer_size] = (uint8_t)( ((base + 2) << 4) | (uint8_t)(pixels[j].blue  & (uint8_t)0x0F) );
 		}
+	}
+
+	if(transfer_size > 0){
+		LL_USART_ClearFlag_TC(uart_handler);
+
+		LL_DMA_SetDataLength(DMAx, DMA_Channel, transfer_size+1);
+
+		LL_DMA_SetPeriphAddress(DMAx, DMA_Channel, (uint32_t)&(uart_handler->TDR));    // --|
+		LL_DMA_SetMemoryAddress(DMAx, DMA_Channel, (uint32_t)DMA_buffer);             //  --| --> Maybe unnecesary???
+
+		LL_DMA_EnableChannel(DMAx, DMA_Channel);
 	}
 }
 
@@ -140,8 +216,25 @@ void window::blank(){
  *  Instance static classes
  *****************************/
 
-windows::window windows::left_window(WINDOW_3V3_LEFT_GPIO_Port, WINDOW_3V3_LEFT_Pin, WINDOW_POWER_LEFT_GPIO_Port, WINDOW_POWER_LEFT_Pin, &huart1);
-windows::window windows::right_window(WINDOW_3V3_RIGHT_GPIO_Port, WINDOW_3V3_RIGHT_Pin, WINDOW_POWER_RIGHT_GPIO_Port, WINDOW_POWER_RIGHT_Pin, &huart2);
+windows::window windows::left_window(
+		WINDOW_3V3_LEFT_GPIO_Port,
+		WINDOW_3V3_LEFT_Pin,
+		WINDOW_POWER_LEFT_GPIO_Port,
+		WINDOW_POWER_LEFT_Pin,
+		USART1,
+		DMA1,
+		LL_DMA_CHANNEL_2);
+
+windows::window windows::right_window(
+		WINDOW_3V3_RIGHT_GPIO_Port,
+		WINDOW_3V3_RIGHT_Pin,
+		WINDOW_POWER_RIGHT_GPIO_Port,
+		WINDOW_POWER_RIGHT_Pin,
+		USART2,
+		DMA1,
+		LL_DMA_CHANNEL_4);
 
 uint8_t sec_cntr_window = 0;
+
+
 

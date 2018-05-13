@@ -123,12 +123,15 @@ void network::do_remote_command(){
 		uint16_t resp_port;
 
 		// Handle too small packages
-		if(size < 5){
+		if(size < 4){
 			len = recvfrom(1, (uint8_t *)buff, 4, resp_addr, &resp_port);
 			return;
 		}
 
 		len = recvfrom(1, (uint8_t *)buff, 4, resp_addr, &resp_port);
+
+		if(len!=4)  //todo consider code remove see above
+			return;
 
 		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M')
 			return;

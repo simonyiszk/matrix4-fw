@@ -38,7 +38,7 @@
 <booleanAttribute key="org.eclipse.cdt.debug.mi.core.verboseMode" value="false"/>
 <stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="${TOOLCHAIN_PATH}/arm-atollic-eabi-gdb"/>
 <intAttribute key="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR" value="2"/>
-<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_REGISTER_GROUPS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#10;&lt;registerGroups&gt;&#10;&lt;group memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#10;&amp;lt;registerGroup enabled=&amp;quot;true&amp;quot; name=&amp;quot;Group_1&amp;quot;&amp;gt;&amp;#10;&amp;lt;register name=&amp;quot;sp&amp;quot; originalGroupName=&amp;quot;Main&amp;quot;/&amp;gt;&amp;#10;&amp;lt;/registerGroup&amp;gt;&amp;#10;&quot;/&gt;&#10;&lt;/registerGroups&gt;&#10;"/>
+<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_REGISTER_GROUPS" value=""/>
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Debug/matrix4_mueb_fw.elf"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="matrix4_mueb_fw"/>
 <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="false"/>

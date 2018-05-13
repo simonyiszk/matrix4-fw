@@ -5,6 +5,8 @@
 
 extern "C"{
 #include "main.h"
+#include "stm32f0xx_ll_dma.h"
+#include "stm32f0xx_ll_usart.h"
 };
 
 enum main_states main_state = booting;
@@ -13,6 +15,9 @@ void main2(void){
 	//init_network(); reminder: static instances's constructors are ran before the driver initialization functions
 
 	net::inetwork.init();
+
+	windows::right_window.init();
+	windows::left_window.init();
 
 	main_state = internal_anim;
 

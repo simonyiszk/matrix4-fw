@@ -43,8 +43,6 @@
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim17;
-extern DMA_HandleTypeDef hdma_usart1_rx;
-extern DMA_HandleTypeDef hdma_usart2_rx;
 
 /******************************************************************************/
 /*            Cortex-M0 Processor Interruption and Exception Handlers         */ 
@@ -137,8 +135,19 @@ void DMA1_Channel2_3_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
 
+	/*if(LL_DMA_IsActiveFlag_HT2(DMA1))
+		LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+
+	if(LL_DMA_IsActiveFlag_TC2(DMA1))
+			LL_GPIO_SetOutputPin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+
+	if(LL_DMA_IsActiveFlag_TE2(DMA1))
+			LL_GPIO_SetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);*/
+
+	LL_DMA_ClearFlag_GI2(DMA1);
+
   /* USER CODE END DMA1_Channel2_3_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  
   /* USER CODE BEGIN DMA1_Channel2_3_IRQn 1 */
 
   /* USER CODE END DMA1_Channel2_3_IRQn 1 */
@@ -149,10 +158,14 @@ void DMA1_Channel2_3_IRQHandler(void)
 */
 void DMA1_Channel4_5_IRQHandler(void)
 {
+
   /* USER CODE BEGIN DMA1_Channel4_5_IRQn 0 */
 
+	LL_DMA_ClearFlag_GI4(DMA1);
+
+
   /* USER CODE END DMA1_Channel4_5_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart2_rx);
+  
   /* USER CODE BEGIN DMA1_Channel4_5_IRQn 1 */
 
   /* USER CODE END DMA1_Channel4_5_IRQn 1 */
