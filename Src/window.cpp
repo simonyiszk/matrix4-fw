@@ -186,11 +186,11 @@ void window::update_image(){
 			uint8_t base = (j & 3) * 3;
 
 			transfer_size++;
-			DMA_buffer[transfer_size] = (uint8_t)( ((base + 0) << 4) | (uint8_t)(pixels[j].red   & (uint8_t)0x0F) );
+			DMA_buffer[transfer_size] = (uint8_t)( ((base + 0) << 4) | (uint8_t)( (pixels[j].red   & (uint8_t)0xF0) >> 4 ) );
 			transfer_size++;
-			DMA_buffer[transfer_size] = (uint8_t)( ((base + 1) << 4) | (uint8_t)(pixels[j].green & (uint8_t)0x0F) );
+			DMA_buffer[transfer_size] = (uint8_t)( ((base + 1) << 4) | (uint8_t)( (pixels[j].green & (uint8_t)0xF0) >> 4 ) );
 			transfer_size++;
-			DMA_buffer[transfer_size] = (uint8_t)( ((base + 2) << 4) | (uint8_t)(pixels[j].blue  & (uint8_t)0x0F) );
+			DMA_buffer[transfer_size] = (uint8_t)( ((base + 2) << 4) | (uint8_t)( (pixels[j].blue  & (uint8_t)0xF0) >> 4 ) );
 		}
 	}
 
