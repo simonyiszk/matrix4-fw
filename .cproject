@@ -103,6 +103,61 @@
 							<tool id="com.atollic.truestudio.ar.base.874202472" name="Archiver" superClass="com.atollic.truestudio.ar.base"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.260635581" name="w5500.c" rcbsApplicability="disable" resourcePath="Drivers/ioLibrary_Driver/Ethernet/W5500/w5500.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.1416264499">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.1416264499" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
+							<option id="com.atollic.truestudio.gcc.directories.select.1414604501" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="../Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet/W5500}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet}&quot;"/>
+							</option>
+							<inputType id="com.atollic.truestudio.gcc.input.100734328" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1714643128" name="socket.c" rcbsApplicability="disable" resourcePath="Drivers/ioLibrary_Driver/Ethernet/socket.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.2087209835">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.2087209835" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
+							<option id="com.atollic.truestudio.gcc.directories.select.1613092245" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="../Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet/W5500}&quot;"/>
+							</option>
+							<inputType id="com.atollic.truestudio.gcc.input.1144885066" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.686605503" name="Socket_APIs_V3.0.3.chm" rcbsApplicability="disable" resourcePath="Drivers/ioLibrary_Driver/Ethernet/Socket_APIs_V3.0.3.chm" toolsToInvoke=""/>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1581728726" name="wizchip_conf.c" rcbsApplicability="disable" resourcePath="Drivers/ioLibrary_Driver/Ethernet/wizchip_conf.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.838221780">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.838221780" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
+							<option id="com.atollic.truestudio.gcc.directories.select.399020917" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="../Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet/}&quot;"/>
+							</option>
+							<inputType id="com.atollic.truestudio.gcc.input.773401132" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1172178879" name="dhcp.c" rcbsApplicability="disable" resourcePath="Drivers/ioLibrary_Driver/Internet/DHCP/dhcp.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.153892732">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447.153892732" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447">
+							<option id="com.atollic.truestudio.gcc.directories.select.1962919506" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="../Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc"/>
+								<listOptionValue builtIn="false" value="../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/ioLibrary_Driver/Ethernet}&quot;"/>
+							</option>
+							<inputType id="com.atollic.truestudio.gcc.input.1883293722" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
 					<folderInfo id="com.atollic.truestudio.exe.debug.1518366166.814825017" name="/" resourcePath="Src">
 						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.1003758939" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
 							<option id="com.atollic.truestudio.general.runtimelib.516685730.1425655089" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.516685730"/>
@@ -290,6 +345,8 @@
 					</fileInfo>
 					<sourceEntries>
 						<entry excluding="ioLibrary_Driver" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry excluding="Socket_APIs_V3.0.3.chm|W5300|W5200|W5100S|W5100" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers/ioLibrary_Driver/Ethernet"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers/ioLibrary_Driver/Internet/DHCP"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry excluding="ioLibrary_Driver" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
@@ -306,7 +363,7 @@
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="matrix4_mueb_fw"/>
+			<resource resourceType="PROJECT" workspacePath="/matrix4_mueb_fw"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
