@@ -32,6 +32,10 @@ void main2(void){
 
 		windows::left_window.update_image();
 		windows::right_window.update_image();
+
+		if(LL_GPIO_IsInputPinSet(USER_INPUT_BUTTON_GPIO_Port, USER_INPUT_BUTTON_Pin)){
+			//TODO do sg
+		}
 	}
 
 	//todo error handling

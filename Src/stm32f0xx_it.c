@@ -158,7 +158,6 @@ void DMA1_Channel2_3_IRQHandler(void)
 */
 void DMA1_Channel4_5_IRQHandler(void)
 {
-
   /* USER CODE BEGIN DMA1_Channel4_5_IRQn 0 */
 
 	LL_DMA_ClearFlag_GI4(DMA1);
