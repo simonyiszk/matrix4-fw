@@ -21,6 +21,7 @@ extern "C" {
 #include "network.hpp"
 #include "main2.hpp"
 #include "window.hpp"
+#include <cstdio>
 
 //------------------------------------------------------------------------
 
@@ -79,6 +80,7 @@ network::network(){
 
 void network::init(){
 	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } };
+	wiz_PhyConf phyconf;
 
 	//Hard-reset W5500
 	LL_GPIO_ResetOutputPin(W5500_RESET_GPIO_Port, W5500_RESET_Pin);
@@ -90,6 +92,16 @@ void network::init(){
 	reg_wizchip_spi_cbfunc(spi_rb, spi_wb);
 
 	ctlwizchip(CW_INIT_WIZCHIP, (void*) memsize);
+	wizphy_setphypmode(PHY_POWER_DOWN);
+
+	wizphy_getphyconf(&phyconf);
+	phyconf.by = PHY_CONFBY_SW;
+	phyconf.duplex = PHY_DUPLEX_FULL;
+	phyconf.mode = PHY_MODE_MANUAL;
+	phyconf.speed = PHY_SPEED_100;
+	wizphy_setphyconf(&phyconf);
+
+	wizphy_setphypmode(PHY_POWER_NORM);
 
 	getMAC(netInfo.mac);
 	wizchip_setnetinfo(&netInfo);
@@ -100,6 +112,26 @@ void network::init(){
 
 	socket(1, Sn_MR_UDP, 2000, 0x00);
 	socket(2, Sn_MR_UDP, 3000, 0x00);
+}
+
+size_t network::create_status_string(){
+	int ret;
+
+	ret = snprintf((char*)this->status_string, sizeof(status_string),
+		"anim_source: %#x\n"
+		"telemetry_comm_buff: %#x\n"
+		"frame_ether_buff: %#x\n"
+		"dhcp_lease_time: %d\n"
+		"dhcp_reamining_lease_time: %d\n"
+		"SEM forever\n",
+		main_state,
+		getSn_RX_RSR(1),
+		getSn_RX_RSR(2),
+		getDHCPLeasetime(),
+		getDHCPTimeBeforeLease()
+	);
+
+	return (ret>=0) ? ret : 1;
 }
 
 void network::do_remote_command(){
@@ -155,6 +187,7 @@ void network::do_remote_command(){
 				NVIC_SystemReset();
 				break;
 			case get_status:
+				sendto(1, status_string, network::create_status_string(), resp_addr, resp_port);
 				///To be implemented TODO
 				break;
 			case delete_anim_network_buffer:

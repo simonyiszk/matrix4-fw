@@ -26,6 +26,10 @@ namespace net{
 		void do_remote_command();
 		void fetch_frame();
 
+		uint8_t status_string[512];
+
+		size_t create_status_string();
+
 	public:
 		enum commands{
 			turn_12v_off_left = 0x00,
