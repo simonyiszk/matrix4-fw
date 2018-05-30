@@ -22,6 +22,7 @@ extern "C" {
 #include "main2.hpp"
 #include "window.hpp"
 #include <cstdio>
+#include "version.hpp"
 
 //------------------------------------------------------------------------
 
@@ -118,12 +119,14 @@ size_t network::create_status_string(){
 	int ret;
 
 	ret = snprintf((char*)this->status_string, sizeof(status_string),
+		"MUEB FW version: %s\n"
 		"anim_source: %#x\n"
 		"telemetry_comm_buff: %#x\n"
 		"frame_ether_buff: %#x\n"
 		"dhcp_lease_time: %d\n"
 		"dhcp_reamining_lease_time: %d\n"
 		"SEM forever\n",
+		mueb_version,
 		main_state,
 		getSn_RX_RSR(1),
 		getSn_RX_RSR(2),
