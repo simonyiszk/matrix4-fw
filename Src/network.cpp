@@ -191,7 +191,6 @@ void network::do_remote_command(){
 				break;
 			case get_status:
 				sendto(1, status_string, network::create_status_string(), resp_addr, resp_port);
-				///To be implemented TODO
 				break;
 			case delete_anim_network_buffer:
 				///To be implemented TODO
