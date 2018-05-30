@@ -80,7 +80,7 @@ network::network(){
 }
 
 void network::init(){
-	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } };
+	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } }; //TODO reassign buffer sizes
 	wiz_PhyConf phyconf;
 
 	//Hard-reset W5500
