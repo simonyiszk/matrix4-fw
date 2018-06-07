@@ -118,6 +118,7 @@ void network::init(){
     LL_SPI_DisableCRC(SPI1);
     LL_SPI_SetMode(SPI1, LL_SPI_MODE_MASTER);
 
+    LL_SPI_SetRxFIFOThreshold(SPI1, LL_SPI_RX_FIFO_TH_QUARTER);
     LL_SPI_SetDataWidth(SPI1, LL_SPI_DATAWIDTH_8BIT);
     LL_SPI_SetStandard(SPI1, LL_SPI_PROTOCOL_MOTOROLA);
 
