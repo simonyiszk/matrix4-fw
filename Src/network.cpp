@@ -195,6 +195,9 @@ void network::do_remote_command(){
 			case delete_anim_network_buffer:
 				///To be implemented TODO
 				break;
+			case ping:
+				sendto(1, (uint8_t*) "pong", 4, resp_addr, resp_port);
+				break;
 			default:
 				break;
 		}

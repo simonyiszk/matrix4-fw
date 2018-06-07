@@ -41,7 +41,8 @@ namespace net{
 			use_internal_anim = 0x10,
 			use_external_anim = 0x20,
 			blank = 0x30,
-			delete_anim_network_buffer = 0x06
+			delete_anim_network_buffer = 0x06,
+			ping = 0x40
 		};
 
 		network();
