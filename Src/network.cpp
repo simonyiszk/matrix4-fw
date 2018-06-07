@@ -16,6 +16,7 @@ extern "C" {
 	#include "stm32f0xx_hal.h"
 	#include "dhcp_buffer.h"
 	#include "stm32f0xx_ll_gpio.h"
+	#include "stm32f0xx_ll_spi.h"
 };
 
 #include "network.hpp"
@@ -63,13 +64,23 @@ void cs_desel() {
 }
 
 uint8_t spi_rb(void) {
-	uint8_t rbuf;
-	HAL_SPI_Receive(&hspi1, &rbuf, 1, 0xFFFFFFFF);
-	return rbuf;
+	while(LL_SPI_IsActiveFlag_BSY(SPI1));
+
+    while (LL_SPI_IsActiveFlag_RXNE(SPI1))
+        (void)LL_SPI_ReceiveData8(SPI1);      // flush any FIFO content
+
+    while (!LL_SPI_IsActiveFlag_TXE(SPI1));
+
+    LL_SPI_TransmitData8(SPI1, 0xFF);   // send dummy byte
+    while (!LL_SPI_IsActiveFlag_RXNE(SPI1));
+
+    return(LL_SPI_ReceiveData8(SPI1));
 }
 
 void spi_wb(uint8_t b) {
-	HAL_SPI_Transmit(&hspi1, &b, 1, 0xFFFFFFFF);
+	while(LL_SPI_IsActiveFlag_BSY(SPI1));
+	LL_SPI_TransmitData8(SPI1, b);
+	(void)LL_SPI_ReceiveData8(SPI1);
 }
 
 /*********************************
@@ -80,6 +91,14 @@ network::network(){
 }
 
 void network::init(){
+
+
+
+
+
+	LL_SPI_Enable(SPI1);
+
+
 	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } }; //TODO reassign buffer sizes
 	wiz_PhyConf phyconf;
 
