@@ -91,12 +91,39 @@ network::network(){
 }
 
 void network::init(){
+    /* Peripheral clock enable */
+    __HAL_RCC_SPI1_CLK_ENABLE();
 
+    GPIO_InitTypeDef GPIO_InitStruct;
 
+    /**SPI1 GPIO Configuration
+    PA5     ------> SPI1_SCK
+    PA6     ------> SPI1_MISO
+    PA7     ------> SPI1_MOSI
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF0_SPI1;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+    LL_SPI_Disable(SPI1);
 
+	LL_SPI_SetBaudRatePrescaler(SPI1, LL_SPI_BAUDRATEPRESCALER_DIV2);
+	LL_SPI_SetClockPolarity(SPI1, LL_SPI_POLARITY_LOW);
+	LL_SPI_SetClockPhase(SPI1, LL_SPI_PHASE_1EDGE);
+    LL_SPI_SetTransferDirection(SPI1, LL_SPI_FULL_DUPLEX);
+    LL_SPI_SetTransferBitOrder(SPI1, LL_SPI_MSB_FIRST);
+    LL_SPI_DisableCRC(SPI1);
+    LL_SPI_SetMode(SPI1, LL_SPI_MODE_MASTER);
 
-	LL_SPI_Enable(SPI1);
+    LL_SPI_SetDataWidth(SPI1, LL_SPI_DATAWIDTH_8BIT);
+    LL_SPI_SetStandard(SPI1, LL_SPI_PROTOCOL_MOTOROLA);
+
+    LL_SPI_SetNSSMode(SPI1, LL_SPI_NSS_SOFT);
+
+    LL_SPI_Enable(SPI1);
 
 
 	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } }; //TODO reassign buffer sizes
