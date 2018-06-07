@@ -15,9 +15,59 @@ extern "C" {
 	#include "main.h"
 	#include "stm32f0xx_hal.h"
 	#include "dhcp_buffer.h"
-	#include "stm32f0xx_ll_gpio.h"
+
+typedef struct
+{
+  uint32_t Pin;          /*!< Specifies the GPIO pins to be configured.
+                              This parameter can be any value of @ref GPIO_LL_EC_PIN */
+
+  uint32_t Mode;         /*!< Specifies the operating mode for the selected pins.
+                              This parameter can be a value of @ref GPIO_LL_EC_MODE.
+
+                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinMode().*/
+
+  uint32_t Speed;        /*!< Specifies the speed for the selected pins.
+                              This parameter can be a value of @ref GPIO_LL_EC_SPEED.
+
+                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinSpeed().*/
+
+  uint32_t OutputType;   /*!< Specifies the operating output type for the selected pins.
+                              This parameter can be a value of @ref GPIO_LL_EC_OUTPUT.
+
+                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinOutputType().*/
+
+  uint32_t Pull;         /*!< Specifies the operating Pull-up/Pull down for the selected pins.
+                              This parameter can be a value of @ref GPIO_LL_EC_PULL.
+
+                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinPull().*/
+
+  uint32_t Alternate;    /*!< Specifies the Peripheral to be connected to the selected pins.
+                              This parameter can be a value of @ref GPIO_LL_EC_AF.
+
+                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetAFPin_0_7() and LL_GPIO_SetAFPin_8_15().*/
+} LL_GPIO_InitTypeDef;
+
+
+
+	#define USE_FULL_LL_DRIVER 1
+#include "stm32f0xx_ll_dma.h"
+#include "stm32f0xx_ll_usart.h"
+#include "stm32f0xx_ll_rcc.h"
+#include "stm32f0xx_ll_system.h"
+#include "stm32f0xx_ll_gpio.h"
+#include "stm32f0xx_ll_exti.h"
+#include "stm32f0xx_ll_bus.h"
+#include "stm32f0xx_ll_cortex.h"
+#include "stm32f0xx_ll_utils.h"
+#include "stm32f0xx_ll_pwr.h"
+	#undef USE_FULL_LL_DRIVER
+
 	#include "stm32f0xx_ll_spi.h"
+	#include "stm32f0xx_ll_bus.h"
+
+ErrorStatus LL_GPIO_Init(GPIO_TypeDef *GPIOx, LL_GPIO_InitTypeDef *GPIO_InitStruct);
 };
+
 
 #include "network.hpp"
 #include "main2.hpp"
@@ -91,22 +141,25 @@ network::network(){
 }
 
 void network::init(){
-    /* Peripheral clock enable */
-    __HAL_RCC_SPI1_CLK_ENABLE();
+    LL_GPIO_InitTypeDef GPIO_InitStruct;
 
-    GPIO_InitTypeDef GPIO_InitStruct;
+	/* Peripheral clock enable */
+	LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SPI1);
 
     /**SPI1 GPIO Configuration
     PA5     ------> SPI1_SCK
     PA6     ------> SPI1_MISO
     PA7     ------> SPI1_MOSI
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF0_SPI1;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_InitStruct.Pin = LL_GPIO_PIN_5|LL_GPIO_PIN_6|LL_GPIO_PIN_7;
+    GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
+    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+    GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+    GPIO_InitStruct.Alternate = LL_GPIO_AF_0;
+    LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+
 
     LL_SPI_Disable(SPI1);
 

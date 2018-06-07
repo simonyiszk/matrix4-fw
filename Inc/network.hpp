@@ -8,14 +8,8 @@
 #ifndef NETWORK_HPP_
 #define NETWORK_HPP_
 
-#include "stm32f0xx_hal.h"
-
-
 namespace net{
 	extern "C" I2C_HandleTypeDef hi2c2;
-
-	extern "C" SPI_HandleTypeDef hspi1;
-
 
 	class network{
 	private:
