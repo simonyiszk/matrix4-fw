@@ -213,6 +213,7 @@ void network::init(){
 
 	socket(1, Sn_MR_UDP, 2000, 0x00);
 	socket(2, Sn_MR_UDP, 3000, 0x00);
+	socket(3, Sn_MR_UDP, 10000, 0x00);
 }
 
 size_t network::create_status_string(){
@@ -305,8 +306,10 @@ void network::do_remote_command(){
 }
 
 void network::fetch_frame(){
-	size_t size= getSn_RX_RSR(2);
+	/*size_t size= getSn_RX_RSR(2);
 	if(size){
+		main_state=external_anim;
+
 		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
 		//todo treat big and small datagrams
 
@@ -329,7 +332,143 @@ void network::fetch_frame(){
 			windows::right_window.pixels[pixel_num].set(red, green, blue);
 		else
 			windows::left_window.pixels[pixel_num].set(red, green, blue);
-	}
+	}*/
+	const uint8_t szoba = 8 , szint = 18;
+
+	size_t size= getSn_RX_RSR(3);
+		if(size){
+			main_state=external_anim;
+
+			HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+			//todo treat big and small datagrams
+
+			char buff[314]; //TODO exception handling
+
+			uint8_t svr_addr[6];
+			uint16_t  svr_port;
+			uint16_t len;
+			len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
+
+			//todo check indexes, datagram size
+
+			if(buff[0] != 0x01)
+				return;
+
+			uint8_t pn_expected = ( ( (18-szint)*16 + (szoba-5)*2  )/52  );
+			uint8_t pn          = buff[1] - 1;
+
+			if(pn != pn_expected)
+				return;
+
+			uint8_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
+			size_t  running_offset = 0;
+
+			//----------------------------------
+
+			uint8_t r, g, b;
+
+				r =
+						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+				g =
+						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+				b=
+						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+
+			windows::right_window.pixels[0].set(
+					r,
+					g,
+					b);
+
+			r =
+					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+			g =
+					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+			b=
+					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+			windows::right_window.pixels[1].set(
+					r,
+										g,
+										b);
+
+			r =
+					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+			g =
+					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+			b=
+					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+			windows::right_window.pixels[2].set(
+					r,
+										g,
+										b);
+
+			r =
+								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+						g =
+								(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+						b=
+								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+			windows::right_window.pixels[3].set(
+					r,
+										g,
+										b);
+
+
+
+
+			//---------------------------------
+
+			r =
+					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+			g =
+					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+			b=
+					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+			windows::left_window.pixels[0].set(
+					r,
+										g,
+										b);
+
+			r =
+								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+						g =
+								(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+						b=
+								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+			windows::left_window.pixels[1].set(
+					r,
+										g,
+										b);
+
+			r =
+					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+			g =
+					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+			b=
+					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+			windows::left_window.pixels[2].set(
+					r,
+										g,
+										b);
+
+			r =
+								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+						g =
+								(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+						b=
+								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+			windows::left_window.pixels[3].set(
+					r,
+										g,
+										b);
+
+			//----------------------------------
+		}
 }
 
 void network::step_network(){
@@ -370,4 +509,3 @@ void network::step_network(){
  ****************************/
 	network inetwork;
 };
-
