@@ -188,7 +188,7 @@
 					</folderInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.23705764" name="network.c" rcbsApplicability="disable" resourcePath="Src/network.cpp" toolsToInvoke="com.atollic.truestudio.gpp.219290923">
 						<tool id="com.atollic.truestudio.gpp.219290923" name="C++ Compiler" superClass="com.atollic.truestudio.gpp">
-							<option id="com.atollic.truestudio.common_options.target.fpucore.1997534004" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.common_options.target.fpucore.1997534004" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
 							<option id="com.atollic.truestudio.gpp.directories.select.738993793" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
 								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc}&quot;"/>
 								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Inc}&quot;"/>
@@ -202,12 +202,19 @@
 								<listOptionValue builtIn="false" value="STM32F030x8"/>
 								<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 							</option>
-							<option id="com.atollic.truestudio.gpp.cppstandard.1809989510" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp0x" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.cppstandard.1809989510" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp14" valueType="enumerated"/>
 							<option id="com.atollic.truestudio.gpp.optimization.fno_rtti.1729553992" name="Disable RTTI" superClass="com.atollic.truestudio.gpp.optimization.fno_rtti" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 							<option id="com.atollic.truestudio.gpp.optimization.fno_exceptions.473198415" name="Disable exception handling" superClass="com.atollic.truestudio.gpp.optimization.fno_exceptions" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 							<option id="com.atollic.truestudio.common_options.target.instr_set.440422676" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 							<option id="com.atollic.truestudio.gpp.misc.otherflags.678384789" name="Other options" superClass="com.atollic.truestudio.gpp.misc.otherflags" useByScannerDiscovery="false" value=" -mcpu=cortex-m0" valueType="string"/>
+							<option id="com.atollic.truestudio.gpp.optimization.level.1079794426" name="Optimization Level" superClass="com.atollic.truestudio.gpp.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.optimization.level.00" valueType="enumerated"/>
 							<inputType id="com.atollic.truestudio.gpp.input.71543481" superClass="com.atollic.truestudio.gpp.input"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.1431250069" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.630615638" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.232408632" name="Resource Custom Build Step Output Type"/>
 						</tool>
 					</fileInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1694680156" name="main.c" rcbsApplicability="disable" resourcePath="Src/main.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.67339517">
@@ -363,7 +370,7 @@
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="matrix4_mueb_fw"/>
+			<resource resourceType="PROJECT" workspacePath="/matrix4_mueb_fw"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>

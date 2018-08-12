@@ -74,6 +74,7 @@ ErrorStatus LL_GPIO_Init(GPIO_TypeDef *GPIOx, LL_GPIO_InitTypeDef *GPIO_InitStru
 #include "window.hpp"
 #include <cstdio>
 #include "version.hpp"
+//#include "matrix2_package_format.hpp"
 
 //------------------------------------------------------------------------
 
@@ -336,139 +337,141 @@ void network::fetch_frame(){
 	const uint8_t szoba = 8 , szint = 18;
 
 	size_t size= getSn_RX_RSR(3);
-		if(size){
-			main_state=external_anim;
+	if(!size)
+		return;
 
-			HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-			//todo treat big and small datagrams
+	main_state=external_anim;
 
-			char buff[314]; //TODO exception handling
+	HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+	//todo treat big and small datagrams
 
-			uint8_t svr_addr[6];
-			uint16_t  svr_port;
-			uint16_t len;
-			len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
+	uint8_t buff[314]; //TODO exception handling
 
-			//todo check indexes, datagram size
+	uint8_t svr_addr[6];
+	uint16_t  svr_port;
+	uint16_t len;
+	len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
 
-			if(buff[0] != 0x01)
-				return;
+	//todo check indexes, datagram size
 
-			uint8_t pn_expected = ( ( (18-szint)*16 + (szoba-5)*2  )/52  );
-			uint8_t pn          = buff[1] - 1;
 
-			if(pn != pn_expected)
-				return;
+	if(buff[0] != 0x01)
+		return;
 
-			uint8_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
-			size_t  running_offset = 0;
+	uint8_t pn_expected = ( ( (18-szint)*16 + (szoba-5)*2  )/52  );
+	uint8_t pn          = buff[1] - 1;
 
-			//----------------------------------
+	if(pn != pn_expected)
+		return;
 
-			uint8_t r, g, b;
+	uint8_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
+	size_t  running_offset = 0;
 
-				r =
-						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-				g =
+	//----------------------------------
+
+	uint8_t r, g, b;
+
+		r =
+				(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+		g =
+				(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+		b=
+				(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+
+	windows::right_window.pixels[0].set(
+			r,
+			g,
+			b);
+
+	r =
+			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+	g =
+			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+	b=
+			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+	windows::right_window.pixels[1].set(
+			r,
+								g,
+								b);
+
+	r =
+			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+	g =
+			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+	b=
+			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+	windows::right_window.pixels[2].set(
+			r,
+								g,
+								b);
+
+	r =
 						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-				b=
+				g =
 						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+				b=
+						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
 
-
-			windows::right_window.pixels[0].set(
-					r,
-					g,
-					b);
-
-			r =
-					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-			g =
-					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-			b=
-					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-			windows::right_window.pixels[1].set(
-					r,
-										g,
-										b);
-
-			r =
-					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-			g =
-					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-			b=
-					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-
-			windows::right_window.pixels[2].set(
-					r,
-										g,
-										b);
-
-			r =
-								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-						g =
-								(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-						b=
-								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-			windows::right_window.pixels[3].set(
-					r,
-										g,
-										b);
+	windows::right_window.pixels[3].set(
+			r,
+								g,
+								b);
 
 
 
 
-			//---------------------------------
+	//---------------------------------
 
-			r =
-					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-			g =
-					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-			b=
-					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+	r =
+			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+	g =
+			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+	b=
+			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
 
-			windows::left_window.pixels[0].set(
-					r,
-										g,
-										b);
+	windows::left_window.pixels[0].set(
+			r,
+								g,
+								b);
 
-			r =
-								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-						g =
-								(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-						b=
-								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+	r =
+						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+				g =
+						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+				b=
+						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
 
-			windows::left_window.pixels[1].set(
-					r,
-										g,
-										b);
+	windows::left_window.pixels[1].set(
+			r,
+								g,
+								b);
 
-			r =
-					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-			g =
-					(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-			b=
-					(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-			windows::left_window.pixels[2].set(
-					r,
-										g,
-										b);
+	r =
+			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+	g =
+			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+	b=
+			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+	windows::left_window.pixels[2].set(
+			r,
+								g,
+								b);
 
-			r =
-								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-						g =
-								(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-						b=
-								(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-			windows::left_window.pixels[3].set(
-					r,
-										g,
-										b);
+	r =
+						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+				g =
+						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+				b=
+						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+	windows::left_window.pixels[3].set(
+			r,
+								g,
+								b);
 
-			//----------------------------------
-		}
+//----------------------------------
 }
 
 void network::step_network(){
