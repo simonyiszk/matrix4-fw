@@ -18,4 +18,7 @@ enum main_states{
 
 extern enum main_states main_state;
 
+extern uint8_t emelet_szam;
+extern uint8_t szoba_szam;
+
 #endif /* MAIN2_HPP_ */

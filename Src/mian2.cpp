@@ -11,6 +11,9 @@ extern "C"{
 
 enum main_states main_state = booting;
 
+uint8_t emelet_szam =0;
+uint8_t szoba_szam  =0;
+
 void main2(void){
 	//init_network(); reminder: static instances's constructors are ran before the driver initialization functions
 

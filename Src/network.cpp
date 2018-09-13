@@ -306,38 +306,45 @@ void network::do_remote_command(){
 	}
 }
 
-void network::fetch_frame(){
-	/*size_t size= getSn_RX_RSR(2);
-	if(size){
-		main_state=external_anim;
+inline static void fetch_frame_unicast_proto(){
+	size_t size= getSn_RX_RSR(2);
+		if(size){
+			main_state=external_anim;
 
-		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-		//todo treat big and small datagrams
+			HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+			//todo treat big and small datagrams
 
-		char buff[10];
+			char buff[10];
 
-		uint8_t svr_addr[6];
-		uint16_t  svr_port;
-		uint16_t len;
-		len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
+			uint8_t svr_addr[6];
+			uint16_t  svr_port;
+			uint16_t len;
+			len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
 
-		//todo check indexes, datagram size
+			//todo check indexes, datagram size
 
-		size_t window = buff[0];
-		size_t pixel_num = buff[1];
-		uint8_t red = buff[2];
-		uint8_t green = buff[3];
-		uint8_t blue = buff[4];
+			size_t window = buff[0];
+			size_t pixel_num = buff[1];
+			uint8_t red = buff[2];
+			uint8_t green = buff[3];
+			uint8_t blue = buff[4];
 
-		if(window == 0) //right window
-			windows::right_window.pixels[pixel_num].set(red, green, blue);
-		else
-			windows::left_window.pixels[pixel_num].set(red, green, blue);
-	}*/
-	const uint8_t szoba = 8 , szint = 18;
+			if(window == 0) //right window
+				windows::right_window.pixels[pixel_num].set(red, green, blue);
+			else
+				windows::left_window.pixels[pixel_num].set(red, green, blue);
+		}
+}
+
+inline static void fetch_frame_multicast_proto(){ //TODO clean the code
+	const uint8_t& emelet= emelet_szam;
+	const uint8_t& szoba = szoba_szam;
 
 	size_t size= getSn_RX_RSR(3);
 	if(!size)
+		return;
+
+	if(emelet==0 || szoba == 0)
 		return;
 
 	main_state=external_anim;
@@ -471,7 +478,11 @@ void network::fetch_frame(){
 								g,
 								b);
 
-//----------------------------------
+}
+
+void network::fetch_frame(){
+	fetch_frame_unicast_proto();
+	fetch_frame_multicast_proto();
 }
 
 void network::step_network(){
@@ -486,9 +497,11 @@ void network::step_network(){
 		case DHCP_IP_ASSIGN:
 		case DHCP_IP_CHANGED:
 			LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+			wizchip_getnetinfo(&netInfo);
+			emelet_szam=netInfo.ip[2];
+			szoba_szam=netInfo.ip[3];
 			break;
 		case DHCP_IP_LEASED:
-			//HAL_GPIO_WritePin(LED_DHCP_GPIO_Port, LED_DHCP_Pin, GPIO_PIN_RESET);
 			break;
 		case DHCP_FAILED:
 			LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
