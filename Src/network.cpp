@@ -181,7 +181,8 @@ void network::init(){
     LL_SPI_Enable(SPI1);
 
 
-	uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } }; //TODO reassign buffer sizes
+	//uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 0, 1, 2, 8, 2, 1, 1, 1 } }; //TODO reassign buffer sizes
+    uint8_t memsize[2][8] = { { 2, 2, 2, 2, 2, 2, 2, 2 }, { 2, 2, 2, 2, 2, 2, 2, 2 } }; //TODO reassign buffer sizes
 	wiz_PhyConf phyconf;
 
 	//Hard-reset W5500
@@ -337,14 +338,14 @@ inline static void fetch_frame_unicast_proto(){
 }
 
 inline static void fetch_frame_multicast_proto(){ //TODO clean the code
-	const uint8_t& emelet= emelet_szam;
+	const uint8_t& szint= emelet_szam;
 	const uint8_t& szoba = szoba_szam;
 
 	size_t size= getSn_RX_RSR(3);
-	if(!size)
+	if(size == 0)
 		return;
 
-	if(emelet==0 || szoba == 0)
+	if(szint==0 || szoba == 0)
 		return;
 
 	main_state=external_anim;
@@ -492,14 +493,15 @@ void network::step_network(){
 		do_remote_command();
 		fetch_frame();
 
+		wizchip_getnetinfo(&netInfo);
+		emelet_szam=netInfo.ip[2];
+		szoba_szam=netInfo.ip[3];
+
 		//do DHCP task
 		switch(DHCP_run()){
 		case DHCP_IP_ASSIGN:
 		case DHCP_IP_CHANGED:
 			LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
-			wizchip_getnetinfo(&netInfo);
-			emelet_szam=netInfo.ip[2];
-			szoba_szam=netInfo.ip[3];
 			break;
 		case DHCP_IP_LEASED:
 			break;
