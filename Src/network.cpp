@@ -372,7 +372,7 @@ inline static void fetch_frame_multicast_proto(){ //TODO clean the code
 	if(pn != pn_expected)
 		return;
 
-	uint8_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
+	uint32_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
 	size_t  running_offset = 0;
 
 	//----------------------------------
