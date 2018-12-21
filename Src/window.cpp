@@ -47,7 +47,7 @@ void window::step_state(){
 				this->set_state(vcc_3v3_on);
 			break;
 		case vcc_3v3_on:
-			if(sec_cntr_window>1){
+			if(sec_cntr_window>1){ //TODO reference time point
 				if(check_uart_welcome_message())
 					this->set_state(vcc_12v_on);
 				else
