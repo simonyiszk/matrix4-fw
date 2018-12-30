@@ -96,9 +96,10 @@ void ip_assign(){
 	LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
 }
 
+// Will be handled on the server side
 void ip_conflict(){
 	LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
-	while(1); //TODO better handling
+	//TODO blinking LED e.g. JOKER or SERVER
 }
 
 //DHCP 1s timer located in stm32f0xx_it.c
@@ -223,6 +224,7 @@ size_t network::create_status_string(){
 
 	ret = snprintf((char*)this->status_string, sizeof(status_string),
 		"MUEB FW version: %s\n"
+		"MUEB MAC: %x:%x:%x:%x:%x:%x\n"
 		"anim_source: %#x\n"
 		"telemetry_comm_buff: %#x\n"
 		"frame_ether_buff: %#x\n"
@@ -230,6 +232,7 @@ size_t network::create_status_string(){
 		"dhcp_reamining_lease_time: %d\n"
 		"SEM forever\n",
 		mueb_version,
+		netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
 		main_state,
 		getSn_RX_RSR(1),
 		getSn_RX_RSR(2),
@@ -294,6 +297,11 @@ void network::do_remote_command(){
 				break;
 			case get_status:
 				sendto(1, status_string, network::create_status_string(), resp_addr, resp_port);
+				break;
+			case get_mac:
+				char mac[17];
+				sprintf(mac, "%x:%x:%x:%x:%x:%x", netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5]);
+				sendto(1, (uint8_t*) mac, 17, resp_addr, resp_port);
 				break;
 			case delete_anim_network_buffer:
 				///To be implemented TODO
@@ -501,9 +509,8 @@ void network::step_network(){
 		switch(DHCP_run()){
 		case DHCP_IP_ASSIGN:
 		case DHCP_IP_CHANGED:
-			LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
-			break;
 		case DHCP_IP_LEASED:
+			LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
 			break;
 		case DHCP_FAILED:
 			LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
