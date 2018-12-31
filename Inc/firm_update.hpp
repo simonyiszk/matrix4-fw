@@ -21,6 +21,8 @@ namespace firmware_update{
 
 	//TODO fix address in linker script
 	void copyfirmware [[noreturn]] ();
+
+	void copyToFlash2(const uint8_t* from);
 }
 
 
