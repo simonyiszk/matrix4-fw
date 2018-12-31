@@ -290,7 +290,7 @@
 							<inputType id="com.atollic.truestudio.gcc.input.1062309588" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1235702971" name="mian2.c" rcbsApplicability="disable" resourcePath="Src/mian2.cpp" toolsToInvoke="com.atollic.truestudio.gpp.255993951">
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1235702971" name="main2.c" rcbsApplicability="disable" resourcePath="Src/main2.cpp" toolsToInvoke="com.atollic.truestudio.gpp.255993951">
 						<tool id="com.atollic.truestudio.gpp.255993951" name="C++ Compiler" superClass="com.atollic.truestudio.gpp">
 							<option id="com.atollic.truestudio.common_options.target.fpucore.382871625" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
 							<option id="com.atollic.truestudio.gpp.directories.select.1948959630" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">

@@ -32,6 +32,7 @@ namespace net{
 			reset_right_panel = 0x03,
 			reboot  = 0x04,
 			get_status = 0x05,
+			get_mac = 0x07,
 			use_internal_anim = 0x10,
 			use_external_anim = 0x20,
 			blank = 0x30,
