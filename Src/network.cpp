@@ -5,6 +5,7 @@
  *      Author: kisada
  */
 
+#include "firm_update.cpp"
 
 extern "C" {
 	#include "mac_eeprom.h"
