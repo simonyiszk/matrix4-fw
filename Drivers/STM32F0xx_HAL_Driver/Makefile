@@ -19,12 +19,6 @@
 
 TARGET     = hal
 
-# MCU family and type in various capitalizations o_O
-MCU_FAMILY = stm32f03x TODO
-MCU_LC     = stm32f446xx TODO
-MCU_MC     = STM32F446xx TODO
-MCU_UC     = STM32F446ZE TODO
-
 # Your C files from the /src directory
 HAL_MODULES = gpio.c spi.c pwr_ex.c i2c_ex.c flash_ex.c rcc_ex.c rcc.c cortex.c flash.c tim_ex.c spi_ex.c tim.c dma.c pwr.c i2c.c
 
@@ -47,23 +41,11 @@ OBJDUMP    = $(PREFIX)-objdump
 SIZE       = $(PREFIX)-size
 
 ###############################################################################
-# Options
-
 # Defines
 DEFS       = -DSTM32F030x8 -DUSE_FULL_LL_DRIVER -DUSE_HAL_DRIVER
 
-# Debug specific definitions for semihosting
-#DEFS       += -DUSE_DBPRINTF
-
 # Include search paths (-I)
 INCS       = -IInc -IInc_CMSIS -IInc_STM
-#INCS      += -I$(BSP_DIR)
-#INCS      += -I$(CMSIS_DIR)/Include
-#INCS      += -I$(DEV_DIR)/Include
-#INCS      += -I$(HAL_DIR)/Inc
-
-# Library search paths
-#LIBS       = -L$(CMSIS_DIR)/Lib
 
 # Compiler flags
 CFLAGS     = -std=gnu11 -c -Os
