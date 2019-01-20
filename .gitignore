@@ -22,3 +22,7 @@ local.properties
 \.vscode/
 
 build
+
+.kdev4
+
+*.kdev4
