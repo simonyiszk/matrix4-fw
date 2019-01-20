@@ -19,28 +19,39 @@ SIZE 		      := $(TOOLCHAIN)-size
 C_STANDARD	      := -std=gnu11
 CXX_STANDARD 	      := -std=gnu++11
 
-DEFS                  := -DSTM32F030x8 -DUSE_HAL_DRIVER 
+DEFS                  := -DSTM32F030x8 -DUSE_HAL_DRIVER  -DUSE_FULL_LL_DRIVER
 
-COMMON_COMPILER_FLAGS := -O2 -g -fstack-usage -fno-threadsafe-statics -Wall -Wextra -Wpacked -Winline  -mcpu=cortex-m0 -mthumb
+COMMON_COMPILER_FLAGS := -O2 -g -fstack-usage -Wall -Wextra -Wpacked -Winline  -mcpu=cortex-m0 -mthumb
 C_FLAGS               := $(COMMON_COMPILER_FLAGS) $(C_STANDARD)
-CXX_FLAGS             := $(COMMON_COMPILER_FLAGS) $(CXX_STANDARD) -fno-rtti -fno-exceptions
+CXX_FLAGS             := $(COMMON_COMPILER_FLAGS) $(CXX_STANDARD) -fno-rtti -fno-exceptions -fno-threadsafe-statics 
 
 LD_FLAGS              := -specs=nano.specs
 
 #TODO script this
-INCLUDES              := -I"/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Inc" -I"/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include" -I"/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Drivers/CMSIS/Include" -I"/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc"
+INCLUDES              := -IInc -IDrivers/CMSIS/Device/ST/STM32F0xx/Include -IDrivers/CMSIS/Include -IDrivers/STM32F0xx_HAL_Driver/Inc -IDrivers/ioLibrary_Driver/Internet/DHCP
 
-C_FILES               := 
+C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c main.c
 
-CPP_FILES             := 
+CPP_FILES             := internal_anim.cpp firm_update.cpp main2.cpp network.cpp window.cpp
 
 ####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####
 
-build_dir: .PHONY
-	mkdir -p build
+C_OBJS                 = $(addprefix build/c_,$(C_FILES:.c=.o))
+CPP_OBJS               = $(addprefix build/cpp_,$(CPP_FILES:.cpp=.o))
 
-c_sources: 
 
-cpp_sources:
+all: build_dir $(C_OBJS) $(CPP_OBJS)
 
-all: build_dir c_sources cpp_sources
+.PHONY: build_dir
+
+build_dir: 
+	@mkdir -p build
+
+build/c_%.o: Src/%.c | build_dir
+	@echo "[CC]	$(notdir $<)"
+	$(CC) $(C_FLAGS) $(DEFS) $(INCLUDES) -c -o $@ $<
+
+build/cpp_%.o: Src/%.cpp | build_dir
+	@echo "[CXX]	$(notdir $<)"
+	$(CXX) $(CXX_FLAGS) $(DEFS) $(INCLUDES) -c -o $@ $<
+
