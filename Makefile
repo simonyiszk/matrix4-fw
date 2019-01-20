@@ -28,7 +28,10 @@ CXX_FLAGS             := $(COMMON_COMPILER_FLAGS) $(CXX_STANDARD) -fno-rtti -fno
 LD_FLAGS              := -specs=nano.specs
 
 #TODO script this
-INCLUDES              := -IInc -IDrivers/CMSIS/Device/ST/STM32F0xx/Include -IDrivers/CMSIS/Include -IDrivers/STM32F0xx_HAL_Driver/Inc -IDrivers/ioLibrary_Driver/Internet/DHCP
+INCLUDES               = -IInc
+INCLUDES              += -IDrivers/CMSIS/Device/ST/STM32F0xx/Include -IDrivers/CMSIS/Include -IDrivers/STM32F0xx_HAL_Driver/Inc
+INCLUDES              += -IDrivers/ioLibrary_Driver/Internet/DHCP -IDrivers/ioLibrary_Driver/Ethernet -IDrivers/ioLibrary_Driver/Ethernet/W5500
+
 
 C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c main.c
 
