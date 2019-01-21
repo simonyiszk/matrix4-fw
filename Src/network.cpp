@@ -249,25 +249,35 @@ void network::do_remote_command(){
 	if(size){
 		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
 
-		char buff[4];
+		char buff[11] = "";
 
-		uint8_t resp_addr[6];
-		uint16_t len;
+		uint8_t resp_addr[4];
 		uint16_t resp_port;
+		int32_t len;
 
-		// Handle too small packages
-		if(size < 4){
-			len = recvfrom(1, (uint8_t *)buff, 4, resp_addr, &resp_port);
+		len = recvfrom(1, (uint8_t *)buff, 11, resp_addr, &resp_port);
+
+		// Handle too small and incorrect packages
+		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M' || len < 4)
 			return;
+
+		// When the 5th bit is set to 1 it means we're sending a broadcast command to only one device
+		// Can be used when the device don't have an IP address
+		if(buff[4] == 1) {
+			if(
+			netInfo.mac[0] != buff[5] ||
+			netInfo.mac[1] != buff[6] ||
+			netInfo.mac[2] != buff[7] ||
+			netInfo.mac[3] != buff[8] ||
+			netInfo.mac[4] != buff[9] ||
+			netInfo.mac[5] != buff[10]
+			)
+				return; // return when the MAC address doesn't match
+
+			// If the IP is 0.0.0.0 use broadcast target address
+			if(!netInfo.ip[0] && !netInfo.ip[1] && !netInfo.ip[2] && !netInfo.ip[3])
+				resp_addr[0] = resp_addr[1] = resp_addr[2] = resp_addr[3] = 255;
 		}
-
-		len = recvfrom(1, (uint8_t *)buff, 4, resp_addr, &resp_port);
-
-		if(len!=4)  //todo consider code remove see above
-			return;
-
-		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M')
-			return;
 
 		switch(buff[3]){
 			case use_external_anim:
