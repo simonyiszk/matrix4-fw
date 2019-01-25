@@ -532,7 +532,7 @@ void network::step_network(){
 		 LL_GPIO_ResetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
 
 		 LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
-		 DHCP_renew();
+		 DHCP_rebind();
 	 }
 }
 
