@@ -12,6 +12,7 @@
 #include "inttypes.h"
 #include <stddef.h>
 #include "stm32f0xx_hal.h"
+#include "main.h"
 
 #ifdef __cplusplus
  extern "C" {

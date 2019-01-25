@@ -9,7 +9,6 @@
 #include <cstdint>
 
 namespace{
-
 	/*constexpr*/ uint8_t* flash_begin = reinterpret_cast<uint8_t*>(0x8000000);
 	/*constexpr*/ size_t   page_size   = 1024; //1 kByte pre page //TODO fix constexpr
 	constexpr size_t       num_of_pages= 64;
@@ -23,10 +22,7 @@ namespace{
 
 using namespace firmware_update;
 
-uint64_t flash_checksum(flashPart chunk){
-	uint8_t* from = chunk == second ? flash_half : flash_begin; //TODO consider sum of 64 bit blocks
-	uint8_t* to   = chunk == first  ? flash_half : flash_end;
-
+uint64_t flash_checksum(const uint8_t* const from,  const uint8_t* const to){
 	uint64_t res = 0;
 	for(auto i = from; i != to; i++)
 		res+=*i;
@@ -45,8 +41,4 @@ static void really_copyfirmware [[noreturn, gnu::noinline, gnu::section("fw_upda
 
 		reprogramPage(from, reinterpret_cast<std::array<unsigned char, 1024>>(page));
 	}
-}
-
-void copyfirmware [[noreturn]] (){
-	really_copyfirmware();
 }

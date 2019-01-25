@@ -45,7 +45,7 @@ CFLAGS    += -ffunction-sections -fdata-sections -fstack-usage
 CFLAGS    += $(INCS) $(DEFS)
 
 # Prettify output
-V = 0
+V = 1
 ifeq ($V, 0)
 	Q = @
 	P = > /dev/null
