@@ -12,7 +12,8 @@
 #include <stdint.h>
 
 namespace firmware_update{
-	uint64_t flash_checksum(const uint8_t* const from,  const uint8_t* const to);
+	const uint64_t checksum_of_new_fw();
+    void           refurbish /*[[noreturn]]*/ ();
 }
 
 
