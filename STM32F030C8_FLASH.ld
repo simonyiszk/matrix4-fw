@@ -163,10 +163,6 @@ SECTIONS
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
-  
-  .fw_updater 0x800fc00 :{
-  	*(.fw_updater);
-  } > FLASH
 }
 
 
