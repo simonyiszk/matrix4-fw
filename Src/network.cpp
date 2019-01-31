@@ -6,35 +6,19 @@
  */
 
 extern "C" {
-	#include "mac_eeprom.h"
-	#include "dhcp.h"
 	#include "wizchip_conf.h"
 	#include "socket.h"
 	#include "w5500.h"
-	#include "main.h"
-	#include "stm32f0xx_hal.h"
-	#include "dhcp_buffer.h"
-
-	#define USE_FULL_LL_DRIVER 1
-#include "stm32f0xx_ll_dma.h"
-#include "stm32f0xx_ll_usart.h"
-#include "stm32f0xx_ll_rcc.h"
-#include "stm32f0xx_ll_system.h"
-#include "stm32f0xx_ll_gpio.h"
-#include "stm32f0xx_ll_exti.h"
-#include "stm32f0xx_ll_bus.h"
-#include "stm32f0xx_ll_cortex.h"
-#include "stm32f0xx_ll_utils.h"
-#include "stm32f0xx_ll_pwr.h"
-	#undef USE_FULL_LL_DRIVER
-
-	#include "stm32f0xx_ll_spi.h"
-	#include "stm32f0xx_ll_bus.h"
-
-ErrorStatus LL_GPIO_Init(GPIO_TypeDef *GPIOx, LL_GPIO_InitTypeDef *GPIO_InitStruct);
 };
 
-
+#include "dhcp.h"
+#include "main.h"
+#include "mac_eeprom.h"
+#include "stm32f0xx_hal.h"    
+#include "dhcp_buffer.h"
+#include "stm32f0xx_ll_dma.h"
+#include "stm32f0xx_ll_spi.h"
+#include "stm32f0xx_ll_bus.h"
 #include "network.hpp"
 #include "main2.hpp"
 #include "window.hpp"
@@ -247,37 +231,37 @@ namespace{
                                     b);
 
     }
+    
+    void cs_sel() {
+        LL_GPIO_ResetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS LOW
+    }
+
+    void cs_desel() {
+        LL_GPIO_SetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS HIGH
+    }
+
+    uint8_t spi_rb(void) {
+        while(LL_SPI_IsActiveFlag_BSY(SPI1));
+
+        while (LL_SPI_IsActiveFlag_RXNE(SPI1))
+            (void)LL_SPI_ReceiveData8(SPI1);      // flush any FIFO content
+
+        while (!LL_SPI_IsActiveFlag_TXE(SPI1));
+
+        LL_SPI_TransmitData8(SPI1, 0xFF);   // send dummy byte
+        while (!LL_SPI_IsActiveFlag_RXNE(SPI1));
+
+        return(LL_SPI_ReceiveData8(SPI1));
+    }
+
+    void spi_wb(uint8_t b) {
+        while(LL_SPI_IsActiveFlag_BSY(SPI1));
+        LL_SPI_TransmitData8(SPI1, b);
+        (void)LL_SPI_ReceiveData8(SPI1);
+    }
 }
 
 namespace net{
-
-void cs_sel() {
-	LL_GPIO_ResetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS LOW
-}
-
-void cs_desel() {
-	LL_GPIO_SetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS HIGH
-}
-
-uint8_t spi_rb(void) {
-	while(LL_SPI_IsActiveFlag_BSY(SPI1));
-
-    while (LL_SPI_IsActiveFlag_RXNE(SPI1))
-        (void)LL_SPI_ReceiveData8(SPI1);      // flush any FIFO content
-
-    while (!LL_SPI_IsActiveFlag_TXE(SPI1));
-
-    LL_SPI_TransmitData8(SPI1, 0xFF);   // send dummy byte
-    while (!LL_SPI_IsActiveFlag_RXNE(SPI1));
-
-    return(LL_SPI_ReceiveData8(SPI1));
-}
-
-void spi_wb(uint8_t b) {
-	while(LL_SPI_IsActiveFlag_BSY(SPI1));
-	LL_SPI_TransmitData8(SPI1, b);
-	(void)LL_SPI_ReceiveData8(SPI1);
-}
 
 /*********************************
  *  network Class function defs
