@@ -58,3 +58,6 @@ build/cpp_%.o: Src/%.cpp | build_dir
 	@echo "[CXX]	$(notdir $<)"
 	$(CXX) $(CXX_FLAGS) $(DEFS) $(INCLUDES) -c -o $@ $<
 
+firmware.elf: $(C_OBJS) $(CPP_OBJS)
+	@echo "[LD]     $@"
+	$(CXX) -o $@ Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a $< $(CXX_FLAGS) $(LD_FLAGS)
