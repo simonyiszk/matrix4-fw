@@ -34,7 +34,7 @@ namespace{
     }
 }
 
-const uint64_t firmware_update::checksum_of_new_fw(){
+uint64_t firmware_update::checksum_of_new_fw(){
     const uint8_t* from = flash_begin + (32*page_size);
     const uint8_t* to   = flash_begin + (63*page_size);
     
@@ -44,5 +44,6 @@ const uint64_t firmware_update::checksum_of_new_fw(){
 
 void firmware_update::refurbish /*[[noreturn]]*/ (){
     void* ptr  = const_cast<uint8_t*>(flash_begin + (31*page_size));
-    void (*fgv)() = ptr;
+    (void) ptr;
+    //TODO
 }

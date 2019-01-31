@@ -12,8 +12,8 @@
 #include <stdint.h>
 
 namespace firmware_update{
-	const uint64_t checksum_of_new_fw();
-    void           refurbish /*[[noreturn]]*/ ();
+	uint64_t checksum_of_new_fw();
+    void     refurbish /*[[noreturn]]*/ ();
 }
 
 
