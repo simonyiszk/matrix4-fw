@@ -46,9 +46,9 @@ C_OBJS                 = $(addprefix build/c_,$(C_FILES:.c=.o))
 CPP_OBJS               = $(addprefix build/cpp_,$(CPP_FILES:.cpp=.o))
 
 
-all: build_dir $(HEX)
+all: $(HEX) | build_dir
 
-.PHONY: build_dir clean
+.PHONY: build_dir clean src
 
 build_dir: 
 	@mkdir -p build
@@ -64,6 +64,8 @@ build/cpp_%.o: Src/%.cpp | build_dir
 clean:
 	@echo "[RM]     $(C_OBJS) $(CPP_OBJS) $(ELF) $(HEX)"
 	@rm -f $(C_OBJS) $(CPP_OBJS) $(ELF) $(HEX)
+
+src: $(C_OBJS) $(CPP_OBJS) | build_dir
 
 $(ELF): $(C_OBJS) $(CPP_OBJS)
 	@echo "[LD]     $@"
