@@ -78,7 +78,7 @@ dhcp: ioLibrary_Driver/Internet/DHCP/dhcp.c | objf
 
 archive:  socket w5500 config dhcp
 	@echo "[AR]      $(TARGET).a"
-	$Q$(AR) qco $(TARGET).a $(OBJS)
+	$Q$(AR) qco $(TARGET).a obj/*.o
 
 clean:
 	@echo "[RM]      $(TARGET).a"; rm -f $(TARGET).a
