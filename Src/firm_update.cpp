@@ -42,8 +42,8 @@ uint64_t firmware_update::checksum_of_new_fw(){
 }
 
 
-void firmware_update::refurbish /*[[noreturn]]*/ (){
+void firmware_update::refurbish [[noreturn]] (){
     void* ptr  = const_cast<uint8_t*>(flash_begin + (31*page_size));
-    (void) ptr;
-    //TODO
+    
+    goto *ptr;
 }
