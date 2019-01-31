@@ -45,7 +45,7 @@ CPP_OBJS               = $(addprefix build/cpp_,$(CPP_FILES:.cpp=.o))
 
 all: build_dir $(C_OBJS) $(CPP_OBJS)
 
-.PHONY: build_dir
+.PHONY: build_dir clean
 
 build_dir: 
 	@mkdir -p build
@@ -57,6 +57,10 @@ build/c_%.o: Src/%.c | build_dir
 build/cpp_%.o: Src/%.cpp | build_dir
 	@echo "[CXX]	$(notdir $<)"
 	$(CXX) $(CXX_FLAGS) $(DEFS) $(INCLUDES) -c -o $@ $<
+
+clean:
+	@echo "[RM]     $(C_OBJS) $(CPP_OBJS) firmware.elf"
+	@rm -f $(C_OBJS) $(CPP_OBJS) firmware.elf
 
 firmware.elf: $(C_OBJS) $(CPP_OBJS)
 	@echo "[LD]     $@"
