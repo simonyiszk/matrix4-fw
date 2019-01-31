@@ -24,7 +24,7 @@ HAL_MODULES = gpio.c spi.c pwr_ex.c i2c_ex.c flash_ex.c rcc_ex.c rcc.c cortex.c 
 
 LL_MODULES = usart.c dma.c spi.c utils.c gpio.c exti.c rcc.c
 
-SRCS       = $(addprefix stm32f0xx_hal_,$(HAL_MODULES)) $(addprefix stm32f0xx_ll_,$(LL_MODULES))
+SRCS       = $(addprefix stm32f0xx_hal_,$(HAL_MODULES)) $(addprefix stm32f0xx_ll_,$(LL_MODULES)) stm32f0xx_hal.c
 
 # Basic HAL libraries
 
