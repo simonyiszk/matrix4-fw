@@ -70,6 +70,7 @@ src: $(C_OBJS) $(CPP_OBJS) | build_dir
 $(ELF): $(C_OBJS) $(CPP_OBJS)
 	@echo "[LD]     $@"
 	$(CXX) -o $@ $? $(CXX_FLAGS) $(LD_FLAGS) Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a 
+	$(SIZE) $@
 
 $(HEX): $(ELF)
 	@echo "[OBJCOPY]$< $@"
