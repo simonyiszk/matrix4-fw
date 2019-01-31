@@ -29,8 +29,8 @@ LD_FLAGS              := -specs=nano.specs
 
 #TODO script this
 INCLUDES               = -I Inc
-INCLUDES              += -isystem Drivers/CMSIS/Device/ST/STM32F0xx/Include -isystem Drivers/CMSIS/Include -IDrivers/STM32F0xx_HAL_Driver/Inc
-INCLUDES              += -isystem Drivers/ioLibrary_Driver/Internet/DHCP -IDrivers/ioLibrary_Driver/Ethernet -IDrivers/ioLibrary_Driver/Ethernet/W5500
+INCLUDES              += -isystem Drivers/CMSIS/Device/ST/STM32F0xx/Include -isystem Drivers/CMSIS/Include -isystem Drivers/STM32F0xx_HAL_Driver/Inc
+INCLUDES              += -isystem Drivers/ioLibrary_Driver/Internet/DHCP -isystem Drivers/ioLibrary_Driver/Ethernet -isystem Drivers/ioLibrary_Driver/Ethernet/W5500
 
 
 C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c main.c
