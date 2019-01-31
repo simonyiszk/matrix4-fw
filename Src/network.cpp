@@ -73,6 +73,184 @@ void ip_conflict(){
 //DHCP 1s timer located in stm32f0xx_it.c
 
 
+namespace{
+    void fetch_frame_unicast_proto(){
+        size_t size= getSn_RX_RSR(2);
+            if(size){
+                main_state=external_anim;
+
+                HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+                //todo treat big and small datagrams
+
+                char buff[10];
+
+                uint8_t svr_addr[6];
+                uint16_t  svr_port;
+                uint16_t len;
+                len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
+                (void) len;
+
+                //TODO check indexes, datagram size
+
+                size_t window = buff[0];
+                size_t pixel_num = buff[1];
+                uint8_t red = buff[2];
+                uint8_t green = buff[3];
+                uint8_t blue = buff[4];
+
+                if(window == 0) //right window
+                    windows::right_window.pixels[pixel_num].set(red, green, blue);
+                else
+                    windows::left_window.pixels[pixel_num].set(red, green, blue);
+            }
+    }
+
+    void fetch_frame_multicast_proto(){ //TODO clean the code
+        const uint8_t& szint= emelet_szam;
+        const uint8_t& szoba = szoba_szam;
+
+        size_t size= getSn_RX_RSR(3);
+        if(size == 0)
+            return;
+
+        if(szint==0 || szoba == 0)
+            return;
+
+        main_state=external_anim;
+
+        HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+        //TODO treat big and small datagrams
+
+        uint8_t buff[314]; //TODO exception handling
+
+        uint8_t svr_addr[6];
+        uint16_t  svr_port;
+        uint16_t len;
+        len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
+        (void) len;
+        
+        //TODO check indexes, datagram size
+
+
+        if(buff[0] != 0x01)
+            return;
+
+        uint8_t pn_expected = ( ( (18-szint)*16 + (szoba-5)*2  )/52  );
+        uint8_t pn          = buff[1] - 1;
+
+        if(pn != pn_expected)
+            return;
+
+        uint32_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
+        size_t  running_offset = 0;
+
+        //----------------------------------
+
+        uint8_t r, g, b;
+
+            r =
+                    (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+            g =
+                    (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+            b=
+                    (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+
+        windows::right_window.pixels[0].set(
+                r,
+                g,
+                b);
+
+        r =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        g =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        b=
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+        windows::right_window.pixels[1].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        g =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        b=
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+        windows::right_window.pixels[2].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+                    g =
+                            (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+                    b=
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+        windows::right_window.pixels[3].set(
+                r,
+                                    g,
+                                    b);
+
+
+
+
+        //---------------------------------
+
+        r =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        g =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        b=
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+        windows::left_window.pixels[0].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+                    g =
+                            (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+                    b=
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+        windows::left_window.pixels[1].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        g =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        b=
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        windows::left_window.pixels[2].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+                    g =
+                            (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+                    b=
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        windows::left_window.pixels[3].set(
+                r,
+                                    g,
+                                    b);
+
+    }
+}
+
 namespace net{
 
 void cs_sel() {
@@ -196,8 +374,8 @@ size_t network::create_status_string(){
 		"anim_source: %#x\n"
 		"telemetry_comm_buff: %#x\n"
 		"frame_ether_buff: %#x\n"
-		"dhcp_lease_time: %d\n"
-		"dhcp_reamining_lease_time: %d\n"
+		"dhcp_lease_time: %lu\n"
+		"dhcp_reamining_lease_time: %lu\n"
 		"SEM forever\n",
 		mueb_version,
 		netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
@@ -281,180 +459,6 @@ void network::do_remote_command(){
 				break;
 		}
 	}
-}
-
-inline static void fetch_frame_unicast_proto(){
-	size_t size= getSn_RX_RSR(2);
-		if(size){
-			main_state=external_anim;
-
-			HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-			//todo treat big and small datagrams
-
-			char buff[10];
-
-			uint8_t svr_addr[6];
-			uint16_t  svr_port;
-			uint16_t len;
-			len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
-
-			//todo check indexes, datagram size
-
-			size_t window = buff[0];
-			size_t pixel_num = buff[1];
-			uint8_t red = buff[2];
-			uint8_t green = buff[3];
-			uint8_t blue = buff[4];
-
-			if(window == 0) //right window
-				windows::right_window.pixels[pixel_num].set(red, green, blue);
-			else
-				windows::left_window.pixels[pixel_num].set(red, green, blue);
-		}
-}
-
-inline static void fetch_frame_multicast_proto(){ //TODO clean the code
-	const uint8_t& szint= emelet_szam;
-	const uint8_t& szoba = szoba_szam;
-
-	size_t size= getSn_RX_RSR(3);
-	if(size == 0)
-		return;
-
-	if(szint==0 || szoba == 0)
-		return;
-
-	main_state=external_anim;
-
-	HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-	//todo treat big and small datagrams
-
-	uint8_t buff[314]; //TODO exception handling
-
-	uint8_t svr_addr[6];
-	uint16_t  svr_port;
-	uint16_t len;
-	len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
-
-	//todo check indexes, datagram size
-
-
-	if(buff[0] != 0x01)
-		return;
-
-	uint8_t pn_expected = ( ( (18-szint)*16 + (szoba-5)*2  )/52  );
-	uint8_t pn          = buff[1] - 1;
-
-	if(pn != pn_expected)
-		return;
-
-	uint32_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
-	size_t  running_offset = 0;
-
-	//----------------------------------
-
-	uint8_t r, g, b;
-
-		r =
-				(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-		g =
-				(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-		b=
-				(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-
-
-	windows::right_window.pixels[0].set(
-			r,
-			g,
-			b);
-
-	r =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	g =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	b=
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-	windows::right_window.pixels[1].set(
-			r,
-								g,
-								b);
-
-	r =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	g =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	b=
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-
-	windows::right_window.pixels[2].set(
-			r,
-								g,
-								b);
-
-	r =
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-				g =
-						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-				b=
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-	windows::right_window.pixels[3].set(
-			r,
-								g,
-								b);
-
-
-
-
-	//---------------------------------
-
-	r =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	g =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	b=
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-
-	windows::left_window.pixels[0].set(
-			r,
-								g,
-								b);
-
-	r =
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-				g =
-						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-				b=
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-	windows::left_window.pixels[1].set(
-			r,
-								g,
-								b);
-
-	r =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	g =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	b=
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	windows::left_window.pixels[2].set(
-			r,
-								g,
-								b);
-
-	r =
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-				g =
-						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-				b=
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	windows::left_window.pixels[3].set(
-			r,
-								g,
-								b);
-
 }
 
 void network::fetch_frame(){
