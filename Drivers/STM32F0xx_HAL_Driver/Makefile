@@ -77,9 +77,9 @@ obj/%.o: Src/%.c  | objf
 
 
 archive:  $(OBJS)
-	@echo "[AR]      $(TARGET).ar"
-	$Q$(AR) qco $(TARGET).ar $(OBJS)
+	@echo "[AR]      $(TARGET).a"
+	$Q$(AR) qco $(TARGET).a $(OBJS)
 
 clean:
-	@echo "[RM]      $(TARGET).ar"; rm -f $(TARGET).ar
+	@echo "[RM]      $(TARGET).a"; rm -f $(TARGET).a
 	@echo "[RMDIR]   obj" ; rm -fr obj
