@@ -24,6 +24,8 @@ extern "C" {
 #include "window.hpp"
 #include <cstdio>
 #include "version.hpp"
+#include "stm32_flash.hpp"
+#include "firm_update.hpp"
 //#include "matrix2_package_format.hpp"
 
 //------------------------------------------------------------------------
@@ -259,6 +261,85 @@ namespace{
         LL_SPI_TransmitData8(SPI1, b);
         (void)LL_SPI_ReceiveData8(SPI1);
     }
+
+    
+    ////////////   Status string
+    uint8_t status_string[512];
+
+    size_t create_status_string(){
+        int ret;
+
+        ret = snprintf((char*)status_string, sizeof(status_string),
+            "MUEB FW version: %s\n"
+            "MUEB MAC: %x:%x:%x:%x:%x:%x\n"
+            "anim_source: %#x\n"
+            "telemetry_comm_buff: %#x\n"
+            "frame_ether_buff: %#x\n"
+            "dhcp_lease_time: %lu\n"
+            "dhcp_reamining_lease_time: %lu\n"
+            "SEM forever\n",
+            mueb_version,
+            netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
+            main_state,
+            getSn_RX_RSR(1),
+            getSn_RX_RSR(2),
+            getDHCPLeasetime(),
+            getDHCPTimeBeforeLease()
+        );
+
+        return (ret>=0) ? ret : 1;
+    }
+    
+    ////////////   FW Update
+    
+    bool   is_update_enabled  = false;
+    
+    inline void enable_update_scoket(){
+        socket(4, Sn_MR_TCP, 1997, 0x00);
+        is_update_enabled = true;
+        
+        uint8_t blocking = SOCK_IO_NONBLOCK;
+        ctlsocket(4, CS_SET_IOMODE, &blocking);        
+    }
+    
+    void step_update(){
+        static size_t next_page_to_fetch = 0;
+        
+        if(!is_update_enabled)
+            return;
+        
+        std::array<uint8_t, 1024> buff;
+        
+        auto buffer_state = recv(4, buff.data(), 1024);
+        
+        if(buffer_state == SOCK_BUSY)
+            return;
+        
+        stm32_flash::unlock_flash raii;
+        
+        stm32_flash::reprogramPage(buff, 32+next_page_to_fetch);
+        
+        next_page_to_fetch++;
+        
+        if(next_page_to_fetch == 32) //check overflow
+            while(1); //TODO better error handle
+    }
+    
+    size_t calc_new_fw_chksum(){
+       	int ret;
+
+        ret = snprintf((char*)status_string, sizeof(status_string),
+            "MUEB FW version: %s\n"
+            "MUEB MAC: %x:%x:%x:%x:%x:%x\n"
+            "Chksum: %llu" 
+            "SEM forever\n",
+            mueb_version,
+            netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
+            firmware_update::checksum_of_new_fw()
+        );
+
+        return (ret>=0) ? ret : 1;
+    }
 }
 
 namespace net{
@@ -347,30 +428,6 @@ void network::init(){
 	socket(3, Sn_MR_UDP, 10000, 0x00);
 }
 
-size_t network::create_status_string(){
-	int ret;
-
-	ret = snprintf((char*)this->status_string, sizeof(status_string),
-		"MUEB FW version: %s\n"
-		"MUEB MAC: %x:%x:%x:%x:%x:%x\n"
-		"anim_source: %#x\n"
-		"telemetry_comm_buff: %#x\n"
-		"frame_ether_buff: %#x\n"
-		"dhcp_lease_time: %lu\n"
-		"dhcp_reamining_lease_time: %lu\n"
-		"SEM forever\n",
-		mueb_version,
-		netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
-		main_state,
-		getSn_RX_RSR(1),
-		getSn_RX_RSR(2),
-		getDHCPLeasetime(),
-		getDHCPTimeBeforeLease()
-	);
-
-	return (ret>=0) ? ret : 1;
-}
-
 void network::do_remote_command(){
 	size_t size = getSn_RX_RSR(1);
 
@@ -424,7 +481,7 @@ void network::do_remote_command(){
 				NVIC_SystemReset();
 				break;
 			case get_status:
-				sendto(1, status_string, network::create_status_string(), resp_addr, resp_port);
+				sendto(1, status_string, create_status_string(), resp_addr, resp_port);
 				break;
 			case get_mac:
 				char mac[17];
@@ -436,6 +493,15 @@ void network::do_remote_command(){
 				break;
 			case ping:
 				sendto(1, (uint8_t*) "pong", 4, resp_addr, resp_port);
+				break;
+            case enable_update:
+				::enable_update_scoket();
+                break;
+            case get_new_fw_chksum:
+                sendto(1, status_string, ::calc_new_fw_chksum(), resp_addr, resp_port);
+                break;
+            case refurbish:
+                firmware_update::refurbish();
 				break;
 			default:
 				break;
@@ -454,6 +520,7 @@ void network::step_network(){
 
 		do_remote_command();
 		fetch_frame();
+        ::step_update();
 
 		wizchip_getnetinfo(&netInfo);
 		emelet_szam=netInfo.ip[2];
