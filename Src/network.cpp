@@ -348,7 +348,7 @@ namespace{
         ret = snprintf((char*)status_string, sizeof(status_string),
             "MUEB FW version: %s\n"
             "MUEB MAC: %x:%x:%x:%x:%x:%x\n"
-            "Chksum: %llu" 
+            "Chksum: %llu\n" 
             "SEM forever\n",
             mueb_version,
             netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
