@@ -44,7 +44,7 @@ ELF_FW_UPDATE          = build/$(TARGET)_fwupdate.elf
 
 HEX_FW                 = build/$(TARGET)_fw.ihex
 HEX_FW_UPDATE          = build/$(TARGET)_fwupdate.ihex
-HEX                    = build/$(TARGET).hex
+HEX                    = build/$(TARGET).ihex
 
 LDSCRIPT               = STM32F030C8_FLASH.ld
 
@@ -75,8 +75,8 @@ build/cpp_%.o: Src/%.cpp | build_dir
 	$(CXX) $(CXX_FLAGS) $(DEFS) $(INCLUDES) -c -o $@ $<
 
 clean:
-	@echo "[RM]     $(C_OBJS) $(CPP_OBJS) $(ELF) $(HEX)"
-	@rm -f $(C_OBJS) $(CPP_OBJS) $(ELF) $(HEX)
+	@echo "[RM]     build/*"
+	@rm -f build/*
 
 src: $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS) | build_dir
 
@@ -99,4 +99,5 @@ $(HEX_FW_UPDATE): $(ELF_FW_UPDATE)
 	arm-none-eabi-objcopy -O ihex $< $@
 
 $(HEX): $(HEX_FW) $(HEX_FW_UPDATE)
-	echo "TODO Merge the to intel hex files" #TODO
+	echo "[SREC_CAT]   $@"
+	srec_cat $(HEX_FW) -intel $(HEX_FW_UPDATE) -intel -o $@ -intel
