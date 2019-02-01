@@ -298,6 +298,8 @@ namespace{
         socket(4, Sn_MR_TCP, 1997, 0x00);
         is_update_enabled = true;
         
+        listen(4);
+        
         uint8_t blocking = SOCK_IO_NONBLOCK;
         ctlsocket(4, CS_SET_IOMODE, &blocking);        
     }
@@ -308,6 +310,11 @@ namespace{
         if(!is_update_enabled)
             return;
         
+        uint8_t status;
+        getsockopt(4, SO_STATUS, &status);
+        if(status != SOCK_ESTABLISHED)
+            return;
+        
         std::array<uint8_t, 1024> buff;
         
         auto buffer_state = recv(4, buff.data(), 1024);
@@ -315,14 +322,24 @@ namespace{
         if(buffer_state == SOCK_BUSY)
             return;
         
-        stm32_flash::unlock_flash raii;
-        
-        stm32_flash::reprogramPage(buff, 32+next_page_to_fetch);
+        {
+            stm32_flash::unlock_flash raii;
+            stm32_flash::reprogramPage(buff, 32+next_page_to_fetch);
+        }
         
         next_page_to_fetch++;
         
-        if(next_page_to_fetch == 32) //check overflow
-            while(1); //TODO better error handle
+        if(next_page_to_fetch == 32){ //check overflow
+            disconnect(4);
+            is_update_enabled=false;
+            next_page_to_fetch = 0;
+            do{
+                uint8_t status;
+                getsockopt(4, SO_STATUS, &status);
+            } while(status == SOCK_ESTABLISHED);
+            
+            close(4);
+        }
     }
     
     size_t calc_new_fw_chksum(){
