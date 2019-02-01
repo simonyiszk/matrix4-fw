@@ -10,7 +10,7 @@
 
 #TODO firmware version incrementing
 
-TARGET                 = MUEB_firmware
+TARGET                 = MUEB
 
 TOOLCHAIN             := arm-none-eabi
 CC                    := $(TOOLCHAIN)-gcc
@@ -39,7 +39,11 @@ C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f
 ASM_FILES             := startup_stm32f030x8.s
 CPP_FILES             := internal_anim.cpp firm_update.cpp main2.cpp network.cpp window.cpp stm32_flash.cpp
 
-ELF                    = build/$(TARGET).elf
+ELF                    = build/$(TARGET)_fw.elf
+ELF_FW_UPDATE          = build/$(TARGET)_fwupdate.elf
+
+HEX_FW                 = build/$(TARGET)_fw.ihex
+HEX_FW_UPDATE          = build/$(TARGET)_fwupdate.ihex
 HEX                    = build/$(TARGET).hex
 
 LDSCRIPT               = STM32F030C8_FLASH.ld
@@ -81,7 +85,18 @@ $(ELF): $(ASM_OBJS) $(C_OBJS) $(CPP_OBJS)
 	$(CXX) -o $@ $(CXX_FLAGS) $(LD_FLAGS) -T$(LDSCRIPT) $? Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a 
 	$(SIZE) $@
 
-$(HEX): $(ELF)
+$(ELF_FW_UPDATE): build/cpp_refurbish.o build/cpp_stm32_flash.o
+	@echo "[LD]     $@"
+	$(CXX) -o $@ -Os -g -fstack-usage -Wall -Wextra -Wpacked -Winline  -mcpu=cortex-m0 -mthumb -std=gnu++11 -fno-rtti -fno-exceptions -fno-threadsafe-statics   -specs=nano.specs -static -Wl,--gc-sections -nostartfiles -nostdlib -nodefaultlibs  -Trefurbish_linker.ld build/cpp_refurbish.o  build/cpp_stm32_flash.o -Wl,--strip-all
+
+
+$(HEX_FW): $(ELF)
 	@echo "[OBJCOPY]$< $@"
 	arm-none-eabi-objcopy -O ihex $< $@
 
+$(HEX_FW_UPDATE): $(ELF_FW_UPDATE)
+	@echo "[OBJCOPY]$< $@"
+	arm-none-eabi-objcopy -O ihex $< $@
+
+$(HEX): $(HEX_FW) $(HEX_FW_UPDATE)
+	echo "TODO Merge the to intel hex files" #TODO

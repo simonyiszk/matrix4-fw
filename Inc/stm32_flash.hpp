@@ -25,10 +25,13 @@ namespace stm32_flash{
 		~unlock_flash (){
 			FLASH->CR |= FLASH_CR_LOCK;
 		}
+		
+		unlock_flash(unlock_flash&) = delete;
+        void operator=(unlock_flash&) = delete;
 	};
 
     static constexpr size_t         pageSize   = 1024; // 1 KByte per page
-	static           uint8_t* const flash_addr = (uint8_t*)(0x8000000);;
+	static constexpr uint8_t* const flash_addr = (uint8_t*)(0x8000000);
 
 	void erasePage(const uint32_t page_num);
 	
