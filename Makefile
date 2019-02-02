@@ -99,7 +99,7 @@ $(HEX_FW_UPDATE): $(ELF_FW_UPDATE)
 	arm-none-eabi-objcopy -O ihex $< $@
 
 $(HEX): $(HEX_FW) $(HEX_FW_UPDATE)
-	echo "[SREC_CAT]   $@"
+	@echo "[SREC_CAT]   $@"
 	srec_cat $(HEX_FW) -intel $(HEX_FW_UPDATE) -intel -o $@ -intel
 
 $(BIN): $(HEX_FW)
