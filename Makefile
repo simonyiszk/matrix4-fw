@@ -101,3 +101,7 @@ $(HEX_FW_UPDATE): $(ELF_FW_UPDATE)
 $(HEX): $(HEX_FW) $(HEX_FW_UPDATE)
 	echo "[SREC_CAT]   $@"
 	srec_cat $(HEX_FW) -intel $(HEX_FW_UPDATE) -intel -o $@ -intel
+
+$(BIN): $(HEX_FW)
+	@echo "[SREC_CAT]  $@"
+	srec_cat $? -intel -offset -0x8000000 -fill 0xff 0x00 0x7C00  -o $@ -binary
