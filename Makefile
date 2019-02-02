@@ -49,6 +49,7 @@ HEX                    = build/$(TARGET).ihex
 BIN                    = build/$(TARGET)_for_remote_update.bin
 
 LDSCRIPT               = STM32F030C8_FLASH.ld
+REFURBISHER_LDSCRIPT   = refurbish_linker.ld
 
 ####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####
 
@@ -89,7 +90,7 @@ $(ELF): $(ASM_OBJS) $(C_OBJS) $(CPP_OBJS)
 
 $(ELF_FW_UPDATE): build/cpp_refurbish.o build/cpp_stm32_flash.o
 	@echo "[LD]     $@"
-	$(CXX) -o $@ -Os -g -fstack-usage -Wall -Wextra -Wpacked -Winline  -mcpu=cortex-m0 -mthumb -std=gnu++11 -fno-rtti -fno-exceptions -fno-threadsafe-statics   -specs=nano.specs -static -Wl,--gc-sections -nostartfiles -nostdlib -nodefaultlibs  -Trefurbish_linker.ld build/cpp_refurbish.o  build/cpp_stm32_flash.o -Wl,--strip-all
+	$(CXX) -o $@ -Os -g -fstack-usage -Wall -Wextra -Wpacked -Winline  -mcpu=cortex-m0 -mthumb -std=gnu++11 -fno-rtti -fno-exceptions -fno-threadsafe-statics   -specs=nano.specs -static -Wl,--gc-sections -nostartfiles -nostdlib -nodefaultlibs  -T$(REFURBISHER_LDSCRIPT) build/cpp_refurbish.o  build/cpp_stm32_flash.o
 
 
 $(HEX_FW): $(ELF)
