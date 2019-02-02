@@ -46,7 +46,7 @@ ELF_FW_UPDATE          = build/$(TARGET)_fwupdate.elf
 
 HEX_FW                 = build/$(TARGET)_fw.ihex
 HEX_FW_UPDATE          = build/$(TARGET)_fwupdate.ihex
-HEX                    = build/$(TARGET).ihex
+HEX                    = build/$(TARGET)_for_stlink_flash.ihex
 
 BIN                    = build/$(TARGET)_for_remote_update.bin
 
