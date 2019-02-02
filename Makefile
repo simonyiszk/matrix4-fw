@@ -46,6 +46,8 @@ HEX_FW                 = build/$(TARGET)_fw.ihex
 HEX_FW_UPDATE          = build/$(TARGET)_fwupdate.ihex
 HEX                    = build/$(TARGET).ihex
 
+BIN                    = build/$(TARGET)_for_remote_update.bin
+
 LDSCRIPT               = STM32F030C8_FLASH.ld
 
 ####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####----####
@@ -55,7 +57,7 @@ CPP_OBJS               = $(addprefix build/cpp_,$(CPP_FILES:.cpp=.o))
 ASM_OBJS               = $(addprefix build/asm_,$(ASM_FILES:.s=.o))
 
 
-all: $(HEX) | build_dir
+all: $(HEX) $(BIN) | build_dir
 
 .PHONY: build_dir clean src
 
@@ -104,4 +106,4 @@ $(HEX): $(HEX_FW) $(HEX_FW_UPDATE)
 
 $(BIN): $(HEX_FW)
 	@echo "[SREC_CAT]  $@"
-	srec_cat $? -intel -offset -0x8000000 -fill 0xff 0x00 0x7C00  -o $@ -binary
+	srec_cat $? -intel -offset -0x8000000 -fill 0xff 0x00 0x7C00 -o $@ -binary
