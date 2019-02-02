@@ -10,6 +10,8 @@
 
 #TODO firmware version incrementing
 
+MAKEFLAGS             += --quiet
+
 TARGET                 = MUEB
 
 TOOLCHAIN             := arm-none-eabi
@@ -86,7 +88,7 @@ src: $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS) | build_dir
 $(ELF): $(ASM_OBJS) $(C_OBJS) $(CPP_OBJS)
 	@echo "[LD]     $@"
 	$(CXX) -o $@ $(CXX_FLAGS) $(LD_FLAGS) -T$(LDSCRIPT) $? Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a 
-	$(SIZE) $@
+#	$(SIZE) $@
 
 $(ELF_FW_UPDATE): build/cpp_refurbish.o build/cpp_stm32_flash.o
 	@echo "[LD]     $@"
