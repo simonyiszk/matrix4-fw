@@ -20,3 +20,9 @@ local.properties
 # Code Recommenders
 .recommenders/
 \.vscode/
+
+build
+
+.kdev4
+
+*.kdev4

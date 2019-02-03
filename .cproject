@@ -19,7 +19,7 @@
 							<option id="com.atollic.truestudio.toolchain_options.mcu.885083494" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" useByScannerDiscovery="false" value="STM32F030C8" valueType="string"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.1722293343" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" useByScannerDiscovery="false" value="STMicroelectronics" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform.2054752829" isAbstract="false" name="Debug platform" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<builder buildPath="${workspace_loc:/STM32100B-EVAL/Debug}" customBuilderProperties="toolChainpathString=/opt/Atollic_TrueSTUDIO_for_STM32_x86_64_9.0.0/ARMTools/bin|toolChainpathType=1|" id="com.atollic.truestudio.mbs.builder1.1222194476" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1">
+							<builder buildPath="${workspace_loc:/STM32100B-EVAL/Debug}" customBuilderProperties="toolChainpathType=1|toolChainpathString=/opt/Atollic_TrueSTUDIO_for_STM32_x86_64_9.0.0/ARMTools/bin|" id="com.atollic.truestudio.mbs.builder1.1222194476" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
 								</outputEntries>
@@ -217,6 +217,34 @@
 							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.232408632" name="Resource Custom Build Step Output Type"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1235702971" name="main2.c" rcbsApplicability="disable" resourcePath="Src/main2.cpp" toolsToInvoke="com.atollic.truestudio.gpp.255993951">
+						<tool id="com.atollic.truestudio.gpp.255993951" name="C++ Compiler" superClass="com.atollic.truestudio.gpp">
+							<option id="com.atollic.truestudio.common_options.target.fpucore.382871625" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.directories.select.1948959630" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Inc}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include}&quot;"/>
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc}&quot;"/>
+							</option>
+							<option id="com.atollic.truestudio.gpp.symbols.defined.922093982" name="Defined symbols" superClass="com.atollic.truestudio.gpp.symbols.defined" valueType="definedSymbols">
+								<listOptionValue builtIn="false" value="STM32F030x8"/>
+								<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+							</option>
+							<option id="com.atollic.truestudio.gpp.cppstandard.822476318" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp0x" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.optimization.level.1855428530" name="Optimization Level" superClass="com.atollic.truestudio.gpp.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.optimization.level.00" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.optimization.fno_rtti.1179888459" name="Disable RTTI" superClass="com.atollic.truestudio.gpp.optimization.fno_rtti" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.atollic.truestudio.gpp.optimization.fno_exceptions.722823789" name="Disable exception handling" superClass="com.atollic.truestudio.gpp.optimization.fno_exceptions" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.atollic.truestudio.common_options.target.instr_set.92642725" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
+							<option id="com.atollic.truestudio.gpp.misc.otherflags.606150728" name="Other options" superClass="com.atollic.truestudio.gpp.misc.otherflags" useByScannerDiscovery="false" value=" -mcpu=cortex-m0" valueType="string"/>
+							<inputType id="com.atollic.truestudio.gpp.input.1691808764" superClass="com.atollic.truestudio.gpp.input"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.64724501" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.1616270092" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.1416854575" name="Resource Custom Build Step Output Type"/>
+						</tool>
+					</fileInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1694680156" name="main.c" rcbsApplicability="disable" resourcePath="Src/main.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.67339517">
 						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.67339517" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335">
 							<option id="com.atollic.truestudio.gcc.directories.select.1998971814" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
@@ -227,6 +255,315 @@
 								<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F0xx/Include"/>
 							</option>
 							<inputType id="com.atollic.truestudio.gcc.input.2008895069" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.86049958" name="firm_update.cpp" rcbsApplicability="disable" resourcePath="Src/firm_update.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1281257290">
+						<tool command="arm-atollic-eabi-g++ -c" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1281257290" name="C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
+							<option id="gnu.cpp.compiler.option.preprocessor.undef.131276845" name="Undefined symbols (-U)" superClass="gnu.cpp.compiler.option.preprocessor.undef" useByScannerDiscovery="false" valueType="undefDefinedSymbols">
+								<listOptionValue builtIn="false" value="__STDC__"/>
+								<listOptionValue builtIn="false" value="__cpp_init_captures"/>
+								<listOptionValue builtIn="false" value="__INT64_MAX__"/>
+								<listOptionValue builtIn="false" value="__LDBL_HAS_QUIET_NAN__"/>
+								<listOptionValue builtIn="false" value="__cpp_binary_literals"/>
+								<listOptionValue builtIn="false" value="__GCC_HAVE_DWARF2_CFI_ASM"/>
+								<listOptionValue builtIn="false" value="__WINT_TYPE__"/>
+								<listOptionValue builtIn="false" value="__ORDER_LITTLE_ENDIAN__"/>
+								<listOptionValue builtIn="false" value="__cpp_rvalue_reference"/>
+								<listOptionValue builtIn="false" value="__DEC64_MAX_EXP__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST32_TYPE__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_POINTER_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST64_TYPE__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_TEST_AND_SET_TRUEVAL"/>
+								<listOptionValue builtIn="false" value="__cpp_runtime_arrays"/>
+								<listOptionValue builtIn="false" value="__STDC_ISO_10646__"/>
+								<listOptionValue builtIn="false" value="__GXX_WEAK__"/>
+								<listOptionValue builtIn="false" value="__BYTE_ORDER__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST32_MAX__"/>
+								<listOptionValue builtIn="false" value="__DECIMAL_DIG__"/>
+								<listOptionValue builtIn="false" value="__has_include_next(STR)"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_SIZE_T__"/>
+								<listOptionValue builtIn="false" value="__PRAGMA_REDEFINE_EXTNAME"/>
+								<listOptionValue builtIn="false" value="__LDBL_MIN__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_RELEASE"/>
+								<listOptionValue builtIn="false" value="__cpp_constexpr"/>
+								<listOptionValue builtIn="false" value="__cpp_initializer_lists"/>
+								<listOptionValue builtIn="false" value="__SCHAR_MAX__"/>
+								<listOptionValue builtIn="false" value="__GXX_ABI_VERSION"/>
+								<listOptionValue builtIn="false" value="__k8__"/>
+								<listOptionValue builtIn="false" value="__UINTMAX_C(c)"/>
+								<listOptionValue builtIn="false" value="__GCC_IEC_559_COMPLEX"/>
+								<listOptionValue builtIn="false" value="__UINT64_MAX__"/>
+								<listOptionValue builtIn="false" value="__x86_64__"/>
+								<listOptionValue builtIn="false" value="__DEC128_MIN__"/>
+								<listOptionValue builtIn="false" value="__UINT16_C(c)"/>
+								<listOptionValue builtIn="false" value="__LDBL_MIN_10_EXP__"/>
+								<listOptionValue builtIn="false" value="__INT_FAST16_MAX__"/>
+								<listOptionValue builtIn="false" value="__amd64__"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST8_MAX__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST64_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cpp_user_defined_literals"/>
+								<listOptionValue builtIn="false" value="__INT32_C(c)"/>
+								<listOptionValue builtIn="false" value="__UINT32_MAX__"/>
+								<listOptionValue builtIn="false" value="__FXSR__"/>
+								<listOptionValue builtIn="false" value="__FLT_MIN_10_EXP__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_HLE_RELEASE"/>
+								<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_LONG_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__cpp_ref_qualifiers"/>
+								<listOptionValue builtIn="false" value="__UINT8_C(c)"/>
+								<listOptionValue builtIn="false" value="__cpp_generic_lambdas"/>
+								<listOptionValue builtIn="false" value="__BIGGEST_ALIGNMENT__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST8_MAX__"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST16_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cpp_hex_float"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST32_MAX__"/>
+								<listOptionValue builtIn="false" value="__cpp_alias_templates"/>
+								<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4"/>
+								<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2"/>
+								<listOptionValue builtIn="false" value="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST8_TYPE__"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_LONG__"/>
+								<listOptionValue builtIn="false" value="__UINT64_C(c)"/>
+								<listOptionValue builtIn="false" value="__INT_FAST8_MAX__"/>
+								<listOptionValue builtIn="false" value="__cpp_lambdas"/>
+								<listOptionValue builtIn="false" value="__DEC64_EPSILON__"/>
+								<listOptionValue builtIn="false" value="__UINTMAX_MAX__"/>
+								<listOptionValue builtIn="false" value="__SSE_MATH__"/>
+								<listOptionValue builtIn="false" value="__DEC64_MIN__"/>
+								<listOptionValue builtIn="false" value="__WINT_MIN__"/>
+								<listOptionValue builtIn="false" value="__REGISTER_PREFIX__"/>
+								<listOptionValue builtIn="false" value="__PIE__"/>
+								<listOptionValue builtIn="false" value="__INTMAX_C(c)"/>
+								<listOptionValue builtIn="false" value="__CHAR16_TYPE__"/>
+								<listOptionValue builtIn="false" value="__FLT_RADIX__"/>
+								<listOptionValue builtIn="false" value="__ORDER_BIG_ENDIAN__"/>
+								<listOptionValue builtIn="false" value="__SIZE_MAX__"/>
+								<listOptionValue builtIn="false" value="__DBL_EPSILON__"/>
+								<listOptionValue builtIn="false" value="__SIZE_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cpp_variadic_templates"/>
+								<listOptionValue builtIn="false" value="__cpp_unicode_characters"/>
+								<listOptionValue builtIn="false" value="__SEG_GS"/>
+								<listOptionValue builtIn="false" value="__UINT32_TYPE__"/>
+								<listOptionValue builtIn="false" value="__LDBL_MAX_EXP__"/>
+								<listOptionValue builtIn="false" value="__FLOAT_WORD_ORDER__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST8_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cpp_static_assert"/>
+								<listOptionValue builtIn="false" value="__FLT_MAX__"/>
+								<listOptionValue builtIn="false" value="__GNUG__"/>
+								<listOptionValue builtIn="false" value="__DBL_DENORM_MIN__"/>
+								<listOptionValue builtIn="false" value="__gnu_linux__"/>
+								<listOptionValue builtIn="false" value="__cpp_inheriting_constructors"/>
+								<listOptionValue builtIn="false" value="__code_model_small__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST64_MAX__"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_SHORT__"/>
+								<listOptionValue builtIn="false" value="__GLIBCXX_BITSIZE_INT_N_0"/>
+								<listOptionValue builtIn="false" value="__DEC32_MIN_EXP__"/>
+								<listOptionValue builtIn="false" value="__STDC_UTF_16__"/>
+								<listOptionValue builtIn="false" value="__DECIMAL_BID_FORMAT__"/>
+								<listOptionValue builtIn="false" value="__unix__"/>
+								<listOptionValue builtIn="false" value="__cpp_rvalue_references"/>
+								<listOptionValue builtIn="false" value="__LP64__"/>
+								<listOptionValue builtIn="false" value="__UINT8_TYPE__"/>
+								<listOptionValue builtIn="false" value="__INT_FAST64_TYPE__"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST8_MAX__"/>
+								<listOptionValue builtIn="false" value="__LDBL_HAS_DENORM__"/>
+								<listOptionValue builtIn="false" value="__linux"/>
+								<listOptionValue builtIn="false" value="__INTPTR_MAX__"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST16_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cpp_variable_templates"/>
+								<listOptionValue builtIn="false" value="__INT16_MAX__"/>
+								<listOptionValue builtIn="false" value="__INT8_MAX__"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST8_TYPE__"/>
+								<listOptionValue builtIn="false" value="__DEC32_MAX_EXP__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_BOOL_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST32_MAX__"/>
+								<listOptionValue builtIn="false" value="__INT_FAST32_MAX__"/>
+								<listOptionValue builtIn="false" value="__DEC128_SUBNORMAL_MIN__"/>
+								<listOptionValue builtIn="false" value="__LDBL_DIG__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_CONSUME"/>
+								<listOptionValue builtIn="false" value="__LDBL_DENORM_MIN__"/>
+								<listOptionValue builtIn="false" value="__GNUC_PATCHLEVEL__"/>
+								<listOptionValue builtIn="false" value="linux"/>
+								<listOptionValue builtIn="false" value="__LDBL_MIN_EXP__"/>
+								<listOptionValue builtIn="false" value="__DBL_HAS_DENORM__"/>
+								<listOptionValue builtIn="false" value="__DEC32_MANT_DIG__"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST32_TYPE__"/>
+								<listOptionValue builtIn="false" value="__VERSION__"/>
+								<listOptionValue builtIn="false" value="__SSE__"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_LONG_DOUBLE__"/>
+								<listOptionValue builtIn="false" value="__PTRDIFF_MAX__"/>
+								<listOptionValue builtIn="false" value="__SSE2_MATH__"/>
+								<listOptionValue builtIn="false" value="__STDC_UTF_32__"/>
+								<listOptionValue builtIn="false" value="__unix"/>
+								<listOptionValue builtIn="false" value="__FLT_EPSILON__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_INT_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__PTRDIFF_TYPE__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_LLONG_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__UINT16_TYPE__"/>
+								<listOptionValue builtIn="false" value="__pic__"/>
+								<listOptionValue builtIn="false" value="__SIG_ATOMIC_TYPE__"/>
+								<listOptionValue builtIn="false" value="__DBL_MIN__"/>
+								<listOptionValue builtIn="false" value="__cpp_delegating_constructors"/>
+								<listOptionValue builtIn="false" value="__STDC_IEC_559__"/>
+								<listOptionValue builtIn="false" value="__cpp_decltype"/>
+								<listOptionValue builtIn="false" value="__DEPRECATED"/>
+								<listOptionValue builtIn="false" value="__DEC32_MIN__"/>
+								<listOptionValue builtIn="false" value="__STDC_IEC_559_COMPLEX__"/>
+								<listOptionValue builtIn="false" value="__PIC__"/>
+								<listOptionValue builtIn="false" value="__FLT_HAS_DENORM__"/>
+								<listOptionValue builtIn="false" value="__WCHAR_MIN__"/>
+								<listOptionValue builtIn="false" value="__CHAR32_TYPE__"/>
+								<listOptionValue builtIn="false" value="__GXX_RTTI"/>
+								<listOptionValue builtIn="false" value="__FLT_DENORM_MIN__"/>
+								<listOptionValue builtIn="false" value="__DEC32_MAX__"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST64_TYPE__"/>
+								<listOptionValue builtIn="false" value="__FLT_HAS_QUIET_NAN__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_HLE_ACQUIRE"/>
+								<listOptionValue builtIn="false" value="__cpp_unicode_literals"/>
+								<listOptionValue builtIn="false" value="__UINT8_MAX__"/>
+								<listOptionValue builtIn="false" value="__k8"/>
+								<listOptionValue builtIn="false" value="__UINT32_C(c)"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_FLOAT80__"/>
+								<listOptionValue builtIn="false" value="__INT64_C(c)"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_LONG_LONG__"/>
+								<listOptionValue builtIn="false" value="__LONG_MAX__"/>
+								<listOptionValue builtIn="false" value="__GCC_IEC_559"/>
+								<listOptionValue builtIn="false" value="__USER_LABEL_PREFIX__"/>
+								<listOptionValue builtIn="false" value="__FLT_MIN_EXP__"/>
+								<listOptionValue builtIn="false" value="__INT_FAST8_TYPE__"/>
+								<listOptionValue builtIn="false" value="__INT16_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cpp_rtti"/>
+								<listOptionValue builtIn="false" value="__INT8_C(c)"/>
+								<listOptionValue builtIn="false" value="__FLT_MIN__"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST64_MAX__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_ACQ_REL"/>
+								<listOptionValue builtIn="false" value="__LDBL_HAS_INFINITY__"/>
+								<listOptionValue builtIn="false" value="__DEC128_MAX_EXP__"/>
+								<listOptionValue builtIn="false" value="__cpp_attributes"/>
+								<listOptionValue builtIn="false" value="__SSE2__"/>
+								<listOptionValue builtIn="false" value="__cpp_aggregate_nsdmi"/>
+								<listOptionValue builtIn="false" value="__INT16_C(c)"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_CHAR16_T_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__DBL_DIG__"/>
+								<listOptionValue builtIn="false" value="__DEC_EVAL_METHOD__"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST16_MAX__"/>
+								<listOptionValue builtIn="false" value="__CHAR_BIT__"/>
+								<listOptionValue builtIn="false" value="__MMX__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_SEQ_CST"/>
+								<listOptionValue builtIn="false" value="__FLT_EVAL_METHOD__"/>
+								<listOptionValue builtIn="false" value="__FLT_MAX_10_EXP__"/>
+								<listOptionValue builtIn="false" value="__UINTPTR_MAX__"/>
+								<listOptionValue builtIn="false" value="__cpp_return_type_deduction"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_DOUBLE__"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_WCHAR_T__"/>
+								<listOptionValue builtIn="false" value="__DEC32_SUBNORMAL_MIN__"/>
+								<listOptionValue builtIn="false" value="__DEC128_EPSILON__"/>
+								<listOptionValue builtIn="false" value="__DBL_MAX_10_EXP__"/>
+								<listOptionValue builtIn="false" value="__INT_FAST32_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cpp_decltype_auto"/>
+								<listOptionValue builtIn="false" value="__NO_INLINE__"/>
+								<listOptionValue builtIn="false" value="__DBL_HAS_INFINITY__"/>
+								<listOptionValue builtIn="false" value="__pie__"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST16_MAX__"/>
+								<listOptionValue builtIn="false" value="__LDBL_MANT_DIG__"/>
+								<listOptionValue builtIn="false" value="__DBL_MIN_10_EXP__"/>
+								<listOptionValue builtIn="false" value="__GCC_ASM_FLAG_OUTPUTS__"/>
+								<listOptionValue builtIn="false" value="__INT64_TYPE__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_SHORT_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__linux__"/>
+								<listOptionValue builtIn="false" value="__GNUC_MINOR__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_RELAXED"/>
+								<listOptionValue builtIn="false" value="__SEG_FS"/>
+								<listOptionValue builtIn="false" value="__FINITE_MATH_ONLY__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_CHAR32_T_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__INT_LEAST32_TYPE__"/>
+								<listOptionValue builtIn="false" value="_LP64"/>
+								<listOptionValue builtIn="false" value="__DBL_DECIMAL_DIG__"/>
+								<listOptionValue builtIn="false" value="__DBL_MAX__"/>
+								<listOptionValue builtIn="false" value="__amd64"/>
+								<listOptionValue builtIn="false" value="__DBL_MIN_EXP__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST16_TYPE__"/>
+								<listOptionValue builtIn="false" value="__FLT_DIG__"/>
+								<listOptionValue builtIn="false" value="__cpp_sized_deallocation"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_PTRDIFF_T__"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_FLOAT128__"/>
+								<listOptionValue builtIn="false" value="__WCHAR_MAX__"/>
+								<listOptionValue builtIn="false" value="__FLT_HAS_INFINITY__"/>
+								<listOptionValue builtIn="false" value="__INT_MAX__"/>
+								<listOptionValue builtIn="false" value="__LDBL_MAX_10_EXP__"/>
+								<listOptionValue builtIn="false" value="_STDC_PREDEF_H"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_FLOAT__"/>
+								<listOptionValue builtIn="false" value="__STDC_NO_THREADS__"/>
+								<listOptionValue builtIn="false" value="_GNU_SOURCE"/>
+								<listOptionValue builtIn="false" value="__INT_FAST64_MAX__"/>
+								<listOptionValue builtIn="false" value="__INT32_TYPE__"/>
+								<listOptionValue builtIn="false" value="__DEC64_MIN_EXP__"/>
+								<listOptionValue builtIn="false" value="__UINT_LEAST16_MAX__"/>
+								<listOptionValue builtIn="false" value="__DEC128_MIN_EXP__"/>
+								<listOptionValue builtIn="false" value="__cpp_nsdmi"/>
+								<listOptionValue builtIn="false" value="__SIG_ATOMIC_MIN__"/>
+								<listOptionValue builtIn="false" value="__GNUC__"/>
+								<listOptionValue builtIn="false" value="__DEC64_MANT_DIG__"/>
+								<listOptionValue builtIn="false" value="__DEC128_MAX__"/>
+								<listOptionValue builtIn="false" value="__EXCEPTIONS"/>
+								<listOptionValue builtIn="false" value="__DBL_MANT_DIG__"/>
+								<listOptionValue builtIn="false" value="__DEC128_MANT_DIG__"/>
+								<listOptionValue builtIn="false" value="unix"/>
+								<listOptionValue builtIn="false" value="__SIG_ATOMIC_MAX__"/>
+								<listOptionValue builtIn="false" value="__cpp_raw_strings"/>
+								<listOptionValue builtIn="false" value="__ELF__"/>
+								<listOptionValue builtIn="false" value="__UINTMAX_TYPE__"/>
+								<listOptionValue builtIn="false" value="__INTPTR_TYPE__"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_INT128__"/>
+								<listOptionValue builtIn="false" value="__ATOMIC_ACQUIRE"/>
+								<listOptionValue builtIn="false" value="__cpp_range_based_for"/>
+								<listOptionValue builtIn="false" value="__LONG_LONG_MAX__"/>
+								<listOptionValue builtIn="false" value="__LDBL_EPSILON__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_CHAR_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__GNUC_STDC_INLINE__"/>
+								<listOptionValue builtIn="false" value="__INT32_MAX__"/>
+								<listOptionValue builtIn="false" value="__FLT_MANT_DIG__"/>
+								<listOptionValue builtIn="false" value="__UINT16_MAX__"/>
+								<listOptionValue builtIn="false" value="__INTMAX_TYPE__"/>
+								<listOptionValue builtIn="false" value="__has_include(STR)"/>
+								<listOptionValue builtIn="false" value="__INT8_TYPE__"/>
+								<listOptionValue builtIn="false" value="__cplusplus"/>
+								<listOptionValue builtIn="false" value="__FLT_DECIMAL_DIG__"/>
+								<listOptionValue builtIn="false" value="__DEC64_MAX__"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_INT__"/>
+								<listOptionValue builtIn="false" value="__FLT_MAX_EXP__"/>
+								<listOptionValue builtIn="false" value="__GLIBCXX_TYPE_INT_N_0"/>
+								<listOptionValue builtIn="false" value="__SHRT_MAX__"/>
+								<listOptionValue builtIn="false" value="__INTMAX_MAX__"/>
+								<listOptionValue builtIn="false" value="__LDBL_MAX__"/>
+								<listOptionValue builtIn="false" value="__DBL_MAX_EXP__"/>
+								<listOptionValue builtIn="false" value="__DEC32_EPSILON__"/>
+								<listOptionValue builtIn="false" value="__UINT_FAST64_MAX__"/>
+								<listOptionValue builtIn="false" value="__cpp_exceptions"/>
+								<listOptionValue builtIn="false" value="__STDC_HOSTED__"/>
+								<listOptionValue builtIn="false" value="__DBL_HAS_QUIET_NAN__"/>
+								<listOptionValue builtIn="false" value="__GCC_ATOMIC_WCHAR_T_LOCK_FREE"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_WINT_T__"/>
+								<listOptionValue builtIn="false" value="__UINT64_TYPE__"/>
+								<listOptionValue builtIn="false" value="__INT_FAST16_TYPE__"/>
+								<listOptionValue builtIn="false" value="__ORDER_PDP_ENDIAN__"/>
+								<listOptionValue builtIn="false" value="__WCHAR_TYPE__"/>
+								<listOptionValue builtIn="false" value="__UINTPTR_TYPE__"/>
+								<listOptionValue builtIn="false" value="__x86_64"/>
+								<listOptionValue builtIn="false" value="__cpp_digit_separators"/>
+								<listOptionValue builtIn="false" value="__SIZEOF_POINTER__"/>
+								<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
+								<listOptionValue builtIn="false" value="__DEC64_SUBNORMAL_MIN__"/>
+								<listOptionValue builtIn="false" value="__WINT_MAX__"/>
+							</option>
+							<option id="gnu.cpp.compiler.option.other.other.1457079503" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -DSTM32F030x8 -DUSE_HAL_DRIVER -I&quot;/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Inc&quot; -I&quot;/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include&quot; -I&quot;/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Drivers/CMSIS/Include&quot; -I&quot;/home/kisada/Atollic/TrueSTUDIO/STM32_workspace_9.0/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc&quot; -O2 -fno-rtti -fno-exceptions -g -Wall -c -fmessage-length=0 -fstack-usage -fno-threadsafe-statics -specs=nano.specs -std=gnu++11   -mcpu=cortex-m0  -mthumb" valueType="string"/>
+							<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1527152105" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+						</tool>
+						<tool announcement="Invoking: Resource Custom Build Step" command="" customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.444841480" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.796238583" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.696666740" name="Resource Custom Build Step Output Type" outputNames=""/>
 						</tool>
 					</fileInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.512429309" name="window.cpp" rcbsApplicability="disable" resourcePath="Src/window.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1006803529">
@@ -290,34 +627,6 @@
 							<inputType id="com.atollic.truestudio.gcc.input.1062309588" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1235702971" name="main2.c" rcbsApplicability="disable" resourcePath="Src/main2.cpp" toolsToInvoke="com.atollic.truestudio.gpp.255993951">
-						<tool id="com.atollic.truestudio.gpp.255993951" name="C++ Compiler" superClass="com.atollic.truestudio.gpp">
-							<option id="com.atollic.truestudio.common_options.target.fpucore.382871625" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="com.atollic.truestudio.common_options.target.fpucore.None" valueType="enumerated"/>
-							<option id="com.atollic.truestudio.gpp.directories.select.1948959630" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Inc}&quot;"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Include}&quot;"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/CMSIS/Device/ST/STM32F0xx/Include}&quot;"/>
-								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix4_mueb_fw/Drivers/STM32F0xx_HAL_Driver/Inc}&quot;"/>
-							</option>
-							<option id="com.atollic.truestudio.gpp.symbols.defined.922093982" name="Defined symbols" superClass="com.atollic.truestudio.gpp.symbols.defined" valueType="definedSymbols">
-								<listOptionValue builtIn="false" value="STM32F030x8"/>
-								<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
-							</option>
-							<option id="com.atollic.truestudio.gpp.cppstandard.822476318" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp0x" valueType="enumerated"/>
-							<option id="com.atollic.truestudio.gpp.optimization.level.1855428530" name="Optimization Level" superClass="com.atollic.truestudio.gpp.optimization.level" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.optimization.level.00" valueType="enumerated"/>
-							<option id="com.atollic.truestudio.gpp.optimization.fno_rtti.1179888459" name="Disable RTTI" superClass="com.atollic.truestudio.gpp.optimization.fno_rtti" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-							<option id="com.atollic.truestudio.gpp.optimization.fno_exceptions.722823789" name="Disable exception handling" superClass="com.atollic.truestudio.gpp.optimization.fno_exceptions" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-							<option id="com.atollic.truestudio.common_options.target.instr_set.92642725" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
-							<option id="com.atollic.truestudio.gpp.misc.otherflags.606150728" name="Other options" superClass="com.atollic.truestudio.gpp.misc.otherflags" useByScannerDiscovery="false" value=" -mcpu=cortex-m0" valueType="string"/>
-							<inputType id="com.atollic.truestudio.gpp.input.1691808764" superClass="com.atollic.truestudio.gpp.input"/>
-						</tool>
-						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.64724501" name="Resource Custom Build Step">
-							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.1616270092" name="Resource Custom Build Step Input Type">
-								<additionalInput kind="additionalinputdependency" paths=""/>
-							</inputType>
-							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.1416854575" name="Resource Custom Build Step Output Type"/>
-						</tool>
-					</fileInfo>
 					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.1143410045" name="system_stm32f0xx.c" rcbsApplicability="disable" resourcePath="Src/system_stm32f0xx.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.262917000">
 						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335.262917000" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.507783335">
 							<option id="com.atollic.truestudio.gcc.directories.select.1044846721" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
@@ -355,7 +664,7 @@
 						<entry excluding="Socket_APIs_V3.0.3.chm|W5300|W5200|W5100S|W5100" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers/ioLibrary_Driver/Ethernet"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers/ioLibrary_Driver/Internet/DHCP"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="firm_update.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry excluding="ioLibrary_Driver" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
 					</sourceEntries>
 				</configuration>

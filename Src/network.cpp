@@ -5,75 +5,27 @@
  *      Author: kisada
  */
 
-
 extern "C" {
-	#include "mac_eeprom.h"
-	#include "dhcp.h"
 	#include "wizchip_conf.h"
 	#include "socket.h"
 	#include "w5500.h"
-	#include "main.h"
-	#include "stm32f0xx_hal.h"
-	#include "dhcp_buffer.h"
-
-typedef struct
-{
-  uint32_t Pin;          /*!< Specifies the GPIO pins to be configured.
-                              This parameter can be any value of @ref GPIO_LL_EC_PIN */
-
-  uint32_t Mode;         /*!< Specifies the operating mode for the selected pins.
-                              This parameter can be a value of @ref GPIO_LL_EC_MODE.
-
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinMode().*/
-
-  uint32_t Speed;        /*!< Specifies the speed for the selected pins.
-                              This parameter can be a value of @ref GPIO_LL_EC_SPEED.
-
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinSpeed().*/
-
-  uint32_t OutputType;   /*!< Specifies the operating output type for the selected pins.
-                              This parameter can be a value of @ref GPIO_LL_EC_OUTPUT.
-
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinOutputType().*/
-
-  uint32_t Pull;         /*!< Specifies the operating Pull-up/Pull down for the selected pins.
-                              This parameter can be a value of @ref GPIO_LL_EC_PULL.
-
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinPull().*/
-
-  uint32_t Alternate;    /*!< Specifies the Peripheral to be connected to the selected pins.
-                              This parameter can be a value of @ref GPIO_LL_EC_AF.
-
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetAFPin_0_7() and LL_GPIO_SetAFPin_8_15().*/
-} LL_GPIO_InitTypeDef;
-
-
-
-	#define USE_FULL_LL_DRIVER 1
-#include "stm32f0xx_ll_dma.h"
-#include "stm32f0xx_ll_usart.h"
-#include "stm32f0xx_ll_rcc.h"
-#include "stm32f0xx_ll_system.h"
-#include "stm32f0xx_ll_gpio.h"
-#include "stm32f0xx_ll_exti.h"
-#include "stm32f0xx_ll_bus.h"
-#include "stm32f0xx_ll_cortex.h"
-#include "stm32f0xx_ll_utils.h"
-#include "stm32f0xx_ll_pwr.h"
-	#undef USE_FULL_LL_DRIVER
-
-	#include "stm32f0xx_ll_spi.h"
-	#include "stm32f0xx_ll_bus.h"
-
-ErrorStatus LL_GPIO_Init(GPIO_TypeDef *GPIOx, LL_GPIO_InitTypeDef *GPIO_InitStruct);
 };
 
-
+#include "dhcp.h"
+#include "main.h"
+#include "mac_eeprom.h"
+#include "stm32f0xx_hal.h"    
+#include "dhcp_buffer.h"
+#include "stm32f0xx_ll_dma.h"
+#include "stm32f0xx_ll_spi.h"
+#include "stm32f0xx_ll_bus.h"
 #include "network.hpp"
 #include "main2.hpp"
 #include "window.hpp"
 #include <cstdio>
 #include "version.hpp"
+#include "stm32_flash.hpp"
+#include "firm_update.hpp"
 //#include "matrix2_package_format.hpp"
 
 //------------------------------------------------------------------------
@@ -105,35 +57,309 @@ void ip_conflict(){
 //DHCP 1s timer located in stm32f0xx_it.c
 
 
+namespace{
+    void fetch_frame_unicast_proto(){
+        size_t size= getSn_RX_RSR(2);
+            if(size){
+                main_state=external_anim;
+
+                HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+                //todo treat big and small datagrams
+
+                char buff[10];
+
+                uint8_t svr_addr[6];
+                uint16_t  svr_port;
+                uint16_t len;
+                len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
+                (void) len;
+
+                //TODO check indexes, datagram size
+
+                size_t window = buff[0];
+                size_t pixel_num = buff[1];
+                uint8_t red = buff[2];
+                uint8_t green = buff[3];
+                uint8_t blue = buff[4];
+
+                if(window == 0) //right window
+                    windows::right_window.pixels[pixel_num].set(red, green, blue);
+                else
+                    windows::left_window.pixels[pixel_num].set(red, green, blue);
+            }
+    }
+
+    void fetch_frame_multicast_proto(){ //TODO clean the code
+        const uint8_t& szint= emelet_szam;
+        const uint8_t& szoba = szoba_szam;
+
+        size_t size= getSn_RX_RSR(3);
+        if(size == 0)
+            return;
+
+        if(szint==0 || szoba == 0)
+            return;
+
+        main_state=external_anim;
+
+        HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+        //TODO treat big and small datagrams
+
+        uint8_t buff[314]; //TODO exception handling
+
+        uint8_t svr_addr[6];
+        uint16_t  svr_port;
+        uint16_t len;
+        len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
+        (void) len;
+        
+        //TODO check indexes, datagram size
+
+
+        if(buff[0] != 0x01)
+            return;
+
+        uint8_t pn_expected = ( ( (18-szint)*16 + (szoba-5)*2  )/52  );
+        uint8_t pn          = buff[1] - 1;
+
+        if(pn != pn_expected)
+            return;
+
+        uint32_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
+        size_t  running_offset = 0;
+
+        //----------------------------------
+
+        uint8_t r, g, b;
+
+            r =
+                    (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+            g =
+                    (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+            b=
+                    (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+
+        windows::right_window.pixels[0].set(
+                r,
+                g,
+                b);
+
+        r =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        g =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        b=
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+        windows::right_window.pixels[1].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        g =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        b=
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+        windows::right_window.pixels[2].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+                    g =
+                            (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+                    b=
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+        windows::right_window.pixels[3].set(
+                r,
+                                    g,
+                                    b);
+
+
+
+
+        //---------------------------------
+
+        r =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        g =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        b=
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+
+        windows::left_window.pixels[0].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+                    g =
+                            (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+                    b=
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+
+        windows::left_window.pixels[1].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        g =
+                (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        b=
+                (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+        windows::left_window.pixels[2].set(
+                r,
+                                    g,
+                                    b);
+
+        r =
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+                    g =
+                            (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
+                    b=
+                            (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
+        windows::left_window.pixels[3].set(
+                r,
+                                    g,
+                                    b);
+
+    }
+    
+    void cs_sel() {
+        LL_GPIO_ResetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS LOW
+    }
+
+    void cs_desel() {
+        LL_GPIO_SetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS HIGH
+    }
+
+    uint8_t spi_rb(void) {
+        while(LL_SPI_IsActiveFlag_BSY(SPI1));
+
+        while (LL_SPI_IsActiveFlag_RXNE(SPI1))
+            (void)LL_SPI_ReceiveData8(SPI1);      // flush any FIFO content
+
+        while (!LL_SPI_IsActiveFlag_TXE(SPI1));
+
+        LL_SPI_TransmitData8(SPI1, 0xFF);   // send dummy byte
+        while (!LL_SPI_IsActiveFlag_RXNE(SPI1));
+
+        return(LL_SPI_ReceiveData8(SPI1));
+    }
+
+    void spi_wb(uint8_t b) {
+        while(LL_SPI_IsActiveFlag_BSY(SPI1));
+        LL_SPI_TransmitData8(SPI1, b);
+        (void)LL_SPI_ReceiveData8(SPI1);
+    }
+
+    
+    ////////////   Status string
+    uint8_t status_string[512];
+
+    size_t create_status_string(){
+        int ret;
+
+        ret = snprintf((char*)status_string, sizeof(status_string),
+            "MUEB FW version: %s\n"
+            "MUEB MAC: %x:%x:%x:%x:%x:%x\n"
+            "anim_source: %#x\n"
+            "telemetry_comm_buff: %#x\n"
+            "frame_ether_buff: %#x\n"
+            "dhcp_lease_time: %lu\n"
+            "dhcp_reamining_lease_time: %lu\n"
+            "SEM forever\n",
+            mueb_version,
+            netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
+            main_state,
+            getSn_RX_RSR(1),
+            getSn_RX_RSR(2),
+            getDHCPLeasetime(),
+            getDHCPTimeBeforeLease()
+        );
+
+        return (ret>=0) ? ret : 1;
+    }
+    
+    ////////////   FW Update
+    
+    bool   is_update_enabled  = false;
+    
+    inline void enable_update_scoket(){
+        socket(4, Sn_MR_TCP, 1997, 0x00);
+        is_update_enabled = true;
+        
+        listen(4);
+        
+        uint8_t blocking = SOCK_IO_NONBLOCK;
+        ctlsocket(4, CS_SET_IOMODE, &blocking);        
+    }
+    
+    void step_update(){
+        static size_t next_page_to_fetch = 0;
+        
+        if(!is_update_enabled)
+            return;
+        
+        uint8_t status;
+        getsockopt(4, SO_STATUS, &status);
+        if(status != SOCK_ESTABLISHED)
+            return;
+        
+        std::array<uint8_t, 1024> buff;
+        
+        auto buffer_state = recv(4, buff.data(), 1024);
+        
+        if(buffer_state == SOCK_BUSY)
+            return;
+        
+        {
+            stm32_flash::unlock_flash raii;
+            stm32_flash::reprogramPage(buff, 32+next_page_to_fetch);
+        }
+        
+        next_page_to_fetch++;
+        
+        if(next_page_to_fetch == 32){ //check overflow
+            disconnect(4);
+            is_update_enabled=false;
+            next_page_to_fetch = 0;
+            do{
+                uint8_t status;
+                getsockopt(4, SO_STATUS, &status);
+            } while(status == SOCK_ESTABLISHED);
+            
+            close(4);
+        }
+    }
+    
+    size_t calc_new_fw_chksum(){
+       	int ret;
+
+        ret = snprintf((char*)status_string, sizeof(status_string),
+            "MUEB FW version: %s\n"
+            "MUEB MAC: %x:%x:%x:%x:%x:%x\n"
+            "Chksum: %llu\n" 
+            "SEM forever\n",
+            mueb_version,
+            netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
+            firmware_update::checksum_of_new_fw()
+        );
+
+        return (ret>=0) ? ret : 1;
+    }
+}
+
 namespace net{
-
-void cs_sel() {
-	LL_GPIO_ResetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS LOW
-}
-
-void cs_desel() {
-	LL_GPIO_SetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS HIGH
-}
-
-uint8_t spi_rb(void) {
-	while(LL_SPI_IsActiveFlag_BSY(SPI1));
-
-    while (LL_SPI_IsActiveFlag_RXNE(SPI1))
-        (void)LL_SPI_ReceiveData8(SPI1);      // flush any FIFO content
-
-    while (!LL_SPI_IsActiveFlag_TXE(SPI1));
-
-    LL_SPI_TransmitData8(SPI1, 0xFF);   // send dummy byte
-    while (!LL_SPI_IsActiveFlag_RXNE(SPI1));
-
-    return(LL_SPI_ReceiveData8(SPI1));
-}
-
-void spi_wb(uint8_t b) {
-	while(LL_SPI_IsActiveFlag_BSY(SPI1));
-	LL_SPI_TransmitData8(SPI1, b);
-	(void)LL_SPI_ReceiveData8(SPI1);
-}
 
 /*********************************
  *  network Class function defs
@@ -219,30 +445,6 @@ void network::init(){
 	socket(3, Sn_MR_UDP, 10000, 0x00);
 }
 
-size_t network::create_status_string(){
-	int ret;
-
-	ret = snprintf((char*)this->status_string, sizeof(status_string),
-		"MUEB FW version: %s\n"
-		"MUEB MAC: %x:%x:%x:%x:%x:%x\n"
-		"anim_source: %#x\n"
-		"telemetry_comm_buff: %#x\n"
-		"frame_ether_buff: %#x\n"
-		"dhcp_lease_time: %d\n"
-		"dhcp_reamining_lease_time: %d\n"
-		"SEM forever\n",
-		mueb_version,
-		netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
-		main_state,
-		getSn_RX_RSR(1),
-		getSn_RX_RSR(2),
-		getDHCPLeasetime(),
-		getDHCPTimeBeforeLease()
-	);
-
-	return (ret>=0) ? ret : 1;
-}
-
 void network::do_remote_command(){
 	size_t size = getSn_RX_RSR(1);
 
@@ -306,7 +508,7 @@ void network::do_remote_command(){
 				NVIC_SystemReset();
 				break;
 			case get_status:
-				sendto(1, status_string, network::create_status_string(), resp_addr, resp_port);
+				sendto(1, status_string, create_status_string(), resp_addr, resp_port);
 				break;
 			case get_mac:
 				char mac[17];
@@ -319,184 +521,19 @@ void network::do_remote_command(){
 			case ping:
 				sendto(1, (uint8_t*) "pong", 4, resp_addr, resp_port);
 				break;
+            case enable_update:
+				::enable_update_scoket();
+                break;
+            case get_new_fw_chksum:
+                sendto(1, status_string, ::calc_new_fw_chksum(), resp_addr, resp_port);
+                break;
+            case refurbish:
+                firmware_update::refurbish();
+				break;
 			default:
 				break;
 		}
 	}
-}
-
-inline static void fetch_frame_unicast_proto(){
-	size_t size= getSn_RX_RSR(2);
-		if(size){
-			main_state=external_anim;
-
-			HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-			//todo treat big and small datagrams
-
-			char buff[10];
-
-			uint8_t svr_addr[6];
-			uint16_t  svr_port;
-			uint16_t len;
-			len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
-
-			//todo check indexes, datagram size
-
-			size_t window = buff[0];
-			size_t pixel_num = buff[1];
-			uint8_t red = buff[2];
-			uint8_t green = buff[3];
-			uint8_t blue = buff[4];
-
-			if(window == 0) //right window
-				windows::right_window.pixels[pixel_num].set(red, green, blue);
-			else
-				windows::left_window.pixels[pixel_num].set(red, green, blue);
-		}
-}
-
-inline static void fetch_frame_multicast_proto(){ //TODO clean the code
-	const uint8_t& szint= emelet_szam;
-	const uint8_t& szoba = szoba_szam;
-
-	size_t size= getSn_RX_RSR(3);
-	if(size == 0)
-		return;
-
-	if(szint==0 || szoba == 0)
-		return;
-
-	main_state=external_anim;
-
-	HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-	//todo treat big and small datagrams
-
-	uint8_t buff[314]; //TODO exception handling
-
-	uint8_t svr_addr[6];
-	uint16_t  svr_port;
-	uint16_t len;
-	len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
-
-	//todo check indexes, datagram size
-
-
-	if(buff[0] != 0x01)
-		return;
-
-	uint8_t pn_expected = ( ( (18-szint)*16 + (szoba-5)*2  )/52  );
-	uint8_t pn          = buff[1] - 1;
-
-	if(pn != pn_expected)
-		return;
-
-	uint32_t base_offset = (((18-szint)*8 + (szoba-5))%26)* 12 + 2;
-	size_t  running_offset = 0;
-
-	//----------------------------------
-
-	uint8_t r, g, b;
-
-		r =
-				(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-		g =
-				(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-		b=
-				(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-
-
-	windows::right_window.pixels[0].set(
-			r,
-			g,
-			b);
-
-	r =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	g =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	b=
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-	windows::right_window.pixels[1].set(
-			r,
-								g,
-								b);
-
-	r =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	g =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	b=
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-
-	windows::right_window.pixels[2].set(
-			r,
-								g,
-								b);
-
-	r =
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-				g =
-						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-				b=
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-	windows::right_window.pixels[3].set(
-			r,
-								g,
-								b);
-
-
-
-
-	//---------------------------------
-
-	r =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	g =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	b=
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-
-	windows::left_window.pixels[0].set(
-			r,
-								g,
-								b);
-
-	r =
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-				g =
-						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-				b=
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-
-	windows::left_window.pixels[1].set(
-			r,
-								g,
-								b);
-
-	r =
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	g =
-			(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	b=
-			(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-	windows::left_window.pixels[2].set(
-			r,
-								g,
-								b);
-
-	r =
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-				g =
-						(buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-				b=
-						(buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-	windows::left_window.pixels[3].set(
-			r,
-								g,
-								b);
-
 }
 
 void network::fetch_frame(){
@@ -510,6 +547,7 @@ void network::step_network(){
 
 		do_remote_command();
 		fetch_frame();
+        ::step_update();
 
 		wizchip_getnetinfo(&netInfo);
 		emelet_szam=netInfo.ip[2];

@@ -20,10 +20,6 @@ namespace net{
 		void do_remote_command();
 		void fetch_frame();
 
-		uint8_t status_string[512];
-
-		size_t create_status_string();
-
 	public:
 		enum commands{
 			turn_12v_off_left = 0x00,
@@ -37,7 +33,10 @@ namespace net{
 			use_external_anim = 0x20,
 			blank = 0x30,
 			delete_anim_network_buffer = 0x06,
-			ping = 0x40
+			ping = 0x40,
+            enable_update,
+            get_new_fw_chksum,
+            refurbish
 		};
 
 		network();

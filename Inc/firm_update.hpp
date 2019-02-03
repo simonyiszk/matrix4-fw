@@ -9,20 +9,11 @@
 #define FIRM_UPDATE_HPP_
 
 #include "stddef.h"
+#include <stdint.h>
 
 namespace firmware_update{
-	enum flashPart{
-		first,
-		second,
-		whole
-	};
-
-	uint64_t flash_checksum(flashPart);
-
-	//TODO fix address in linker script
-	void copyfirmware [[noreturn]] ();
-
-	void copyToFlash2(const uint8_t* from);
+	uint64_t checksum_of_new_fw();
+    void     refurbish [[noreturn]] ();
 }
 
 
