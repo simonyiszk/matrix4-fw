@@ -34,9 +34,9 @@ namespace net{
 			blank = 0x30,
 			delete_anim_network_buffer = 0x06,
 			ping = 0x40,
-            enable_update,
-            get_new_fw_chksum,
-            refurbish
+            enable_update=0x50,
+            get_new_fw_chksum=0x51,
+            refurbish=0x60
 		};
 
 		network();
