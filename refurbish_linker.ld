@@ -19,7 +19,7 @@ ENTRY(ref)
 
 MEMORY{
     RAM   (rw)   : ORIGIN = 0x20000000, LENGTH = 8K
-    FLASH (rx)   : ORIGIN = 0x80007C00, LENGTH = 1K
+    FLASH (rx)   : ORIGIN = 0x8007C00, LENGTH = 1K
 }
 
 SECTIONS
