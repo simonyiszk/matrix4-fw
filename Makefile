@@ -37,7 +37,7 @@ INCLUDES              += -isystem Drivers/CMSIS/Device/ST/STM32F0xx/Include -isy
 INCLUDES              += -isystem Drivers/ioLibrary_Driver/Internet/DHCP -isystem Drivers/ioLibrary_Driver/Ethernet -isystem Drivers/ioLibrary_Driver/Ethernet/W5500
 
 
-C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c main.c
+C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c main.c stm32f0xx_hal_msp.c
 ASM_FILES             := startup_stm32f030x8.s
 CPP_FILES             := internal_anim.cpp firm_update.cpp main2.cpp network.cpp window.cpp stm32_flash.cpp
 
@@ -87,7 +87,7 @@ src: $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS) | build_dir
 
 $(ELF): $(ASM_OBJS) $(C_OBJS) $(CPP_OBJS)
 	@echo "[LD]     $@"
-	$(CXX) -o $@ $(CXX_FLAGS) $(LD_FLAGS) -T$(LDSCRIPT) $? Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a 
+	$(CXX) -o $@ $(CXX_FLAGS) $(LD_FLAGS) -T$(LDSCRIPT) $^ Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a 
 #	$(SIZE) $@
 
 $(ELF_FW_UPDATE): build/cpp_refurbish.o build/cpp_stm32_flash.o
@@ -109,4 +109,4 @@ $(HEX): $(HEX_FW) $(HEX_FW_UPDATE)
 
 $(BIN): $(HEX_FW)
 	@echo "[SREC_CAT]  $@"
-	srec_cat $? -intel -offset -0x8000000 -fill 0xff 0x00 0x7C00 -o $@ -binary
+	srec_cat $^ -intel -offset -0x8000000 -fill 0xff 0x00 0x7C00 -o $@ -binary
