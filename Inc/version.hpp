@@ -9,7 +9,7 @@
 #define VERSION_HPP_
 
 
-const char* mueb_version = "v0.3";
+const char* mueb_version = "v0.4";
 
 
 #endif /* VERSION_HPP_ */

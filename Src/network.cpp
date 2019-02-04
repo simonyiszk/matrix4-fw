@@ -58,6 +58,8 @@ void ip_conflict(){
 
 
 namespace{
+    const uint8_t fw_update_socket = 4;
+    
     void fetch_frame_unicast_proto(){
         size_t size= getSn_RX_RSR(2);
             if(size){
@@ -295,13 +297,17 @@ namespace{
     bool   is_update_enabled  = false;
     
     inline void enable_update_scoket(){
-        socket(4, Sn_MR_TCP, 1997, 0x00);
+        LL_RCC_HSI_Enable();
+    
+        while(! LL_RCC_HSI_IsReady() );
+        
+        socket(fw_update_socket, Sn_MR_TCP, 1997, 0x00);
         is_update_enabled = true;
         
-        listen(4);
+        listen(fw_update_socket);
         
         uint8_t blocking = SOCK_IO_NONBLOCK;
-        ctlsocket(4, CS_SET_IOMODE, &blocking);        
+        ctlsocket(fw_update_socket, CS_SET_IOMODE, &blocking);        
     }
     
     void step_update(){
@@ -311,34 +317,31 @@ namespace{
             return;
         
         uint8_t status;
-        getsockopt(4, SO_STATUS, &status);
+        getsockopt(fw_update_socket, SO_STATUS, &status);
         if(status != SOCK_ESTABLISHED)
             return;
         
         std::array<uint8_t, 1024> buff;
         
-        auto buffer_state = recv(4, buff.data(), 1024);
+        auto buffer_state = recv(fw_update_socket, buff.data(), 1024);
         
         if(buffer_state == SOCK_BUSY)
             return;
         
-        {
-            stm32_flash::unlock_flash raii;
-            stm32_flash::reprogramPage(buff, 32+next_page_to_fetch);
-        }
+        stm32_flash::reprogramPage(buff, 32+next_page_to_fetch);
         
         next_page_to_fetch++;
         
         if(next_page_to_fetch == 32){ //check overflow
-            disconnect(4);
+            disconnect(fw_update_socket);
             is_update_enabled=false;
             next_page_to_fetch = 0;
             do{
                 uint8_t status;
-                getsockopt(4, SO_STATUS, &status);
+                getsockopt(fw_update_socket, SO_STATUS, &status);
             } while(status == SOCK_ESTABLISHED);
             
-            close(4);
+            close(fw_update_socket);
         }
     }
     

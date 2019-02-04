@@ -9,20 +9,24 @@ void stm32_flash::reprogramPage (const std::array<uint8_t, pageSize>& Buff, cons
     erasePage(page_num);
 
     WaitForLastOperation();
-    FLASH->CR |= FLASH_CR_PG;
-
-    volatile uint8_t* ptr = flash_addr + (pageSize * page_num);
-    for(const uint8_t& i : Buff) {
-        *ptr = i; //TODO look up if uint8_t write is possible over the uint16_t case
+    
+    volatile uint16_t* ptr = reinterpret_cast<uint16_t*>(flash_addr + (pageSize * page_num));
+    
+    for(size_t i = 0; i < pageSize; i+=2){
+        uint16_t tmp = Buff[i+1] << 8 | Buff[i];
+        
+        FLASH->CR |= FLASH_CR_PG;
+        
+        *ptr = tmp;
         ptr++;
-
+        
         WaitForLastOperation();
+        
+        FLASH->CR &= ~FLASH_CR_PG;
     }
-
-    FLASH->CR &= ~FLASH_CR_PG;
 }
 
-void stm32_flash::write_byte(const uint8_t towrite, volatile uint8_t* const addr) { //A pointer a konstans nem az adat.
+void stm32_flash::write_halfword(const uint16_t towrite, volatile uint16_t* const addr) { //A pointer a konstans nem az adat.
     WaitForLastOperation();
 
     FLASH->CR |= FLASH_CR_PG;
@@ -39,9 +43,11 @@ void stm32_flash::erasePage(const uint32_t page_num) {
     WaitForLastOperation();
 
     FLASH->CR |= FLASH_CR_PER;
-    FLASH->AR  = reinterpret_cast<uint32_t>(flash_addr + (pageSize * page_num)); //TODO investigate int narrowing warn
+    FLASH->AR  = reinterpret_cast<uint32_t>(reinterpret_cast<uint32_t>(flash_addr) + (pageSize * page_num)); //TODO investigate int narrowing warn
     FLASH->CR |= FLASH_CR_STRT;
 
+    __NOP();
+    
     WaitForLastOperation();
 
     FLASH->CR &= ~FLASH_CR_PER;

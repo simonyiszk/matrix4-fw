@@ -76,12 +76,12 @@ void ref [[noreturn,gnu::section(".text.prologue")]] (){
     
     //No way back
     
-    const size_t      bytes_to_copy = 31 * pageSize;
-    volatile uint8_t* main_fw       = flash_addr;
-    const uint8_t*    new_fw        = flash_addr + ( 32 * pageSize );
+    const size_t       bytes_to_copy = 31 * pageSize;
+    volatile uint16_t* main_fw       = reinterpret_cast<uint16_t*>(flash_addr);
+    const uint16_t*    new_fw        = reinterpret_cast<uint16_t*>(flash_addr + ( 32 * pageSize ));
     
-	for(size_t i = 0; i < bytes_to_copy; i++){
-		write_byte(*new_fw, main_fw);
+	for(size_t i = 0; i < bytes_to_copy; i+=sizeof(uint16_t)){
+		write_halfword(*new_fw, main_fw);
         
         main_fw++;
         new_fw ++;

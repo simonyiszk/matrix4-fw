@@ -8,10 +8,14 @@ namespace stm32_flash{
 	//Reference: https://github.com/jgowans/stm32f0_devel/blob/master/STM32F0xx_StdPeriph_Lib_V1.3.1/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_flash.c
 
 	inline void WaitForLastOperation [[gnu::always_inline]] (){
-		while ((FLASH->SR & FLASH_FLAG_BSY) == FLASH_FLAG_BSY);
-		if((FLASH->SR & FLASH_FLAG_BSY) != FLASH_FLAG_EOP){
-			while(1); //TODO better error handling
-		}
+		while ((FLASH->SR & FLASH_FLAG_BSY) != 0);
+        
+        if ((FLASH->SR & FLASH_FLAG_EOP) != 0)
+            FLASH->SR = FLASH_FLAG_EOP;
+        
+		//if((FLASH->SR & FLASH_FLAG_BSY) != FLASH_FLAG_EOP){ //TODO implement
+		//	while(1); //TODO better error handling
+		//}
 	}
 
 	struct unlock_flash{
@@ -35,7 +39,7 @@ namespace stm32_flash{
 
 	void erasePage(const uint32_t page_num);
 	
-	void write_byte(const uint8_t towrite, volatile uint8_t* const addr); //A pointer a konstans nem az adat.
+	void write_halfword(const uint16_t towrite, volatile uint16_t* const addr); //A pointer a konstans nem az adat.
 
 	void reprogramPage (const std::array<uint8_t, pageSize>& Buff, const uint32_t page_num);
 }
