@@ -9,7 +9,21 @@
 #define VERSION_HPP_
 
 
-const char* mueb_version = "v0.4";
+const char* mueb_version = 
+
+"v0.4"
+
+
+#ifdef _COMMIT
+"-" _COMMIT
+#endif
+//TODO else compile error
+
+#ifdef _DIRTYTREE
+"-dirty"
+#endif
+
+;
 
 
 #endif /* VERSION_HPP_ */

@@ -8,8 +8,6 @@
 #                ||     ||
 #
 
-#TODO firmware version incrementing
-
 MAKEFLAGS             += --quiet
 
 TARGET                 = MUEB
@@ -59,6 +57,9 @@ C_OBJS                 = $(addprefix build/c_,$(C_FILES:.c=.o))
 CPP_OBJS               = $(addprefix build/cpp_,$(CPP_FILES:.cpp=.o))
 ASM_OBJS               = $(addprefix build/asm_,$(ASM_FILES:.s=.o))
 
+COMMIT                 = -D_COMMIT=\"`git log --pretty=format:'%h' -n 1`\"    #define commit number
+COMMIT                += `git diff --quiet || echo '-D_DIRTYTREE'`            #define dirty tree
+
 
 all: $(HEX) $(BIN) | build_dir
 
@@ -69,7 +70,7 @@ build_dir:
 
 build/c_%.o: Src/%.c | build_dir
 	@echo "[CC]	$(notdir $<)"
-	$(CC) $(C_FLAGS) $(DEFS) $(INCLUDES) -c -o $@ $<
+	$(CC) $(C_FLAGS) $(DEFS) $(COMMIT) $(INCLUDES) -c -o $@ $<
 
 build/asm_%.o: startup/%.s | build_dir
 	@echo "[CC]	$(notdir $<)"
@@ -77,7 +78,7 @@ build/asm_%.o: startup/%.s | build_dir
 
 build/cpp_%.o: Src/%.cpp | build_dir
 	@echo "[CXX]	$(notdir $<)"
-	$(CXX) $(CXX_FLAGS) $(DEFS) $(INCLUDES) -c -o $@ $<
+	$(CXX) $(CXX_FLAGS) $(DEFS) $(COMMIT) $(INCLUDES) -c -o $@ $<
 
 clean:
 	@echo "[RM]     build/*"
