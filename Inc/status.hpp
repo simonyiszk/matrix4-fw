@@ -16,3 +16,6 @@ namespace status{
     void swap_windows();
     windows::window& getWindow(window_from_outside);
 }
+
+using status::LEFT;
+using status::RIGHT;

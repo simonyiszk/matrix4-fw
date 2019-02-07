@@ -79,16 +79,13 @@ namespace{
 
                 //TODO check indexes, datagram size
 
-                size_t window = buff[0];
+                bool window = buff[0];
                 size_t pixel_num = buff[1];
                 uint8_t red = buff[2];
                 uint8_t green = buff[3];
                 uint8_t blue = buff[4];
 
-                if(window == 0) //right window
-                    windows::right_window.pixels[pixel_num].set(red, green, blue);
-                else
-                    windows::left_window.pixels[pixel_num].set(red, green, blue);
+                status::getWindow(static_cast<status::window_from_outside>(window)).pixels[pixel_num].set(red, green, blue);
             }
     }
 
@@ -133,6 +130,9 @@ namespace{
 
         //----------------------------------
 
+        auto&  first_window = status::getWindow(LEFT);
+        auto& second_window = status::getWindow(RIGHT);
+        
         uint8_t r, g, b;
 
             r =
@@ -143,7 +143,7 @@ namespace{
                     (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
 
 
-        windows::right_window.pixels[0].set(
+        first_window.pixels[0].set(
                 r,
                 g,
                 b);
@@ -155,7 +155,7 @@ namespace{
         b=
                 (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
 
-        windows::right_window.pixels[1].set(
+        first_window.pixels[1].set(
                 r,
                                     g,
                                     b);
@@ -167,7 +167,7 @@ namespace{
         b=
                 (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
 
-        windows::right_window.pixels[2].set(
+        first_window.pixels[2].set(
                 r,
                                     g,
                                     b);
@@ -179,7 +179,7 @@ namespace{
                     b=
                             (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
 
-        windows::right_window.pixels[3].set(
+        first_window.pixels[3].set(
                 r,
                                     g,
                                     b);
@@ -196,7 +196,7 @@ namespace{
         b=
                 (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
 
-        windows::left_window.pixels[0].set(
+        second_window.pixels[0].set(
                 r,
                                     g,
                                     b);
@@ -208,7 +208,7 @@ namespace{
                     b=
                             (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
 
-        windows::left_window.pixels[1].set(
+        second_window.pixels[1].set(
                 r,
                                     g,
                                     b);
@@ -219,7 +219,7 @@ namespace{
                 (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
         b=
                 (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
-        windows::left_window.pixels[2].set(
+        second_window.pixels[2].set(
                 r,
                                     g,
                                     b);
@@ -230,7 +230,7 @@ namespace{
                             (buff[ (base_offset+running_offset)  ]  & 0xf0) << 1;
                     b=
                             (buff[ (base_offset+running_offset++)]  & 0x0f) << 5;
-        windows::left_window.pixels[3].set(
+        second_window.pixels[3].set(
                 r,
                                     g,
                                     b);
@@ -494,20 +494,20 @@ void network::do_remote_command(){
 				status::turn_internal_anim_on();
 				break;
 			case blank:
-				windows::right_window.blank();
-				windows::left_window.blank();
+				status::getWindow(RIGHT).blank();
+				status::getWindow(LEFT).blank();
 				break;
 			case turn_12v_off_left:
-				windows::left_window.set_state(windows::window::vcc_12v_off);
+                status::getWindow(LEFT).set_state(windows::window::vcc_12v_off);
 				break;
 			case turn_12v_off_right:
-				windows::right_window.set_state(windows::window::vcc_12v_off);
+				status::getWindow(RIGHT).set_state(windows::window::vcc_12v_off);
 				break;
 			case reset_left_panel:
-				windows::left_window.set_state(windows::window::discharge_caps);
+				status::getWindow(LEFT).set_state(windows::window::discharge_caps);
 				break;
 			case reset_right_panel:
-				windows::right_window.set_state(windows::window::discharge_caps);
+				status::getWindow(RIGHT).set_state(windows::window::discharge_caps);
 				break;
 			case reboot:
 				NVIC_SystemReset();
