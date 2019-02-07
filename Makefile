@@ -29,7 +29,6 @@ CXX_FLAGS             := $(COMMON_COMPILER_FLAGS) $(CXX_STANDARD) -fno-rtti -fno
 
 LD_FLAGS              := -specs=nosys.specs -specs=nano.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=build/$(TARGET).map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group
 
-#TODO script this
 INCLUDES               = -I Inc
 INCLUDES              += -isystem Drivers/CMSIS/Device/ST/STM32F0xx/Include -isystem Drivers/CMSIS/Include -isystem Drivers/STM32F0xx_HAL_Driver/Inc
 INCLUDES              += -isystem Drivers/ioLibrary_Driver/Internet/DHCP -isystem Drivers/ioLibrary_Driver/Ethernet -isystem Drivers/ioLibrary_Driver/Ethernet/W5500
