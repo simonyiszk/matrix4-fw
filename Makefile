@@ -36,7 +36,7 @@ INCLUDES              += -isystem Drivers/ioLibrary_Driver/Internet/DHCP -isyste
 
 C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c main.c stm32f0xx_hal_msp.c
 ASM_FILES             := startup_stm32f030x8.s
-CPP_FILES             := internal_anim.cpp firm_update.cpp main2.cpp network.cpp window.cpp stm32_flash.cpp
+CPP_FILES             := internal_anim.cpp firm_update.cpp main2.cpp network.cpp window.cpp stm32_flash.cpp status.cpp
 
 ELF                    = build/$(TARGET)_fw.elf
 ELF_FW_UPDATE          = build/$(TARGET)_fwupdate.elf

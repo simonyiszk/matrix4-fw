@@ -2,6 +2,7 @@
 #include "main2.hpp"
 #include "internal_anim.hpp"
 #include "network.hpp"
+#include "status.hpp"
 
 extern "C"{
 #include "main.h"
@@ -9,7 +10,6 @@ extern "C"{
 #include "stm32f0xx_ll_usart.h"
 };
 
-enum main_states main_state = booting;
 
 uint8_t emelet_szam =0;
 uint8_t szoba_szam  =0;
@@ -22,10 +22,10 @@ void main2(void){
 	windows::right_window.init();
 	windows::left_window.init();
 
-	main_state = internal_anim;
+	status::turn_internal_anim_on();
 
 	while (1){
-		if(main_state == internal_anim)
+		if(status::if_internal_animation_is_on)
 			internal_animation::step_anim();
 
 		net::inetwork.step_network();

@@ -10,14 +10,6 @@
 
 #include "main2.h"
 
-enum main_states{
-	booting,
-	internal_anim,
-	external_anim
-};
-
-extern enum main_states main_state;
-
 extern uint8_t emelet_szam;
 extern uint8_t szoba_szam;
 

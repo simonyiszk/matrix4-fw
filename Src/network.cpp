@@ -26,6 +26,7 @@ extern "C" {
 #include "version.hpp"
 #include "stm32_flash.hpp"
 #include "firm_update.hpp"
+#include "status.hpp"
 //#include "matrix2_package_format.hpp"
 
 //------------------------------------------------------------------------
@@ -63,7 +64,7 @@ namespace{
     void fetch_frame_unicast_proto(){
         size_t size= getSn_RX_RSR(2);
             if(size){
-                main_state=external_anim;
+                status::turn_internal_anim_off();
 
                 HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
                 //todo treat big and small datagrams
@@ -102,7 +103,7 @@ namespace{
         if(szint==0 || szoba == 0)
             return;
 
-        main_state=external_anim;
+        status::turn_internal_anim_off();
 
         HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
         //TODO treat big and small datagrams
@@ -282,7 +283,7 @@ namespace{
             "SEM forever\n",
             mueb_version,
             netInfo.mac[0],netInfo.mac[1],netInfo.mac[2],netInfo.mac[3],netInfo.mac[4],netInfo.mac[5],
-            main_state,
+            status::if_internal_animation_is_on,
             getSn_RX_RSR(1),
             getSn_RX_RSR(2),
             getDHCPLeasetime(),
@@ -360,6 +361,7 @@ namespace{
 
         return (ret>=0) ? ret : 1;
     }
+
 }
 
 namespace net{
@@ -486,10 +488,10 @@ void network::do_remote_command(){
 
 		switch(buff[3]){
 			case use_external_anim:
-				main_state=external_anim;
+				status::turn_internal_anim_off();
 				break;
 			case use_internal_anim:
-				main_state=internal_anim;
+				status::turn_internal_anim_on();
 				break;
 			case blank:
 				windows::right_window.blank();
