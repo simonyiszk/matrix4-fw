@@ -36,7 +36,8 @@ namespace net{
 			ping = 0x40,
             enable_update=0x50,
             get_new_fw_chksum=0x51,
-            refurbish=0x60
+            refurbish=0x60,
+            swap_windows=0x70
 		};
 
 		network();

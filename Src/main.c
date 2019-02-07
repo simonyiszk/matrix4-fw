@@ -108,9 +108,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C2_Init();
   MX_TIM17_Init();
-  /* USER CODE BEGIN 2 */
-
-
+  /* USER CODE BEGIN 2 */  
 
   HAL_TIM_Base_Start_IT(&htim17);
   main2();

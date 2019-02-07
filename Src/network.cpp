@@ -27,6 +27,7 @@ extern "C" {
 #include "stm32_flash.hpp"
 #include "firm_update.hpp"
 #include "status.hpp"
+#include <gpioes.h>
 //#include "matrix2_package_format.hpp"
 
 //------------------------------------------------------------------------
@@ -454,7 +455,7 @@ void network::do_remote_command(){
 	size_t size = getSn_RX_RSR(1);
 
 	if(size){
-		HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
+		toogle_gpio(LED_COMM);
 
 		char buff[11] = "";
 
@@ -535,6 +536,9 @@ void network::do_remote_command(){
             case refurbish:
                 firmware_update::refurbish();
 				break;
+            case swap_windows:
+                status::swap_windows();
+                break;
 			default:
 				break;
 		}
@@ -548,7 +552,7 @@ void network::fetch_frame(){
 
 void network::step_network(){
 	 if (wizphy_getphylink() == PHY_LINK_ON){
-		LL_GPIO_SetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
+        set_gpio(LED_JOKER);
 
 		do_remote_command();
 		fetch_frame();
@@ -563,18 +567,18 @@ void network::step_network(){
 		case DHCP_IP_ASSIGN:
 		case DHCP_IP_CHANGED:
 		case DHCP_IP_LEASED:
-			LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+            set_gpio(LED_DHCP);
 			break;
 		case DHCP_FAILED:
-			LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+            reset_gpio(LED_DHCP);
 			break;
 		default:
 			break;
 		}
 	 } else {
-		 LL_GPIO_ResetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
-
-		 LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+         reset_gpio(LED_JOKER);
+         reset_gpio(LED_DHCP);
+        
 		 DHCP_rebind();
 	 }
 }
