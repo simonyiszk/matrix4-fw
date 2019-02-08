@@ -3,20 +3,20 @@
 #include "internal_anim.hpp"
 #include "network.hpp"
 #include "status.hpp"
+#include "system_init.hpp"
+#include "gpioes.h"
 
-extern "C"{
-#include "main.h"
-#include "stm32f0xx_ll_dma.h"
-#include "stm32f0xx_ll_usart.h"
-};
+clock_and_systick  init_1;
+gpio               init_2;
+uart_and_dma       init_3;
+hal_i2c            init_4;
+hal_timer          init_5;
 
 
 uint8_t emelet_szam =0;
 uint8_t szoba_szam  =0;
 
-void main2(void){
-	//init_network(); reminder: static instances's constructors are ran before the driver initialization functions
-
+int main(void){
 	net::inetwork.init();
 
 	windows::right_window.init();

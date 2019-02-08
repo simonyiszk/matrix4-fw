@@ -34,7 +34,7 @@ INCLUDES              += -isystem Drivers/CMSIS/Device/ST/STM32F0xx/Include -isy
 INCLUDES              += -isystem Drivers/ioLibrary_Driver/Internet/DHCP -isystem Drivers/ioLibrary_Driver/Ethernet -isystem Drivers/ioLibrary_Driver/Ethernet/W5500
 
 
-C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c main.c stm32f0xx_hal_msp.c
+C_FILES               := mac_eeprom.c dhcp_buffer.c stm32f0xx_it.c system_stm32f0xx.c stm32f0xx_hal_msp.c
 ASM_FILES             := startup_stm32f030x8.s
 CPP_FILES             := internal_anim.cpp firm_update.cpp main2.cpp network.cpp window.cpp stm32_flash.cpp status.cpp
 

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "stm32f0xx_ll_gpio.h"
+
+
 /// Output
 
 enum output_gpioes{

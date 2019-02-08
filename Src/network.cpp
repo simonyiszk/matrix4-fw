@@ -12,7 +12,7 @@ extern "C" {
 };
 
 #include "dhcp.h"
-#include "main.h"
+#include "stm32f0xx_ll_rcc.h"
 #include "mac_eeprom.h"
 #include "stm32f0xx_hal.h"    
 #include "dhcp_buffer.h"

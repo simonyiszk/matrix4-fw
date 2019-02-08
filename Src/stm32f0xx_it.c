@@ -39,6 +39,8 @@
 #include "dhcp.h"
 #include "window.h"
 #include "internal_anim.h"
+#include "stm32f0xx_ll_dma.h"
+#include "gpioes.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
