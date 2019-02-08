@@ -313,7 +313,6 @@ namespace{
 
 }
 
-namespace net{
 
 /*********************************
  *  network Class function defs
@@ -527,4 +526,3 @@ void network::step_network(){
 		 DHCP_rebind();
 	 }
 }
-};

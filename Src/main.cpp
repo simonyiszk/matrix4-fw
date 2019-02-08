@@ -16,7 +16,7 @@ hal_timer          init_5;
 //Init external peripheries
 windows::window windows::left_window(WINDOW_3V3_LEFT_GPIO_Port,	WINDOW_3V3_LEFT_Pin, WINDOW_POWER_LEFT_GPIO_Port, WINDOW_POWER_LEFT_Pin, USART2, DMA1, LL_DMA_CHANNEL_4 );
 windows::window windows::right_window(WINDOW_3V3_RIGHT_GPIO_Port, WINDOW_3V3_RIGHT_Pin,	WINDOW_POWER_RIGHT_GPIO_Port, WINDOW_POWER_RIGHT_Pin, USART1, DMA1, LL_DMA_CHANNEL_2 );
-net::network    net::inetwork;
+network    inetwork;
 
 extern "C" int main(void);
 
@@ -27,7 +27,7 @@ int main(void){
 		if(status::if_internal_animation_is_on)
 			internal_animation::step_anim();
 
-		net::inetwork.step_network();
+		inetwork.step_network();
 
 		windows::left_window.step_state();
 		windows::right_window.step_state();
