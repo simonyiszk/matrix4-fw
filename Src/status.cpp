@@ -24,3 +24,5 @@ void status::swap_windows(){
 
 bool status::if_internal_animation_is_on = false;
 
+uint8_t status::emelet_szam  = 0;
+uint8_t status::szoba_szam   = 0;

@@ -20,7 +20,6 @@ extern "C" {
 #include "stm32f0xx_ll_spi.h"
 #include "stm32f0xx_ll_bus.h"
 #include "network.hpp"
-#include "main.hpp"
 #include "window.hpp"
 #include <cstdio>
 #include "version.hpp"
@@ -91,8 +90,8 @@ namespace{
     }
 
     void fetch_frame_multicast_proto(){ //TODO clean the code
-        const uint8_t& szint= emelet_szam;
-        const uint8_t& szoba = szoba_szam;
+        const uint8_t szint =  status::emelet_szam;
+        const uint8_t szoba =  status::szoba_szam;
 
         size_t size= getSn_RX_RSR(3);
         if(size == 0)
@@ -559,8 +558,8 @@ void network::step_network(){
         ::step_update();
 
 		wizchip_getnetinfo(&netInfo);
-		emelet_szam=netInfo.ip[2];
-		szoba_szam=netInfo.ip[3];
+		status::emelet_szam=netInfo.ip[2];
+		status::szoba_szam=netInfo.ip[3];
 
 		//do DHCP task
 		switch(DHCP_run()){

@@ -15,6 +15,9 @@ namespace status{
     
     void swap_windows();
     windows::window& getWindow(window_from_outside);
+    
+    extern uint8_t emelet_szam;
+    extern uint8_t szoba_szam;
 }
 
 using status::LEFT;

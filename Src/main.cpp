@@ -1,5 +1,4 @@
 #include "window.hpp"
-#include "main.hpp"
 #include "internal_anim.hpp"
 #include "network.hpp"
 #include "status.hpp"
@@ -11,10 +10,6 @@ gpio               init_2;
 uart_and_dma       init_3;
 hal_i2c            init_4;
 hal_timer          init_5;
-
-
-uint8_t emelet_szam =0;
-uint8_t szoba_szam  =0;
 
 extern "C" int main(void);
 
