@@ -16,6 +16,8 @@ hal_timer          init_5;
 uint8_t emelet_szam =0;
 uint8_t szoba_szam  =0;
 
+extern "C" int main(void);
+
 int main(void){
 	net::inetwork.init();
 
