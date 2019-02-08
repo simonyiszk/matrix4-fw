@@ -102,8 +102,6 @@ namespace windows{
 		window(const window&) = delete;
 		window& operator=(const window&) = delete;
 
-		void init();
-
 		/*!
 		 * \brief the the jobs defined by the state of the window
 		 *

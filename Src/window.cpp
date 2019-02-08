@@ -82,13 +82,7 @@ window::window(	GPIO_TypeDef* gpio_port_3v3,
 		uart_handler(USARTx),
 		transmitted_before(false)
 {
-	//this->set_state(discharge_caps); WARN static insatance's constructor runs before hardware init routines
-	//TODO> DMA
-	DMA_buffer[0]=0xF0;
-};
-
-void window::init(){
-	LL_DMA_DisableChannel(DMAx, DMA_Channel);
+    LL_DMA_DisableChannel(DMAx, DMA_Channel);
 
 	while(LL_DMA_IsEnabledChannel(DMAx, DMA_Channel));
 
@@ -126,7 +120,11 @@ void window::init(){
 	//Do a first tranfer, to set TC flag
 	DMA_buffer[0]=0xF0;
 	LL_DMA_EnableChannel(DMAx, DMA_Channel);
-}
+    
+    
+	this->set_state(discharge_caps);
+	DMA_buffer[0]=0xF0;
+};
 
 window::twindow_status window::get_state(){
 	return this->status;

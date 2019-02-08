@@ -21,11 +21,6 @@ net::network    net::inetwork;
 extern "C" int main(void);
 
 int main(void){
-	net::inetwork.init();
-
-	windows::right_window.init();
-	windows::left_window.init();
-
 	status::turn_internal_anim_on();
 
 	while (1){

@@ -39,7 +39,6 @@ namespace net{
 
 		network();
 		void step_network();
-		void init();
 	};
 
 	extern network inetwork;

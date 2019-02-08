@@ -320,10 +320,7 @@ namespace net{
  ********************************/
 
 network::network(){
-}
-
-void network::init(){
-    LL_GPIO_InitTypeDef GPIO_InitStruct;
+LL_GPIO_InitTypeDef GPIO_InitStruct;
 
 	/* Peripheral clock enable */
 	LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SPI1);
