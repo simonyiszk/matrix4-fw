@@ -1,5 +1,6 @@
 #include "system_init.hpp"
 #include "stm32f0xx_hal.h"
+#include "error_handler.hpp"
 
 
 /**

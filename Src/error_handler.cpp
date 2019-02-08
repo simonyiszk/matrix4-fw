@@ -1,7 +1,6 @@
 #include "error_handler.hpp"
 
-void _Error_Handler(char *file, int line)
-{
+void _Error_Handler ( const char* file, int line ){
   (void) file;
   (void) line;
   

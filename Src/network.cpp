@@ -581,12 +581,4 @@ void network::step_network(){
 		 DHCP_rebind();
 	 }
 }
-
-
-/*****************************
- *
- *    Static instances
- *
- ****************************/
-	network inetwork;
 };

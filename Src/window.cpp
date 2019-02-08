@@ -215,28 +215,8 @@ void window::blank(){
 
 
 /*****************************
- *  Instance static classes
+ *  Instance of static members
  *****************************/
-
-windows::window windows::left_window(
-		WINDOW_3V3_LEFT_GPIO_Port,
-		WINDOW_3V3_LEFT_Pin,
-		WINDOW_POWER_LEFT_GPIO_Port,
-		WINDOW_POWER_LEFT_Pin,
-		USART2,
-		DMA1,
-		LL_DMA_CHANNEL_4
-);
-
-windows::window windows::right_window(
-		WINDOW_3V3_RIGHT_GPIO_Port,
-		WINDOW_3V3_RIGHT_Pin,
-		WINDOW_POWER_RIGHT_GPIO_Port,
-		WINDOW_POWER_RIGHT_Pin,
-		USART1,
-		DMA1,
-		LL_DMA_CHANNEL_2
-		);
 
 uint8_t sec_cntr_window = 0;
 

@@ -1,3 +1,3 @@
 #pragma once
 
-void _Error_Handler(char *file, int line);
+void _Error_Handler(const char *file, int line);
