@@ -47,8 +47,6 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c2;
 
-SPI_HandleTypeDef hspi1;
-
 TIM_HandleTypeDef htim17;
 
 /* USER CODE BEGIN PV */
