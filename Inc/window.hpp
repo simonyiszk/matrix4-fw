@@ -137,11 +137,6 @@ namespace windows{
 		void update_image();
 
 		/*!
-		 *  Preventing non-static instancing.
-		 */
-		//~window() = delete;
-
-		/*!
 		 * \brief Blanks every panel connected to the window.
 		 */
 		void blank();
