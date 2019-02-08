@@ -37,7 +37,6 @@
 
 /* USER CODE BEGIN 0 */
 #include "dhcp.h"
-#include "internal_anim.h"
 #include "stm32f0xx_ll_dma.h"
 #include "gpioes.h"
 /* USER CODE END 0 */
@@ -180,6 +179,7 @@ void DMA1_Channel4_5_IRQHandler(void)
 	 *Updated in stm32f0xx_it.c (TIM17 INT)
 	 */
 extern uint8_t sec_cntr_window;
+extern uint8_t time_to_next_frame;
 
 /**
 * @brief This function handles TIM17 global interrupt.

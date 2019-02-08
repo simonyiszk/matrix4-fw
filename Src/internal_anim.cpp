@@ -5,9 +5,11 @@
  *      Author: kisada
  */
 
-#include "../Inc/internal_anim.hpp"
+#include "internal_anim.hpp"
 #include "window.hpp"
 
+
+extern "C" uint8_t time_to_next_frame;
 uint8_t time_to_next_frame = 0;
 
 void internal_animation::step_anim(void){
