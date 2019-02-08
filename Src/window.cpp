@@ -1,5 +1,4 @@
 #include "window.hpp"
-#include "window.h"
 #include "gpioes.h"
 
 using namespace windows;
@@ -35,6 +34,8 @@ bool pixel_data::isFull(){
 /*****************************
  *    Class window
  *****************************/
+
+extern "C" uint8_t sec_cntr_window;
 
 void window::step_state(){
 	switch(this->status){

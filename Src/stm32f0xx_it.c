@@ -37,7 +37,6 @@
 
 /* USER CODE BEGIN 0 */
 #include "dhcp.h"
-#include "window.h"
 #include "internal_anim.h"
 #include "stm32f0xx_ll_dma.h"
 #include "gpioes.h"
@@ -171,6 +170,16 @@ void DMA1_Channel4_5_IRQHandler(void)
 
   /* USER CODE END DMA1_Channel4_5_IRQn 1 */
 }
+
+
+/*!
+	 * \brief counts the seconds
+	 * used to countdown the timeout in panel probing
+	 *
+	 * The declaration is in window.c
+	 *Updated in stm32f0xx_it.c (TIM17 INT)
+	 */
+extern uint8_t sec_cntr_window;
 
 /**
 * @brief This function handles TIM17 global interrupt.
