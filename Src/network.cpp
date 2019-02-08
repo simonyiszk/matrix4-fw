@@ -63,30 +63,35 @@ namespace{
     
     void fetch_frame_unicast_proto(){
         size_t size= getSn_RX_RSR(2);
-            if(size){
-                status::turn_internal_anim_off();
+        
+        if (size == 0) 
+            return;
+        
+        status::turn_internal_anim_off();
 
-                HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-                //todo treat big and small datagrams
+        toogle_gpio(LED_COMM);
+        //todo treat big and small datagrams
 
-                char buff[10];
+        char buff[10];
 
-                uint8_t svr_addr[6];
-                uint16_t  svr_port;
-                uint16_t len;
-                len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
-                (void) len;
+        uint8_t svr_addr[6];
+        uint16_t  svr_port;
+        uint16_t len;
+        len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
+        
+        if(len < /*sizeof(struct)*/ 5)
+            return;
 
-                //TODO check indexes, datagram size
+        bool window = buff[0];
+        size_t pixel_num = buff[1];
+        uint8_t red = buff[2];
+        uint8_t green = buff[3];
+        uint8_t blue = buff[4];
 
-                bool window = buff[0];
-                size_t pixel_num = buff[1];
-                uint8_t red = buff[2];
-                uint8_t green = buff[3];
-                uint8_t blue = buff[4];
-
-                status::getWindow(static_cast<status::window_from_outside>(window)).pixels[pixel_num].set(red, green, blue);
-            }
+        if(pixel_num > 3)
+            return;
+        
+        status::getWindow(static_cast<status::window_from_outside>(window)).pixels[pixel_num].set(red, green, blue);
     }
 
     void fetch_frame_multicast_proto(){ //TODO clean the code
