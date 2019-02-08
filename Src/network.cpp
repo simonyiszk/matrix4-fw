@@ -20,7 +20,7 @@ extern "C" {
 #include "stm32f0xx_ll_spi.h"
 #include "stm32f0xx_ll_bus.h"
 #include "network.hpp"
-#include "main2.hpp"
+#include "main.hpp"
 #include "window.hpp"
 #include <cstdio>
 #include "version.hpp"

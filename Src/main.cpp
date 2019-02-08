@@ -1,5 +1,5 @@
 #include "window.hpp"
-#include "main2.hpp"
+#include "main.hpp"
 #include "internal_anim.hpp"
 #include "network.hpp"
 #include "status.hpp"

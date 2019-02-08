@@ -8,8 +8,6 @@
 #ifndef MAIN2_HPP_
 #define MAIN2_HPP_
 
-#include "main2.h"
-
 extern uint8_t emelet_szam;
 extern uint8_t szoba_szam;
 
