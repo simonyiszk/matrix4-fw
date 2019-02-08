@@ -46,12 +46,13 @@ void ip_assign(){
 	getSNfromDHCP(netInfo.sn);
 	getDNSfromDHCP(netInfo.dns);
 	wizchip_setnetinfo(&netInfo);
-	LL_GPIO_SetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+    
+    set_gpio(LED_DHCP);
 }
 
 // Will be handled on the server side
 void ip_conflict(){
-	LL_GPIO_ResetOutputPin(LED_DHCP_GPIO_Port, LED_DHCP_Pin);
+    reset_gpio(LED_DHCP)
 	//TODO blinking LED e.g. JOKER or SERVER
 }
 
@@ -107,8 +108,7 @@ namespace{
 
         status::turn_internal_anim_off();
 
-        HAL_GPIO_TogglePin(LED_COMM_GPIO_Port, LED_COMM_Pin);
-        //TODO treat big and small datagrams
+        toogle_gpio(LED_COMM);
 
         uint8_t buff[314]; //TODO exception handling
 
@@ -118,7 +118,10 @@ namespace{
         len = recvfrom(3, (uint8_t *)buff, size, svr_addr, &svr_port);
         (void) len;
         
-        //TODO check indexes, datagram size
+        /*
+        if (len != sizeof(buff))
+            return; 
+        */ //TODO check this code
 
 
         if(buff[0] != 0x01)
@@ -184,11 +187,11 @@ namespace{
     }
     
     void cs_sel() {
-        LL_GPIO_ResetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS LOW
+        reset_gpio(SPI1_NSS); //ChipSelect to low
     }
 
     void cs_desel() {
-        LL_GPIO_SetOutputPin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin); //CS HIGH
+        set_gpio(SPI1_NSS); //ChipSelect to high
     }
 
     uint8_t spi_rb(void) {
