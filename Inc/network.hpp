@@ -9,13 +9,10 @@
 #define NETWORK_HPP_
 
 namespace net{
-	extern "C" I2C_HandleTypeDef hi2c2;
-
 	class network{
 	private:
 		network(const network&) = delete;
 		network& operator=(const network&) = delete;
-		//~network() = delete;
 
 		void do_remote_command();
 		void fetch_frame();
