@@ -2,6 +2,23 @@
 
 TODO better README
 
+# Compilation
+
+Required packages on Debian systems: make, gcc-arm-none-eabi, srec-cat 
+
+build process:
+
+cd Drivers/wiznet_drier && make
+
+cd Drivers/STM32_HAL && make
+
+cd . && make
+
+outputs: 
+
+build/mueb_fw_for_stlink.hex <-- to be flashed with debugger
+build/mueb_fw_for_remote_update.bin <-- to be used for remote firmware update
+
 # Debug in GNU environment
 
 ```bash
