@@ -39,7 +39,7 @@ DEFS       = -DSTM32F030x8
 INCS       = -IioLibrary_Driver/Ethernet/ -IioLibrary_Driver/Ethernet/W5500 -Iconfigs
 
 # Compiler flags
-CFLAGS     = -std=gnu11 -c -Os
+CFLAGS     = -std=gnu11 -c -Os -g
 CFLAGS    += -mcpu=cortex-m0 -mthumb
 CFLAGS    += -ffunction-sections -fdata-sections -fstack-usage
 CFLAGS    += $(INCS) $(DEFS)
