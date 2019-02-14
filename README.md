@@ -20,11 +20,10 @@ build/MUEB_for_remote_update.bin <-- to be used for remote firmware update
 # Debug in GNU environment
 
 ```bash
-openocd -f interface/stlink-v2.cfg -c "hla_vid_pid 0x0483 0x3748" -f target/stm32f0x.cfg & arm-none-eabi-gdb MUEB_fw.elf
+openocd -f interface/stlink-v2.cfg -c "hla_vid_pid 0x0483 0x3748" -f target/stm32f0x.cfg & arm-none-eabi-gdb MUEB_fw.elf --eval-command="target remote localhost:3333"
 ```
 
 ```
-target remote localhost:3333
 monitor halt
 load
 monitor reset
