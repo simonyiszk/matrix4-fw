@@ -66,7 +66,7 @@ endif
 
 .PHONY: all clean
 
-all: archive
+all: $(TARGET).a
 
 objf:
 	$Qmkdir -p obj
@@ -76,7 +76,7 @@ obj/%.o: Src/%.c  | objf
 	$Q$(CC) $(CFLAGS) -c -o $@ $< 
 
 
-archive:  $(OBJS)
+$(TARGET).a:  $(OBJS)
 	@echo "[AR]      $(TARGET).a"
 	$Q$(AR) qco $(TARGET).a $(OBJS)
 
