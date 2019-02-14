@@ -68,10 +68,10 @@ endif
 
 all: $(TARGET).a
 
-objf:
+obj:
 	$Qmkdir -p obj
 
-obj/%.o: Src/%.c  | objf
+obj/%.o: Src/%.c  | obj
 	@echo "[CC]      $(notdir $<)"
 	$Q$(CC) $(CFLAGS) -c -o $@ $< 
 
