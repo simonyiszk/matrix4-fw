@@ -45,38 +45,43 @@ CFLAGS    += -ffunction-sections -fdata-sections -fstack-usage
 CFLAGS    += $(INCS) $(DEFS)
 
 # Prettify output
-V = 1
+V = 0
 ifeq ($V, 0)
 	Q = @
 	P = > /dev/null
 endif
 
+
+modules = socket w5500 config dhcp
+
 ###################################################
+
+OBJS = $(addsuffix .o,$(addprefix obj/,$(modules)))
 
 .PHONY: all clean
 
-all: archive
+all: $(TARGET).a | obj
 
-objf:
+obj:
 	$Qmkdir -p obj
 
-socket: ioLibrary_Driver/Ethernet/socket.c | objf
+obj/socket.o: ioLibrary_Driver/Ethernet/socket.c | obj
 	@echo "[CC]      $(notdir $<)"
-	$Q$(CC) $(CFLAGS) -c -o obj/$@.o $< 
+	$Q$(CC) $(CFLAGS) -c -o $@ $< 
 
-w5500: ioLibrary_Driver/Ethernet/W5500/w5500.c | objf
+obj/w5500.o: ioLibrary_Driver/Ethernet/W5500/w5500.c | obj
 	@echo "[CC]      $(notdir $<)"
-	$Q$(CC) $(CFLAGS) -c -o obj/$@.o $< 
+	$Q$(CC) $(CFLAGS) -c -o $@ $< 
 
-config: ioLibrary_Driver/Ethernet/wizchip_conf.c | objf
+obj/config.o: ioLibrary_Driver/Ethernet/wizchip_conf.c | obj
 	@echo "[CC]      $(notdir $<)"
-	$Q$(CC) $(CFLAGS) -c -o obj/$@.o $< 
+	$Q$(CC) $(CFLAGS) -c -o $@ $< 
 
-dhcp: ioLibrary_Driver/Internet/DHCP/dhcp.c | objf
+obj/dhcp.o: ioLibrary_Driver/Internet/DHCP/dhcp.c | obj
 	@echo "[CC]      $(notdir $<)"
-	$Q$(CC) $(CFLAGS) -c -o obj/$@.o $< 
+	$Q$(CC) $(CFLAGS) -c -o $@ $< 
 
-archive:  socket w5500 config dhcp
+$(TARGET).a:  $(OBJS)
 	@echo "[AR]      $(TARGET).a"
 	$Q$(AR) qco $(TARGET).a obj/*.o
 
