@@ -60,22 +60,22 @@ COMMIT                 = -D_COMMIT=\"`git log --pretty=format:'%h' -n 1`\"    #d
 COMMIT                += `git diff --quiet || echo '-D_DIRTYTREE'`            #define dirty tree
 
 
-all: $(HEX) $(BIN) | build_dir
+all: $(HEX) $(BIN) | build
 
-.PHONY: build_dir clean src
+.PHONY: clean src
 
-build_dir: 
+build: 
 	@mkdir -p build
 
-build/c_%.o: Src/%.c | build_dir
+build/c_%.o: Src/%.c | build
 	@echo "[CC]	$(notdir $<)"
 	$(CC) $(C_FLAGS) $(DEFS) $(COMMIT) $(INCLUDES) -c -o $@ $<
 
-build/asm_%.o: startup/%.s | build_dir
+build/asm_%.o: startup/%.s | build
 	@echo "[CC]	$(notdir $<)"
 	$(CC) $(C_FLAGS) -c -o $@ $<
 
-build/cpp_%.o: Src/%.cpp | build_dir
+build/cpp_%.o: Src/%.cpp | build
 	@echo "[CXX]	$(notdir $<)"
 	$(CXX) $(CXX_FLAGS) $(DEFS) $(COMMIT) $(INCLUDES) -c -o $@ $<
 
@@ -83,7 +83,7 @@ clean:
 	@echo "[RM]     build/*"
 	@rm -f build/*
 
-src: $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS) | build_dir
+src: $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS) | build
 
 $(ELF): $(ASM_OBJS) $(C_OBJS) $(CPP_OBJS)
 	@echo "[LD]     $@"
