@@ -25,7 +25,7 @@ DEFS                  := -DSTM32F030x8 -DUSE_HAL_DRIVER  -DUSE_FULL_LL_DRIVER
 
 COMMON_COMPILER_FLAGS := -Os -g -fstack-usage -Wall -Wextra -Wpacked -Winline  -mcpu=cortex-m0 -mthumb
 C_FLAGS               := $(COMMON_COMPILER_FLAGS) $(C_STANDARD)
-CXX_FLAGS             := $(COMMON_COMPILER_FLAGS) $(CXX_STANDARD) -fno-rtti -fno-exceptions -fno-threadsafe-statics 
+CXX_FLAGS             := $(COMMON_COMPILER_FLAGS) $(CXX_STANDARD) -fno-rtti -fno-exceptions -fno-threadsafe-statics
 
 LD_FLAGS              := -specs=nosys.specs -specs=nano.specs -static -Wl,-cref,-u,Reset_Handler -Wl,-Map=build/$(TARGET).map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group
 
@@ -64,7 +64,7 @@ all: $(HEX) $(BIN) | build
 
 .PHONY: clean src
 
-build: 
+build:
 	@mkdir -p build
 
 build/c_%.o: Src/%.c | build
@@ -79,20 +79,28 @@ build/cpp_%.o: Src/%.cpp | build
 	@echo "[CXX]	$(notdir $<)"
 	$(CXX) $(CXX_FLAGS) $(DEFS) $(COMMIT) $(INCLUDES) -c -o $@ $<
 
+Drivers/wiznet_driver/ioLibrary.a:
+	make -C Drivers/wiznet_driver
+
+Drivers/STM32F0xx_HAL_Driver/hal.a:
+	make -C Drivers/STM32F0xx_HAL_Driver
+
 clean:
 	@echo "[RM]     build/*"
 	@rm -fr build
+	make clean -C Drivers/wiznet_driver
+	make clean -C Drivers/STM32F0xx_HAL_Driver
 
 src: $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS) | build
 
-$(ELF): $(ASM_OBJS) $(C_OBJS) $(CPP_OBJS)
+$(ELF): $(ASM_OBJS) $(C_OBJS) $(CPP_OBJS) Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a
 	@echo "[LD]     $@"
-	$(CXX) -o $@ $(CXX_FLAGS) $(LD_FLAGS) -T$(LDSCRIPT) $^ Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a 
+	$(CXX) -o $@ $(CXX_FLAGS) $(LD_FLAGS) -T$(LDSCRIPT) $^ Drivers/wiznet_driver/ioLibrary.a Drivers/STM32F0xx_HAL_Driver/hal.a
 #	$(SIZE) $@
 
 $(ELF_FW_UPDATE): build/cpp_refurbish.o build/cpp_stm32_flash.o
 	@echo "[LD]     $@"
-	$(CXX) -o $@ -Os -g -fstack-usage -Wall -Wextra -Wpacked -Winline  -mcpu=cortex-m0 -mthumb -std=gnu++11 -fno-rtti -fno-exceptions -fno-threadsafe-statics   -specs=nano.specs -static -Wl,--gc-sections -nostartfiles -nostdlib -nodefaultlibs  -T$(REFURBISHER_LDSCRIPT) build/cpp_refurbish.o  build/cpp_stm32_flash.o
+	$(CXX) -o $@ $(CXX_FLAGS) -specs=nano.specs -static -Wl,--gc-sections -nostartfiles -nostdlib -nodefaultlibs  -T$(REFURBISHER_LDSCRIPT) build/cpp_refurbish.o  build/cpp_stm32_flash.o
 
 
 $(HEX_FW): $(ELF)
