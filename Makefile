@@ -81,7 +81,7 @@ build/cpp_%.o: Src/%.cpp | build
 
 clean:
 	@echo "[RM]     build/*"
-	@rm -f build/*
+	@rm -fr build
 
 src: $(C_OBJS) $(CPP_OBJS) $(ASM_OBJS) | build
 
