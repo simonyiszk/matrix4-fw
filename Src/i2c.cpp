@@ -107,7 +107,7 @@ void I2C::stop_cond(void) {
 }
 
 // Write a bit to I2C bus
-void I2C::write_bit(uint8_t bit) {
+void I2C::write_bit(bool bit) {
 	if (bit) {
 		set_SDA();
 	} else {
@@ -138,8 +138,8 @@ void I2C::write_bit(uint8_t bit) {
 }
 
 // Read a bit from I2C bus
-uint8_t I2C::read_bit(void) {
-	uint8_t bit;
+bool I2C::read_bit(void) {
+	bool bit;
 
 	// Let the slave drive data
 	set_SDA();
@@ -167,9 +167,9 @@ uint8_t I2C::read_bit(void) {
 }
 
 // Write a byte to I2C bus. Return 0 if ack by the slave.
-uint8_t I2C::write_byte(uint8_t send_start, uint8_t send_stop, uint8_t byte) {
+bool I2C::write_byte(bool send_start, bool send_stop, uint8_t byte) {
 	uint8_t bit;
-	uint8_t nack;
+	bool nack;
 
 	if (send_start) {
 		start_cond();
@@ -190,7 +190,7 @@ uint8_t I2C::write_byte(uint8_t send_start, uint8_t send_stop, uint8_t byte) {
 }
 
 // Read a byte from I2C bus
-uint8_t I2C::read_byte(uint8_t nack, uint8_t send_stop) {
+uint8_t I2C::read_byte(bool nack, bool send_stop) {
 	uint8_t byte = 0;
 	uint8_t bit;
 
@@ -231,7 +231,7 @@ void I2C::mem_read_bytes(uint8_t slave_addr, uint8_t mem_addr, uint8_t* data_arr
 	write_byte(1, 0, (slave_addr << 1) | 1);
 	I2C_delay();
 	I2C_delay();
-	for (uint32_t i = 0; i < len-1; i++) {
+	for (int32_t i = 0; i < (int32_t)len-1; i++) {
 		uint8_t res = read_byte(0, 0);
 		data_array[i] = res;
 	}
@@ -269,12 +269,12 @@ void I2C::I2C_delay(void) {
 	  while((this->timer->CNT - t) < this->delayVal);
 }
 
-uint8_t I2C::read_SCL(void)  // Return current level of SCL line, 0 or 1
+bool I2C::read_SCL(void)  // Return current level of SCL line, 0 or 1
 {
 	return LL_GPIO_IsInputPinSet(this->SCL_Port, this->SCL_PinMask);
 }
 
-uint8_t I2C::read_SDA(void)  // Return current level of SDA line, 0 or 1
+bool I2C::read_SDA(void)  // Return current level of SDA line, 0 or 1
 {
 	return LL_GPIO_IsInputPinSet(this->SDA_Port, this->SDA_PinMask);
 }

@@ -1,4 +1,3 @@
-
 #ifndef __I2C_H
 #define __I2C_H
 
@@ -50,18 +49,18 @@ private:
 	uint8_t started = 0; // global data
 
 	void I2C_delay(void);
-	uint8_t read_SCL(void);  // Return current level of SCL line, 0 or 1
-	uint8_t read_SDA(void);  // Return current level of SDA line, 0 or 1
+	bool read_SCL(void);  // Return current level of SCL line, 0 or 1
+	bool read_SDA(void);  // Return current level of SDA line, 0 or 1
 	void set_SCL(void);   // Do not drive SCL (set pin high-impedance)
 	void clear_SCL(void); // Actively drive SCL signal low
 	void set_SDA(void);   // Do not drive SDA (set pin high-impedance)
 	void clear_SDA(void); // Actively drive SDA signal low
 	void start_cond(void);
 	void stop_cond(void);
-	void write_bit(uint8_t bit);
-	uint8_t read_bit(void);
-	uint8_t write_byte(uint8_t send_start, uint8_t send_stop, uint8_t byte);
-	uint8_t read_byte(uint8_t nack, uint8_t send_stop);
+	void write_bit(bool bit);
+	bool read_bit(void);
+	bool write_byte(bool send_start, bool send_stop, uint8_t byte);
+	uint8_t read_byte(bool nack, bool send_stop);
 };
 
 
