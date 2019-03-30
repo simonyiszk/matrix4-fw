@@ -2,7 +2,6 @@
 #define __I2C_H
 
 #include <stdint.h>
-#include "stm32f0xx_ll_gpio.h"
 #include "gpioes.h"
 
 class I2C {

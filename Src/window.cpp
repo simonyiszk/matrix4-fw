@@ -254,7 +254,7 @@ void window::init_leds()
 	i2c.mem_write_bytes(blue_addr, REG_MODE1 | AUTO_INC_ALL, init_data, 24);
 }
 
-void window::update_image_i2c()
+void window::update_image_i2c() //TODO intensity table
 {
 	uint8_t data_red[16] = {0};
 	uint8_t data_green[16] = {0};

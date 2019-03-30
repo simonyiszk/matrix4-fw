@@ -1,11 +1,5 @@
 #include "i2c.hpp"
-#include "gpioes.h"
 
-
-/*I2C::I2C()
-{
-}
-*/
 void I2C::init(GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 		GPIO_TypeDef* SDA_Port, uint32_t SDA_PinMask,
 		TIM_TypeDef* timer, uint32_t F_CLK, uint32_t speed)
@@ -75,7 +69,6 @@ void I2C::start_cond(void) {
 
 	// SCL is high, set SDA from 1 to 0.
 	clear_SDA();
-	LL_GPIO_SetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
 	I2C_delay();
 	clear_SCL();
 	I2C_delay();
