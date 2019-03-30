@@ -50,6 +50,15 @@ void toogle_gpio(enum output_gpioes);
 #define WINDOW_3V3_LEFT_Pin LL_GPIO_PIN_9
 #define WINDOW_3V3_LEFT_GPIO_Port GPIOB
 
+#define WINDOW_I2C_SCL_RIGHT_GPIO_Port GPIOA
+#define WINDOW_I2C_SCL_RIGHT_Pin LL_GPIO_PIN_9
+#define WINDOW_I2C_SDA_RIGHT_GPIO_Port GPIOA
+#define WINDOW_I2C_SDA_RIGHT_Pin LL_GPIO_PIN_10
+#define WINDOW_I2C_SCL_LEFT_GPIO_Port GPIOA
+#define WINDOW_I2C_SCL_LEFT_Pin LL_GPIO_PIN_2
+#define WINDOW_I2C_SDA_LEFT_GPIO_Port GPIOA
+#define WINDOW_I2C_SDA_LEFT_Pin LL_GPIO_PIN_3
+
 /// Input
 
 enum input_gpioes{

@@ -5,6 +5,9 @@
 extern "C" TIM_HandleTypeDef htim17;
 TIM_HandleTypeDef htim17;
 
+extern "C" TIM_HandleTypeDef htim16;
+TIM_HandleTypeDef htim16;
+
 hal_timer::hal_timer(){
   TIM_OC_InitTypeDef sConfigOC;
   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig;
@@ -52,4 +55,20 @@ hal_timer::hal_timer(){
 
   
   HAL_TIM_Base_Start_IT(&htim17);
+
+
+  __HAL_RCC_TIM16_CLK_ENABLE();
+
+  htim16.Instance = TIM16;
+  htim16.Init.Prescaler = 0;
+  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim16.Init.Period = 0xFFFF;
+  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim16.Init.RepetitionCounter = 0;
+  htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim16) != HAL_OK)
+  {
+	  _Error_Handler(__FILE__, __LINE__);
+  }
+  HAL_TIM_Base_Start(&htim16);
 }

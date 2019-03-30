@@ -51,7 +51,10 @@ void window::step_state(){
 		case vcc_3v3_on:
 			if(sec_cntr_window>1){ //TODO reference time point
 				if(check_uart_welcome_message())
+				{
 					this->set_state(vcc_12v_on);
+					this->init_leds();
+				}
 				else
 					this->set_state(vcc_3v3_off);
 			}
@@ -229,6 +232,7 @@ void window::init_I2C(uint8_t i2c_addr_base, GPIO_TypeDef* SCL_Port, uint32_t SC
 	blue_addr = i2c_addr_base+2;
 	LL_USART_Disable(uart_handler);
 	i2c.init(SCL_Port, SCL_PinMask, SDA_Port, SDA_PinMask, timer, F_CLK, speed);
+
 }
 
 void window::init_leds()
@@ -268,17 +272,18 @@ void window::update_image_i2c()
 	i2c.mem_write_bytes(red_addr, REG_PWM0 | AUTO_INC_PWM, data_red, 16);
 	i2c.mem_write_bytes(green_addr, REG_PWM0 | AUTO_INC_PWM, data_green, 16);
 	i2c.mem_write_bytes(blue_addr, REG_PWM0 | AUTO_INC_PWM, data_blue, 16);
+
 }
 
-void windows::set_group_dim_red(uint8_t dim) {
+void window::set_group_dim_red(uint8_t dim) {
 	i2c.mem_write_byte(red_addr, REG_GRPPWM, dim);
 }
 
-void windows::set_group_dim_green(uint8_t dim) {
+void window::set_group_dim_green(uint8_t dim) {
 	i2c.mem_write_byte(green_addr, REG_GRPPWM, dim);
 }
 
-void windows::set_group_dim_blue(uint8_t dim) {
+void window::set_group_dim_blue(uint8_t dim) {
 	i2c.mem_write_byte(blue_addr, REG_GRPPWM, dim);
 }
 

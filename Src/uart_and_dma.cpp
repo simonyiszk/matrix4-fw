@@ -7,7 +7,7 @@
 /* USART1 init function */
 static void MX_USART1_UART_Init(void)
 {
-
+  return;
   LL_USART_InitTypeDef USART_InitStruct;
 
   LL_GPIO_InitTypeDef GPIO_InitStruct;
@@ -74,7 +74,7 @@ static void MX_USART1_UART_Init(void)
 /* USART2 init function */
 static void MX_USART2_UART_Init(void)
 {
-
+  return;
   LL_USART_InitTypeDef USART_InitStruct;
 
   LL_GPIO_InitTypeDef GPIO_InitStruct;

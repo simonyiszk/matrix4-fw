@@ -2,15 +2,15 @@
 #define __I2C_H
 
 #include <stdint.h>
-#include "main.h"
-
+#include "stm32f0xx_ll_gpio.h"
+#include "gpioes.h"
 
 class I2C {
 public:
 	/*I2C(GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 			GPIO_TypeDef* SDA_Port, uint32_t SDA_PinMask,
 			TIM_TypeDef* timer, uint32_t F_CLK, uint32_t speed = 100000);*/
-	I2C();
+	I2C(){}
 
 	void init(GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 			GPIO_TypeDef* SDA_Port, uint32_t SDA_PinMask,
@@ -38,11 +38,11 @@ public:
 	void setSpeed(uint32_t speed);
 
 private:
-	GPIO_TypeDef* SCL_Port = NULL;
-	uint32_t SCL_PinMask = 0;
-	GPIO_TypeDef* SDA_Port = NULL;
-	uint32_t SDA_PinMask = 0;
-	TIM_TypeDef* timer = NULL;
+	GPIO_TypeDef* SCL_Port;
+	uint32_t SCL_PinMask;
+	GPIO_TypeDef* SDA_Port;
+	uint32_t SDA_PinMask;
+	TIM_TypeDef* timer;
 	uint32_t F_CLK = 0;
 	uint32_t speed = 0;
 	uint32_t delayVal = 0;
@@ -62,7 +62,6 @@ private:
 	bool write_byte(bool send_start, bool send_stop, uint8_t byte);
 	uint8_t read_byte(bool nack, bool send_stop);
 };
-
 
 #endif /* __I2C_H */
 

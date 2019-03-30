@@ -1,11 +1,11 @@
-#include <i2c.hpp>
-#include "main.h"
+#include "i2c.hpp"
+#include "gpioes.h"
 
 
-I2C::I2C()
+/*I2C::I2C()
 {
 }
-
+*/
 void I2C::init(GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 		GPIO_TypeDef* SDA_Port, uint32_t SDA_PinMask,
 		TIM_TypeDef* timer, uint32_t F_CLK, uint32_t speed)
@@ -14,7 +14,7 @@ void I2C::init(GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 	this->SCL_PinMask = SCL_PinMask;
 	this->SDA_Port = SDA_Port;
 	this->SDA_PinMask = SDA_PinMask;
-	this->timer = timer;
+	this->timer = timer;//TODO
 	this->F_CLK = F_CLK;
 	this->speed = speed;
 	this->delayVal = (this->F_CLK / this->speed) / 2;
@@ -22,12 +22,12 @@ void I2C::init(GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 
 	LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 	LL_GPIO_SetOutputPin(this->SDA_Port, this->SDA_PinMask);
-	LL_GPIO_SetOutputPin(this->SCL_Port, this->SDA_PinMask);
+	LL_GPIO_SetOutputPin(this->SCL_Port, this->SCL_PinMask);
 
 	/**/
-	GPIO_InitStruct.Pin = this->SDA_PinMask;
+	GPIO_InitStruct.Pin = this->SCL_PinMask;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	LL_GPIO_Init(this->SCL_Port, &GPIO_InitStruct);
@@ -35,7 +35,7 @@ void I2C::init(GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 	/**/
 	GPIO_InitStruct.Pin = this->SDA_PinMask;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	LL_GPIO_Init(this->SDA_Port, &GPIO_InitStruct);
@@ -61,9 +61,9 @@ void I2C::start_cond(void) {
 		set_SDA();
 		I2C_delay();
 		set_SCL();
-		while (read_SCL() == 0) { // Clock stretching
-			// You should add timeout to this loop
-		}
+//		while (read_SCL() == 0) { // Clock stretching
+//			// You should add timeout to this loop
+//		}
 
 		// Repeated start setup time, minimum 4.7us
 		I2C_delay();
@@ -75,6 +75,7 @@ void I2C::start_cond(void) {
 
 	// SCL is high, set SDA from 1 to 0.
 	clear_SDA();
+	LL_GPIO_SetOutputPin(LED_JOKER_GPIO_Port, LED_JOKER_Pin);
 	I2C_delay();
 	clear_SCL();
 	I2C_delay();
@@ -264,36 +265,41 @@ void I2C::mem_write_bytes(uint8_t salve_addr, uint8_t mem_addr, uint8_t* data_ar
 }
 
 void I2C::I2C_delay(void) {
-	  volatile uint32_t t = this->timer->CNT;
-	  //LL_GPIO_SetOutputPin(SDA_GPIO_Port, SDA_Pin);
-	  while((this->timer->CNT - t) < this->delayVal);
+	volatile uint32_t t = this->timer->CNT;
+	while((this->timer->CNT - t) < this->delayVal);//timer->CNT,this->delayVal
 }
 
 bool I2C::read_SCL(void)  // Return current level of SCL line, 0 or 1
 {
 	return LL_GPIO_IsInputPinSet(this->SCL_Port, this->SCL_PinMask);
+//	return LL_GPIO_IsInputPinSet(WINDOW_I2C_SCL_LEFT_GPIO_Port, WINDOW_I2C_SCL_LEFT_Pin);
 }
 
 bool I2C::read_SDA(void)  // Return current level of SDA line, 0 or 1
 {
+//	return LL_GPIO_IsInputPinSet(WINDOW_I2C_SDA_LEFT_GPIO_Port, WINDOW_I2C_SDA_LEFT_Pin);
 	return LL_GPIO_IsInputPinSet(this->SDA_Port, this->SDA_PinMask);
 }
 
 void I2C::set_SCL(void)   // Do not drive SCL (set pin high-impedance)
 {
+//	LL_GPIO_SetOutputPin(WINDOW_I2C_SCL_LEFT_GPIO_Port, WINDOW_I2C_SCL_LEFT_Pin);
 	LL_GPIO_SetOutputPin(this->SCL_Port, this->SCL_PinMask);
 }
 
 void I2C::clear_SCL(void) // Actively drive SCL signal low
 {
+//	LL_GPIO_ResetOutputPin(WINDOW_I2C_SCL_LEFT_GPIO_Port, WINDOW_I2C_SCL_LEFT_Pin);
 	LL_GPIO_ResetOutputPin(this->SCL_Port, this->SCL_PinMask);
 }
 void I2C::set_SDA(void)   // Do not drive SDA (set pin high-impedance)
 {
+	//LL_GPIO_SetOutputPin(WINDOW_I2C_SDA_LEFT_GPIO_Port, WINDOW_I2C_SDA_LEFT_Pin);
 	LL_GPIO_SetOutputPin(this->SDA_Port, this->SDA_PinMask);
 }
 void I2C::clear_SDA(void) // Actively drive SDA signal low
 {
+	//LL_GPIO_ResetOutputPin(WINDOW_I2C_SDA_LEFT_GPIO_Port, WINDOW_I2C_SDA_LEFT_Pin);
 	LL_GPIO_ResetOutputPin(this->SDA_Port, this->SDA_PinMask);
 }
 
