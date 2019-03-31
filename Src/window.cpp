@@ -238,20 +238,20 @@ void window::init_I2C(uint8_t i2c_addr_base, GPIO_TypeDef* SCL_Port, uint32_t SC
 void window::init_leds()
 {
 	uint8_t init_data[24];
-	init_data[REG_MODE1] = INIT_MODE1;
-	init_data[REG_MODE2] = INIT_MODE2;
+	init_data[Reg::MODE1] = InitReg::MODE1;
+	init_data[Reg::MODE2] = InitReg::MODE2;
 	for (uint32_t i = 0; i < 16; ++i) {
-		init_data[REG_PWM0 + i] = INIT_PWM;
+		init_data[Reg::PWM0 + i] = InitReg::PWM;
 	}
-	init_data[REG_GRPPWM] = INIT_GRPPWM;
-	init_data[REG_GRPFREQ] = INIT_GRPFREQ;
-	init_data[REG_LEDOUT0] = INIT_LEDOUT;
-	init_data[REG_LEDOUT1] = INIT_LEDOUT;
-	init_data[REG_LEDOUT2] = INIT_LEDOUT;
-	init_data[REG_LEDOUT3] = INIT_LEDOUT;
-	i2c.mem_write_bytes(red_addr, REG_MODE1 | AUTO_INC_ALL, init_data, 24);
-	i2c.mem_write_bytes(green_addr, REG_MODE1 | AUTO_INC_ALL, init_data, 24);
-	i2c.mem_write_bytes(blue_addr, REG_MODE1 | AUTO_INC_ALL, init_data, 24);
+	init_data[Reg::GRPPWM] = InitReg::GRPPWM;
+	init_data[Reg::GRPFREQ] = InitReg::GRPFREQ;
+	init_data[Reg::LEDOUT0] = InitReg::LEDOUT;
+	init_data[Reg::LEDOUT1] = InitReg::LEDOUT;
+	init_data[Reg::LEDOUT2] = InitReg::LEDOUT;
+	init_data[Reg::LEDOUT3] = InitReg::LEDOUT;
+	i2c.mem_write_bytes(red_addr, Reg::MODE1 | AutoInc::ALL, init_data, 24);
+	i2c.mem_write_bytes(green_addr, Reg::MODE1 | AutoInc::ALL, init_data, 24);
+	i2c.mem_write_bytes(blue_addr, Reg::MODE1 | AutoInc::ALL, init_data, 24);
 }
 
 void window::update_image_i2c() //TODO intensity table
@@ -269,22 +269,22 @@ void window::update_image_i2c() //TODO intensity table
 		data_green[12 + i] = pixels[i].green;
 		data_blue[12 + i] = pixels[i].blue;
 	}
-	i2c.mem_write_bytes(red_addr, REG_PWM0 | AUTO_INC_PWM, data_red, 16);
-	i2c.mem_write_bytes(green_addr, REG_PWM0 | AUTO_INC_PWM, data_green, 16);
-	i2c.mem_write_bytes(blue_addr, REG_PWM0 | AUTO_INC_PWM, data_blue, 16);
+	i2c.mem_write_bytes(red_addr, Reg::PWM0 | AutoInc::PWM, data_red, 16);
+	i2c.mem_write_bytes(green_addr, Reg::PWM0 | AutoInc::PWM, data_green, 16);
+	i2c.mem_write_bytes(blue_addr, Reg::PWM0 | AutoInc::PWM, data_blue, 16);
 
 }
 
 void window::set_group_dim_red(uint8_t dim) {
-	i2c.mem_write_byte(red_addr, REG_GRPPWM, dim);
+	i2c.mem_write_byte(red_addr, Reg::GRPPWM, dim);
 }
 
 void window::set_group_dim_green(uint8_t dim) {
-	i2c.mem_write_byte(green_addr, REG_GRPPWM, dim);
+	i2c.mem_write_byte(green_addr, Reg::GRPPWM, dim);
 }
 
 void window::set_group_dim_blue(uint8_t dim) {
-	i2c.mem_write_byte(blue_addr, REG_GRPPWM, dim);
+	i2c.mem_write_byte(blue_addr, Reg::GRPPWM, dim);
 }
 
 

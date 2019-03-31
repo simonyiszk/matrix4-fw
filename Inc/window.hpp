@@ -17,6 +17,7 @@
 #define WINDOW_HPP_
 
 #include <array>
+#include <stdint.h>
 #include "i2c.hpp"
 #include "stm32f0xx_hal.h"
 #include "stm32f0xx_ll_gpio.h"
@@ -156,56 +157,71 @@ namespace windows{
 		void set_group_dim_red(uint8_t dim);
 		void set_group_dim_green(uint8_t dim);
 		void set_group_dim_blue(uint8_t dim);
-
-		static const uint8_t REG_MODE1			= (0x00);
-		static const uint8_t REG_MODE2			= (0x01);
-		static const uint8_t REG_PWM0			= (0x02);
-		static const uint8_t REG_PWM1			= (0x03);
-		static const uint8_t REG_PWM2			= (0x04);
-		static const uint8_t REG_PWM3			= (0x05);
-		static const uint8_t REG_PWM4			= (0x06);
-		static const uint8_t REG_PWM5			= (0x07);
-		static const uint8_t REG_PWM6			= (0x08);
-		static const uint8_t REG_PWM7			= (0x09);
-		static const uint8_t REG_PWM8			= (0x0A);
-		static const uint8_t REG_PWM9			= (0x0B);
-		static const uint8_t REG_PWM10			= (0x0C);
-		static const uint8_t REG_PWM11			= (0x0D);
-		static const uint8_t REG_PWM12			= (0x0E);
-		static const uint8_t REG_PWM13			= (0x0F);
-		static const uint8_t REG_PWM14			= (0x10);
-		static const uint8_t REG_PWM15			= (0x11);
-		static const uint8_t REG_GRPPWM		= (0x12);
-		static const uint8_t REG_GRPFREQ		= (0x13);
-		static const uint8_t REG_LEDOUT0		= (0x14);
-		static const uint8_t REG_LEDOUT1		= (0x15);
-		static const uint8_t REG_LEDOUT2		= (0x16);
-		static const uint8_t REG_LEDOUT3		= (0x17);
-		static const uint8_t REG_SUBADR1		= (0x18);
-		static const uint8_t REG_SUBADR2		= (0x19);
-		static const uint8_t REG_SUBADR3		= (0x1A);
-		static const uint8_t REG_ALLCALLADR	= (0x1B);
-		static const uint8_t REG_IREF			= (0x1C);
-		static const uint8_t REG_EFLAG1		= (0x1D);
-		static const uint8_t REG_EFLAG2		= (0x1E);
-
-		static const uint8_t AUTO_INC_NONE		= (0b00000000);
-		static const uint8_t AUTO_INC_ALL		= (0b10000000);
-		static const uint8_t AUTO_INC_PWM		= (0b10100000);
-		static const uint8_t AUTO_INC_CTRL		= (0b11000000);
-		static const uint8_t AUTO_INC_PWM_CTRL	= (0b11100000);
-
-		static const uint8_t INIT_MODE1		= 0x00;	//OSC: normal mode
-		static const uint8_t INIT_MODE2		= 0x00;
-		static const uint8_t INIT_PWM			= 0x00;	//brightness 0
-		static const uint8_t INIT_GRPPWM		= 0xFF;	//group dim max
-		static const uint8_t INIT_GRPFREQ		= 0x00;	//don't care
-		static const uint8_t INIT_LEDOUT		= 0xFF; 	//brightness + group dimming
 	};
 
 	extern window left_window;
 	extern window right_window;
+
+	namespace Reg
+	{
+		enum : uint8_t {
+			MODE1			= 0x00,
+			MODE2			= 0x01,
+			PWM0			= 0x02,
+			PWM1			= 0x03,
+			PWM2			= 0x04,
+			PWM3			= 0x05,
+			PWM4			= 0x06,
+			PWM5			= 0x07,
+			PWM6			= 0x08,
+			PWM7			= 0x09,
+			PWM8			= 0x0A,
+			PWM9			= 0x0B,
+			PWM10			= 0x0C,
+			PWM11			= 0x0D,
+			PWM12			= 0x0E,
+			PWM13			= 0x0F,
+			PWM14			= 0x10,
+			PWM15			= 0x11,
+			GRPPWM			= 0x12,
+			GRPFREQ			= 0x13,
+			LEDOUT0			= 0x14,
+			LEDOUT1			= 0x15,
+			LEDOUT2			= 0x16,
+			LEDOUT3			= 0x17,
+			SUBADR1			= 0x18,
+			SUBADR2			= 0x19,
+			SUBADR3			= 0x1A,
+			ALLCALLADR		= 0x1B,
+			IREF			= 0x1C,
+			EFLAG1			= 0x1D,
+			EFLAG2			= 0x1E
+		};
+	}
+
+	namespace AutoInc {
+		enum : uint8_t {
+			NONE		= 0b00000000,
+			ALL			= 0b10000000,
+			PWM			= 0b10100000,
+			CTRL		= 0b11000000,
+			PWM_CTRL	= 0b11100000
+		};
+	}
+
+	namespace InitReg {
+		enum : uint8_t {
+			MODE1		= 0x00,	//OSC: normal mode
+			MODE2		= 0x00,
+			PWM			= 0x00,	//brightness 0
+			GRPPWM		= 0xFF,	//group dim max
+			GRPFREQ		= 0x00,	//don't care
+			LEDOUT		= 0xFF 	//brightness + group dimming
+		};
+	}
 };
+
+
 
 
 #endif /* WINDOW_HPP_ */
