@@ -24,6 +24,8 @@ bool init_i2c = false;
 extern "C" TIM_HandleTypeDef htim16;
 TIM_TypeDef* timer_asd = TIM16;
 
+uint32_t in_mode = 0;
+
 int main(void){
 	status::turn_internal_anim_on();
 	windows::left_window.init_I2C(0x60, WINDOW_I2C_SCL_LEFT_GPIO_Port, WINDOW_I2C_SCL_LEFT_Pin, WINDOW_I2C_SDA_LEFT_GPIO_Port, WINDOW_I2C_SDA_LEFT_Pin, TIM16, 20000000, 100000);
@@ -31,15 +33,34 @@ int main(void){
 
 	while (1){
 		if(status::if_internal_animation_is_on)
-			internal_animation::step_anim();
+		{
+			switch (in_mode) {
+			case 0:
+				internal_animation::step_anim();
+				break;
+			case 1:
+				internal_animation::step_anim2();
+				break;
+			default:
+				//in_mode = 0;
+				break;
+			}
+		}
 
 		inetwork.step_network();
 
-		windows::left_window.step_state();
-		windows::right_window.step_state();
+		if (in_mode != 3 || !status::if_internal_animation_is_on)
+		{
+			windows::left_window.step_state();
+			windows::right_window.step_state();
+		}
 
 		if(!LL_GPIO_IsInputPinSet(USER_INPUT_BUTTON_GPIO_Port, USER_INPUT_BUTTON_Pin)){
-			//TODO do sg
+			while(!LL_GPIO_IsInputPinSet(USER_INPUT_BUTTON_GPIO_Port, USER_INPUT_BUTTON_Pin))
+			{
+			}
+			in_mode++;
+			in_mode %= 3;
 		}
 	}
 

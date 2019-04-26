@@ -73,7 +73,8 @@ namespace windows{
 			vcc_3v3_off,  //waiting for plug
 			vcc_3v3_on,   //waiting for comm
 			vcc_12v_off,  //panel turned off remotely
-			vcc_12v_on    //comm ok
+			vcc_12v_on,    //comm ok
+			all_init
 		};
 	private:
 		twindow_status status;

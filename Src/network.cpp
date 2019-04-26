@@ -410,7 +410,7 @@ void network::do_remote_command(){
 		len = recvfrom(1, (uint8_t *)buff, 11, resp_addr, &resp_port);
 
 		// Handle too small and incorrect packages
-		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M' || len < 4)
+		if(buff[0]!='S' || buff[1]!='E'/* || buff[2]!='M'*/ || len < 4 )
 			return;
 
 		// When the 5th bit is set to 1 it means we're sending a broadcast command to only one device
@@ -482,6 +482,25 @@ void network::do_remote_command(){
 				break;
             case swap_windows:
                 status::swap_windows();
+                break;
+            case dim_left_red:
+            	toogle_gpio(LED_JOKER);
+            	status::getWindow(LEFT).set_group_dim_red(buff[2]);
+                break;
+            case dim_left_green:
+            	status::getWindow(LEFT).set_group_dim_green(buff[2]);
+                break;
+            case dim_left_blue:
+            	status::getWindow(LEFT).set_group_dim_blue(buff[2]);
+                break;
+            case dim_right_red:
+            	status::getWindow(RIGHT).set_group_dim_red(buff[2]);
+                break;
+            case dim_right_green:
+            	status::getWindow(RIGHT).set_group_dim_green(buff[2]);
+                break;
+            case dim_right_blue:
+            	status::getWindow(RIGHT).set_group_dim_blue(buff[2]);
                 break;
 			default:
 				break;

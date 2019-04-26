@@ -40,6 +40,10 @@ extern "C" uint8_t sec_cntr_window;
 void window::step_state(){
 	switch(this->status){
 		case vcc_12v_on:
+			if(sec_cntr_window>1)
+				this->set_state(all_init);
+			break;
+		case all_init:
 			this->update_image();
 			break;
 		case vcc_12v_off:
@@ -53,7 +57,7 @@ void window::step_state(){
 				if(check_uart_welcome_message())
 				{
 					this->set_state(vcc_12v_on);
-					this->init_leds();
+					//this->init_leds();
 				}
 				else
 					this->set_state(vcc_3v3_off);
@@ -153,10 +157,14 @@ void window::set_state(enum twindow_status new_stat){
 			LL_GPIO_ResetOutputPin(gpio_port_power, gpio_pin_power);
 			break;
 		case vcc_12v_on:
+			sec_cntr_window=0;
 			LL_GPIO_SetOutputPin(gpio_port_power, gpio_pin_power);
 			break;
 		case vcc_12v_off:
 			LL_GPIO_ResetOutputPin(gpio_port_power, gpio_pin_power);
+			break;
+		case all_init:
+			init_leds();
 			break;
 		}
 		this->status = new_stat;
@@ -256,23 +264,24 @@ void window::init_leds()
 
 void window::update_image_i2c() //TODO intensity table
 {
+	static const uint8_t duty_cyc_table[8] = {0, 8, 11, 16, 32, 64, 128, 255};
+//	static const uint8_t duty_cyc_table[8] = {0, 5, 6, 7, 8, 9, 10, 255};
 	uint8_t data_red[16] = {0};
 	uint8_t data_green[16] = {0};
 	uint8_t data_blue[16] = {0};
 	for (uint32_t i = 0; i < num_of_pixels; ++i) {
 		for (uint32_t j = 0; j < 3; ++j) {
-			data_red[3*i + j] = pixels[i].red;
-			data_green[3*i + j] = pixels[i].green;
-			data_blue[3*i + j] = pixels[i].blue;
+			data_red[3*i + j] = duty_cyc_table[(pixels[i].red >> 5)  & 0x7];//1 << ((uint8_t)(pixels[i].red >> 5) & (uint8_t)0x07);
+			data_green[3*i + j] = duty_cyc_table[(pixels[i].green >> 5)  & 0x7];//1 << ((uint8_t)(pixels[i].red >> 5) & (uint8_t)0x07);
+			data_blue[3*i + j] = duty_cyc_table[(pixels[i].blue >> 5)  & 0x7];//1 << ((uint8_t)(pixels[i].red >> 5) & (uint8_t)0x07);
 		}
-		data_red[12 + i] = pixels[i].red;
-		data_green[12 + i] = pixels[i].green;
-		data_blue[12 + i] = pixels[i].blue;
+		data_red[12 + i] = duty_cyc_table[(pixels[i].red >> 5)  & 0x7];//1 << ((uint8_t)(pixels[i].red >> 5) & (uint8_t)0x07);
+		data_green[12 + i] = duty_cyc_table[(pixels[i].green >> 5)  & 0x7];//1 << ((uint8_t)(pixels[i].green >> 5) & (uint8_t)0x07);
+		data_blue[12 + i] = duty_cyc_table[(pixels[i].blue >> 5)  & 0x7];//1 << ((uint8_t)(pixels[i].blue >> 5) & (uint8_t)0x07);
 	}
 	i2c.mem_write_bytes(red_addr, Reg::PWM0 | AutoInc::PWM, data_red, 16);
 	i2c.mem_write_bytes(green_addr, Reg::PWM0 | AutoInc::PWM, data_green, 16);
 	i2c.mem_write_bytes(blue_addr, Reg::PWM0 | AutoInc::PWM, data_blue, 16);
-
 }
 
 void window::set_group_dim_red(uint8_t dim) {
