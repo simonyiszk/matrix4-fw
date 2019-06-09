@@ -11,7 +11,7 @@
 
 const char* mueb_version = 
 
-"v0.4"
+"v0.7"
 
 
 #ifdef _COMMIT
