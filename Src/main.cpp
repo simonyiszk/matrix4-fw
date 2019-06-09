@@ -14,8 +14,8 @@ hal_i2c            init_4;
 hal_timer          init_5;
 
 //Init external peripheries
-windows::window windows::left_window(WINDOW_3V3_LEFT_GPIO_Port,	WINDOW_3V3_LEFT_Pin, WINDOW_POWER_LEFT_GPIO_Port, WINDOW_POWER_LEFT_Pin, USART2, DMA1, LL_DMA_CHANNEL_4 );
-windows::window windows::right_window(WINDOW_3V3_RIGHT_GPIO_Port, WINDOW_3V3_RIGHT_Pin,	WINDOW_POWER_RIGHT_GPIO_Port, WINDOW_POWER_RIGHT_Pin, USART1, DMA1, LL_DMA_CHANNEL_2 );
+windows::window windows::left_window(WINDOW_3V3_LEFT_GPIO_Port,	WINDOW_3V3_LEFT_Pin, WINDOW_POWER_LEFT_GPIO_Port, WINDOW_POWER_LEFT_Pin, GPIOA, LL_GPIO_PIN_2,  USART2, DMA1, LL_DMA_CHANNEL_4 );
+windows::window windows::right_window(WINDOW_3V3_RIGHT_GPIO_Port, WINDOW_3V3_RIGHT_Pin,	WINDOW_POWER_RIGHT_GPIO_Port, WINDOW_POWER_RIGHT_Pin, GPIOA, LL_GPIO_PIN_9, USART1, DMA1, LL_DMA_CHANNEL_2 );
 network    inetwork;
 
 extern "C" int main(void);

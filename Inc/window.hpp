@@ -77,8 +77,9 @@ namespace windows{
 		twindow_status status;
 
 		GPIO_TypeDef* gpio_port_3v3;
+        GPIO_TypeDef* gpio_port_tx;
 		GPIO_TypeDef* gpio_port_power; //TODO add const keyword
-		uint16_t gpio_pin_3v3, gpio_pin_power; //TODO add const keyword
+		uint16_t gpio_pin_3v3, gpio_pin_tx, gpio_pin_power; //TODO add const keyword
 
 		DMA_TypeDef* DMAx;
 		uint32_t DMA_Channel;
@@ -95,6 +96,8 @@ namespace windows{
 				uint16_t gpio_pin_3v3,
 				GPIO_TypeDef* gpio_port_power,
 				uint16_t gpio_pin_power,
+                GPIO_TypeDef* gpio_port_tx,
+                uint16_t gpio_pin_tx,
 				USART_TypeDef *USARTx,
 				DMA_TypeDef* DMAx,
 				uint32_t DMA_Channel);
