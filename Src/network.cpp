@@ -401,13 +401,13 @@ void network::do_remote_command(){
 	if(size){
 		toogle_gpio(LED_COMM);
 
-		char buff[11] = "";
+		char buff[32] = "";
 
 		uint8_t resp_addr[4];
 		uint16_t resp_port;
 		int32_t len;
 
-		len = recvfrom(1, (uint8_t *)buff, 11, resp_addr, &resp_port);
+		len = recvfrom(1, (uint8_t *)buff, 32, resp_addr, &resp_port);
 
 		// Handle too small and incorrect packages
 		if(buff[0]!='S' || buff[1]!='E' || buff[2]!='M' || len < 4)
@@ -482,6 +482,15 @@ void network::do_remote_command(){
 				break;
             case swap_windows:
                 status::swap_windows();
+                break;
+            case set_whitebalance:
+                for (int i = 0; i < 21; i++)
+                {
+                    status::getWindow(LEFT).whitebalance_data[i] = buff[11 + i];
+                    status::getWindow(RIGHT).whitebalance_data[i] = buff[11 + i];
+                }
+                status::getWindow(LEFT).set_whitebalance_flag(true);
+                status::getWindow(RIGHT).set_whitebalance_flag(true);
                 break;
 			default:
 				break;

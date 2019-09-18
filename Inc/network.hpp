@@ -33,7 +33,8 @@ public:
         enable_update=0x50,
         get_new_fw_chksum=0x51,
         refurbish=0x60,
-        swap_windows=0x70
+        swap_windows=0x70,
+        set_whitebalance=0x80
     };
 
     network();

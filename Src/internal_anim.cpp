@@ -22,7 +22,7 @@ void internal_animation::step_anim(void){
 	time_to_next_frame = 0;
 
 	for(size_t k=0;k<windows::num_of_pixels;k++){
-		uint8_t j = i << 4;
+		uint8_t j = i << 5;
 		windows::right_window.pixels[k].set(szin == 0 ? j : 0, szin == 1 ? j : 0, szin == 2 ? j : 0);
 		windows::left_window.pixels[k].set(szin == 0 ? j : 0, szin == 1 ? j : 0, szin == 2 ? j : 0);
 	}

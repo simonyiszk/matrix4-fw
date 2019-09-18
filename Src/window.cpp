@@ -84,7 +84,8 @@ window::window(	GPIO_TypeDef* gpio_port_3v3,
 		DMAx(DMAx),
 		DMA_Channel(DMA_Channel),
 		uart_handler(USARTx),
-		transmitted_before(false)
+		transmitted_before(false),
+		whitebalance_flag(false)
 {
     LL_DMA_DisableChannel(DMAx, DMA_Channel);
 
@@ -204,6 +205,20 @@ void window::update_image(){
 	else
 		while(1);
 
+	if(whitebalance_flag)
+	{
+		while(!LL_USART_IsActiveFlag_TXE(uart_handler));
+		LL_USART_TransmitData8(uart_handler, 0xE0);
+		for (int i = 0; i < 21; i++)
+		{
+			while(!LL_USART_IsActiveFlag_TXE(uart_handler));
+			LL_USART_TransmitData8(uart_handler, whitebalance_data[i]);
+		}
+		whitebalance_flag = false;
+	}
+
+
+
 	DMA_buffer[0] = 0xF0; //always this value, never changes
 	size_t transfer_size = 0; //besides the first F0 byte
 
@@ -233,9 +248,21 @@ void window::update_image(){
 	}
 }
 
+
+
 void window::blank(){
 	for(size_t j=0; j<num_of_pixels; j++)
 		pixels[j].set(0,0,0);
+}
+
+void window::set_whitebalance_flag(bool value)
+{
+	this->whitebalance_flag = value;
+}
+
+bool window::get_whitebalance_flag()
+{
+	return this->whitebalance_flag;
 }
 
 

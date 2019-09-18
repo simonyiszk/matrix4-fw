@@ -89,6 +89,8 @@ namespace windows{
 
 		bool transmitted_before;
 
+		volatile bool whitebalance_flag;
+
 	public:
 
 		window() = delete;
@@ -133,6 +135,8 @@ namespace windows{
 		 */
 		std::array<pixel_data, num_of_pixels> pixels;
 
+		volatile uint8_t whitebalance_data[21];
+
 		bool check_uart_welcome_message();
 
 		void update_image();
@@ -141,6 +145,9 @@ namespace windows{
 		 * \brief Blanks every panel connected to the window.
 		 */
 		void blank();
+
+		void set_whitebalance_flag(bool value);
+		bool get_whitebalance_flag();
 	};
 
 	extern window left_window;
