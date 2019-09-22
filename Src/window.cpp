@@ -54,6 +54,7 @@ void window::step_state(){
 			break;
 		case vcc_3v3_on:
 			if(sec_cntr_window>1){ //TODO reference time point
+				config_I2C();
 				if(check_uart_welcome_message())
 				{
 					this->set_state(vcc_12v_on);
@@ -87,8 +88,12 @@ window::window(	GPIO_TypeDef* gpio_port_3v3,
 		DMAx(DMAx),
 		DMA_Channel(DMA_Channel),
 		uart_handler(USARTx),
-		transmitted_before(false)
+		transmitted_before(false),
+		i2c(BITBANG)
+		//i2c(IT_TIMER)
+		//i2c(DMA)
 {
+	i2c_preconf.inited = false;
     LL_DMA_DisableChannel(DMAx, DMA_Channel);
 
 	while(LL_DMA_IsEnabledChannel(DMAx, DMA_Channel));
@@ -241,6 +246,36 @@ void window::init_I2C(uint8_t i2c_addr_base, GPIO_TypeDef* SCL_Port, uint32_t SC
 	LL_USART_Disable(uart_handler);
 	i2c.init(SCL_Port, SCL_PinMask, SDA_Port, SDA_PinMask, timer, F_CLK, speed);
 
+}
+
+void window::preconfig_I2C(uint8_t i2c_addr_base, GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
+		GPIO_TypeDef* SDA_Port, uint32_t SDA_PinMask,
+		TIM_TypeDef* timer, uint32_t F_CLK, uint32_t speed)
+{
+	i2c_preconf.inited = true;
+	i2c_panel = true;
+	red_addr = i2c_addr_base;
+	green_addr = i2c_addr_base+1;
+	blue_addr = i2c_addr_base+2;
+	LL_USART_Disable(uart_handler);
+	i2c_preconf.i2c_addr_base = i2c_addr_base;
+	i2c_preconf.SCL_Port = SCL_Port;
+	i2c_preconf.SCL_PinMask = SCL_PinMask;
+	i2c_preconf.SDA_Port = SDA_Port;
+	i2c_preconf.SDA_PinMask = SDA_PinMask;
+	i2c_preconf.timer = timer;
+	i2c_preconf.F_CLK = F_CLK;
+	i2c_preconf.speed = speed;
+}
+
+void window::config_I2C()
+{
+	if (i2c_preconf.inited)
+	{
+		i2c.init(i2c_preconf.SCL_Port, i2c_preconf.SCL_PinMask,
+				i2c_preconf.SDA_Port, i2c_preconf.SDA_PinMask,
+				i2c_preconf.timer, i2c_preconf.F_CLK, i2c_preconf.speed);
+	}
 }
 
 void window::init_leds()

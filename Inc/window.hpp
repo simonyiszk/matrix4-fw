@@ -61,6 +61,18 @@ namespace windows{
 		bool isFull();
 	};
 
+	struct i2c_preconf_t {
+		uint8_t i2c_addr_base;
+		GPIO_TypeDef* SCL_Port;
+		uint32_t SCL_PinMask;
+		GPIO_TypeDef* SDA_Port;
+		uint32_t SDA_PinMask;
+		TIM_TypeDef* timer;
+		uint32_t F_CLK;
+		uint32_t speed;
+		bool inited;
+	};
+
 	class window{
 	public:
 		/*!
@@ -95,6 +107,7 @@ namespace windows{
 		uint8_t red_addr = 0;
 		uint8_t green_addr = 0;
 		uint8_t blue_addr = 0;
+		i2c_preconf_t i2c_preconf;
 
 	public:
 
@@ -153,6 +166,10 @@ namespace windows{
 		void init_I2C(uint8_t i2c_addr_base, GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
 				GPIO_TypeDef* SDA_Port, uint32_t SDA_PinMask,
 				TIM_TypeDef* timer, uint32_t F_CLK, uint32_t speed = 100000);
+		void preconfig_I2C(uint8_t i2c_addr_base, GPIO_TypeDef* SCL_Port, uint32_t SCL_PinMask,
+				GPIO_TypeDef* SDA_Port, uint32_t SDA_PinMask,
+				TIM_TypeDef* timer, uint32_t F_CLK, uint32_t speed = 100000);
+		void config_I2C();
 		void init_leds();
 		void update_image_i2c();
 		void set_group_dim_red(uint8_t dim);

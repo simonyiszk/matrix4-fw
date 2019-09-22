@@ -77,7 +77,7 @@ namespace{
 
         uint8_t svr_addr[6];
         uint16_t  svr_port;
-        uint16_t len;
+        int32_t len;
         len = recvfrom(2, (uint8_t *)buff, size, svr_addr, &svr_port);
         
         if(len < /*sizeof(struct)*/ 5)
@@ -519,7 +519,7 @@ void network::step_network(){
 
 		do_remote_command();
 		fetch_frame();
-        ::step_update();
+        //::step_update();
 
 		wizchip_getnetinfo(&netInfo);
 		status::emelet_szam=netInfo.ip[2];
