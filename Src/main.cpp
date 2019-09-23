@@ -35,7 +35,6 @@ int main(void){
 	windows::left_window.preconfig_I2C(0x60, WINDOW_I2C_SCL_LEFT_GPIO_Port, WINDOW_I2C_SCL_LEFT_Pin, WINDOW_I2C_SDA_LEFT_GPIO_Port, WINDOW_I2C_SDA_LEFT_Pin, TIM16, 20000000, 1000000);
 	windows::right_window.preconfig_I2C(0x60, WINDOW_I2C_SCL_RIGHT_GPIO_Port, WINDOW_I2C_SCL_RIGHT_Pin, WINDOW_I2C_SDA_RIGHT_GPIO_Port, WINDOW_I2C_SDA_RIGHT_Pin, TIM16, 20000000, 1000000);
 
-	windows::right_window.config_I2C();
 	while (1){
 		if(status::if_internal_animation_is_on)
 		{
